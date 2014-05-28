@@ -15,6 +15,9 @@
       </header>
 
       {{ content }}
+      {% if page.comments %}
+      {% include comments.html %}
+      {% endif %}
 
       <footer>
         <p>

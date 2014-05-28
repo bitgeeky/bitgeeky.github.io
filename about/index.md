@@ -1,6 +1,7 @@
 ---
 layout: page
 title: About
+comments: false
 ---
 
 Pankaj Malhotra aka bitgeeky is a Computer Science student at IIIT-Hyderabad with more than two years of experience with Python and Automation. He is a core Mozilla contributor and mostly works with the Web QA team writing autmated tests for Mozilla Web Projects.
