@@ -2,10 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://pankajmalhotra.com/</loc>
-    <lastmod>2014-08-01T01:09:38+05:30</lastmod>
+    <lastmod>2014-08-23T12:14:13+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+    <url>
+      <loc>http://pankajmalhotra.com/ARP-and-ethernet-issues-with-osx-mavericks</loc>
+      
+        <lastmod>2014-08-17T10:45:20Z</lastmod>
+      
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+    </url>
   
     <url>
       <loc>http://pankajmalhotra.com/Project-Wrap-Up</loc>
@@ -17,7 +26,7 @@
     </url>
   
     <url>
-      <loc>http://pankajmalhotra.com/From-a-PIE-to-an-API-!!</loc>
+      <loc>http://pankajmalhotra.com/REST-API-Using-DRF</loc>
       
         <lastmod>2014-05-16T09:03:05Z</lastmod>
       
@@ -26,7 +35,7 @@
     </url>
   
     <url>
-      <loc>http://pankajmalhotra.com/We-need-it-!!-Oh-wait...-do-we</loc>
+      <loc>http://pankajmalhotra.com/Test-Automation-Best-Practices</loc>
       
         <lastmod>2014-05-05T04:58:55Z</lastmod>
       
@@ -35,7 +44,7 @@
     </url>
   
     <url>
-      <loc>http://pankajmalhotra.com/Google-Summer-of-Code-with-Mozilla-!!!</loc>
+      <loc>http://pankajmalhotra.com/Google-Summer-of-Code-with-Mozilla</loc>
       
         <lastmod>2014-04-23T12:43:36Z</lastmod>
       
@@ -44,7 +53,7 @@
     </url>
   
     <url>
-      <loc>http://pankajmalhotra.com/Factory-Boy-!</loc>
+      <loc>http://pankajmalhotra.com/Factory-Boy</loc>
       
         <lastmod>2014-02-23T12:31:54Z</lastmod>
       
@@ -101,7 +110,7 @@
   <url>
     <loc>http://pankajmalhotra.com/404.html</loc>
     
-      <lastmod>2014-08-01</lastmod>
+      <lastmod>2014-08-23</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -114,7 +123,7 @@
   <url>
     <loc>http://pankajmalhotra.com/feed.xml</loc>
     
-      <lastmod>2014-08-01</lastmod>
+      <lastmod>2014-08-23</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -127,7 +136,7 @@
   <url>
     <loc>http://pankajmalhotra.com/index.html</loc>
     
-      <lastmod>2014-08-01</lastmod>
+      <lastmod>2014-08-23</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -140,7 +149,7 @@
   <url>
     <loc>http://pankajmalhotra.com/about/index.html</loc>
     
-      <lastmod>2014-08-01</lastmod>
+      <lastmod>2014-08-23</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -153,7 +162,7 @@
   <url>
     <loc>http://pankajmalhotra.com/public/css/main.css</loc>
     
-      <lastmod>2014-08-01</lastmod>
+      <lastmod>2014-08-23</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -166,7 +175,7 @@
   <url>
     <loc>http://pankajmalhotra.com/sitemap.xml</loc>
     
-      <lastmod>2014-08-01</lastmod>
+      <lastmod>2014-08-23</lastmod>
     
     
       <changefreq>monthly</changefreq>
