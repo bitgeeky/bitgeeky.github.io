@@ -9,4 +9,5 @@ He is also a Google Summer of Code Intern with Mozilla working on developing an 
 He has been rewarded by Mozilla for his code contribution and active participation.
 In his free time he likes to Blog and help fellow contributors.
 
-He likes to Open Source his code on <a href="https://github.com/bitgeeky">GitHub</a>. If you like, you can tip him on Gittip &nbsp; <script data-gittip-username="bitgeeky" data-gittip-widget="button" src="//gttp.co/v1.js"></script>
+He likes to Open Source his code on <a href="https://github.com/bitgeeky">GitHub</a>. If you like, you can tip him on Gratipay &nbsp; <script data-gittip-username="bitgeeky" data-gittip-widget="button" src="//gttp.co/v1.js"></script>
+He is also open to any kind of employment opportunities matching his interests. <a href="{{site.baseurl}}/public/docs/resume.pdf" target="_blank">Resume</a>.
