@@ -2,10 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://pankajmalhotra.com/</loc>
-    <lastmod>2014-09-14T05:01:17+05:30</lastmod>
+    <lastmod>2015-03-11T22:42:22+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+    <url>
+      <loc>http://pankajmalhotra.com/The-calm-before-the-storm</loc>
+      
+        <lastmod>2015-03-11T01:50:20Z</lastmod>
+      
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+    </url>
   
     <url>
       <loc>http://pankajmalhotra.com/ARP-and-ethernet-issues-with-osx-mavericks</loc>
@@ -110,7 +119,7 @@
   <url>
     <loc>http://pankajmalhotra.com/404.html</loc>
     
-      <lastmod>2014-09-14</lastmod>
+      <lastmod>2015-03-11</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -123,7 +132,20 @@
   <url>
     <loc>http://pankajmalhotra.com/feed.xml</loc>
     
-      <lastmod>2014-09-14</lastmod>
+      <lastmod>2015-03-11</lastmod>
+    
+    
+      <changefreq>monthly</changefreq>
+    
+    
+      <priority>0.3</priority>
+    
+  </url>
+  
+  <url>
+    <loc>http://pankajmalhotra.com/utils/git.html</loc>
+    
+      <lastmod>2015-03-11</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -136,7 +158,7 @@
   <url>
     <loc>http://pankajmalhotra.com/index.html</loc>
     
-      <lastmod>2014-09-14</lastmod>
+      <lastmod>2015-03-11</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -149,7 +171,7 @@
   <url>
     <loc>http://pankajmalhotra.com/about/index.html</loc>
     
-      <lastmod>2014-09-14</lastmod>
+      <lastmod>2015-03-11</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -162,7 +184,7 @@
   <url>
     <loc>http://pankajmalhotra.com/public/css/main.css</loc>
     
-      <lastmod>2014-09-14</lastmod>
+      <lastmod>2015-03-11</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -175,7 +197,7 @@
   <url>
     <loc>http://pankajmalhotra.com/sitemap.xml</loc>
     
-      <lastmod>2014-09-14</lastmod>
+      <lastmod>2015-03-11</lastmod>
     
     
       <changefreq>monthly</changefreq>

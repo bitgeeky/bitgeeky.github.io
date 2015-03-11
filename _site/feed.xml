@@ -6,9 +6,67 @@
     <atom:link href="http://pankajmalhotra.com//feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Sun, 14 Sep 2014 05:01:17 +0530</pubDate>
-    <lastBuildDate>Sun, 14 Sep 2014 05:01:17 +0530</lastBuildDate>
+    <pubDate>Wed, 11 Mar 2015 22:42:22 +0530</pubDate>
+    <lastBuildDate>Wed, 11 Mar 2015 22:42:22 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>The Calm Before the Storm</title>
+        <link>http://pankajmalhotra.com//The-calm-before-the-storm</link>
+        <pubDate>Wed, 11 Mar 2015 01:50:20 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;I had gone &lt;em&gt;almost&lt;/em&gt; socially and publicaly silent for a couple of months. This was not by choice but I was busy experimenting with a lot of new things, had a few goals to achieve, learn new things and most of my time went in this. Still I have been wanting to write/blog about everything I tried, thing I learned, things I achieved and the challenging experience I had from past a few months but again time and the laziness was a big barrier.&lt;/p&gt;
+
+&lt;p&gt;Its not that I am completely free now and had nothing else to do than write a blog post but as I say I was learning things and one of the things which I iterated learning was managing my time.
+So yeah after managing my time I got a couple of moments in which I can share and write about things, I really have been longing to write about.&lt;/p&gt;
+
+&lt;p&gt;I am planning to roll out the blog post about these things in a weekly post manner i.e one post per week. This will give me enough time to write a quality post and since the reader would be able to appreciate them.&lt;img src=&quot;/public/images/blog_posts_are_coming.jpg&quot; alt=&quot;Brace Yourselves, Blog Posts Are Coming&quot; style=&quot;float:left; margin-right:15px; margin-top:15px; width: 40%; height: 40%&quot; /&gt; 
+These post range from a wide range of topics from my experimens with my diet, social life/facebook new feed, my achievement in these months from being and Intel Embedded Challenge Winner to working as a part time developer with HashiCorp and getting an Internship at BrowserStack while also discussing about the challenges I faced during this period.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h2&gt;Upcoming Blog Posts &lt;/h2&gt;
+
+&lt;p&gt;These are some of the topics I have been wanting to write about and definitely as I write I will have more to share.&lt;/p&gt;
+
+&lt;h2&gt;1. Being Technical Reviewer for PACKT Publishing&lt;/h2&gt;
+
+&lt;p&gt;I got an offer from PACKT publishing to be a technical reviewer for one the their books on JQuery. I accpeted their offer but had to leave in between because of some reasons. There wasn&amp;#39;t any sort of contract. I would be blogging about my views on accepting the offer at first and reject it before even starting so that there isn&amp;#39;t any kind of loss.&lt;/p&gt;
+
+&lt;h2&gt;2. Winning Intel India Embedded Challenge 2014&lt;/h2&gt;
+
+&lt;p&gt;This was one of the best thing I had done in all the years I spent in college till now. I along with my two friends participated in Intel IEC 2014 and won the Jury&amp;#39;s popular choice award, a fat cash prize and a lot of fame. &lt;a href=&quot;https://iec2014.intel.com/winner2014.aspx&quot;&gt;Official Results&lt;/a&gt;.&lt;img src=&quot;/public/images/Intel_IEC.jpg&quot; alt=&quot;Intel IEC&quot; style=&quot;float:right; margin-left:15px; margin-top:15px; width: 50%; height: 50%&quot; /&gt;Thanks to the team, this would not have been possible without Aditya Jindal and Shubham Chhabra. We built an &amp;quot;Ambulatory EEG and seizure alert system&amp;quot;. Will be discussing more on this in the post and all about the competetion. One thing I would not miss out here is that this was the best Judgement I have ever seen. The Jury was of the most notable alumni of top most institutions and corporates and comprised of Judges with very diverse fields Mangament, Entrepreneurs, Engineers, Teachers, Proffesors and Doctors.&lt;/p&gt;
+
+&lt;h2&gt;3. Algorithms and competetive programming&lt;/h2&gt;
+
+&lt;p&gt;Honestly speaking I wasn&amp;#39;t much into Algorithms and competetive programming till I realised that things would be really tough if I would not practice enough Algorithms to crack interviews for Software Engineering Intern and yes from that point I started reading a lot of Algorithsm and would solve a few problems daily.
+I gradually developed interest and saw its intersection with Software Development. Obviously, you would never be able to write a good software unless you know your Algorithms and Data Structures. This thing wasn&amp;#39;t actually too obvious to me initially.&lt;/p&gt;
+
+&lt;h2&gt;4. Software Developer Contractor for &lt;a href=&quot;http://atlas.hashicorp.com/&quot;&gt;HashiCorp ATLAS&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;I am writing code for &lt;a href=&quot;https://hashicorp.com/&quot;&gt;HashiCorp&lt;/a&gt;, YES you heard it right ! This was something I have been wanting to do since when I started programming but I didn&amp;#39;t know my interest because I never knew what DevOps is and what Distributed Systems is.&lt;img src=&quot;/public/images/HashiCorp_Logo.png&quot; alt=&quot;HashiCorp Logo&quot; style=&quot;float:left; margin-right:15px; margin-top:15px; width: 20%; height: 20%&quot; /&gt;I always wanted to make things which could communicate in real time and send data across machines,  I developed a few multiplayer games and used Socket IO alot to make chat applications. But now I know what I want to do and I read a lot about distributed algorithms, protocols and networking.
+I can&amp;#39;t write much on this because of a contract but I would be blogging about my adventures with ATLAS.&lt;/p&gt;
+
+&lt;h2&gt;5. Summer Internship 2015 at &lt;a href=&quot;http://www.browserstack.com/&quot;&gt;BrowserStack&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/images/BrowserStack_Logo.png&quot; alt=&quot;BrowserStack Logo&quot; style=&quot;float:left; margin-right:15px; width: 20%; height: 20%&quot; /&gt;I will be working with BrowseStack as a summer Intern this year. I will blog about the reasons why I chose BrowserStack to work for.&lt;/p&gt;
+
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+
+&lt;h2&gt;Blog Renovation&lt;/h2&gt;
+
+&lt;p&gt;For now I have initialised this Queue for Blog posts with these topics and hope to make each post on time.
+Apart from this I am planning to restructure my Blog and have some more features, I chose Jekyll and github.io for hosting in a hurry when I started blogging, but this it definitely lacks SEO optimisations.&lt;/p&gt;
+
+&lt;p&gt;Restructuring the site is a less priority, and would do when I have enough time to design and plan a good one.&lt;/p&gt;
+
+&lt;h2&gt;TL;DR&lt;/h2&gt;
+
+&lt;p&gt;Was working on some big things, had to forgo some minor things and didn&amp;#39;t get much time to blog. Would be blogging about most of those things in upcoming posts. &lt;/p&gt;
+
+&lt;h2&gt;Keep Checking !&lt;/h2&gt;
+</description>
+      </item>
     
       <item>
         <title>ARP and Thunderbolt-Ethernet issues with OS X Mavericks</title>
@@ -275,15 +333,6 @@ as a regular contributor and take up internship at Mozilla next year.
         <pubDate>Fri, 12 Jul 2013 09:50:02 +0000</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot; trbidi=&quot;on&quot;&gt;Passing over to Binary Search Tree , this one is an easy problem .&lt;br /&gt;One should have a basic knowledge about BST and also know how to insert data into it . i am really not sure of whether it is a standard for BST or not but here i am going to use LDR to insert data in the tree , i.e ( if the value to be inserted is smaller than root it goes to left and if it is greater then it goes to right ) . Ok without taking much time i discuss the problem with u .&lt;br /&gt;&lt;br /&gt;Problem :&lt;br /&gt;&lt;br /&gt;The diameter of a tree is the number of nodes on the longest path between two leaves in the tree. The&lt;br /&gt;&lt;br /&gt;diameter of a tree T is the largest of the following quantities:&lt;br /&gt;• The diameter of T’s left subtree&lt;br /&gt;• The diameter of T’s right subtree&lt;br /&gt;• The longest path between leaves that goes through the root of T(this can be computed from the&lt;br /&gt;heights of the subtrees of T)&lt;br /&gt;The Fig &amp;nbsp;below shows a tree with diameter nine, the leaves that form the ends of a&lt;br /&gt;longest path are shaded (note that there is more than one path in the tree of length nine, but no path&lt;br /&gt;longer than nine nodes).&lt;br /&gt;&lt;br /&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;a href=&quot;http://3.bp.blogspot.com/-cMqO6wNKKjw/Ud_GfU0BR6I/AAAAAAAAAB0/tXXmoxmf3Wg/s1600/b1.png&quot; imageanchor=&quot;1&quot; style=&quot;text-align: center;&quot;&gt;&lt;img border=&quot;0&quot; height=&quot;233&quot; src=&quot;http://3.bp.blogspot.com/-cMqO6wNKKjw/Ud_GfU0BR6I/AAAAAAAAAB0/tXXmoxmf3Wg/s320/b1.png&quot; width=&quot;320&quot; /&gt;&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;Input Format:&lt;br /&gt;Sequence of Numbers(without repetition), terminated by newline character.&lt;br /&gt;&lt;br /&gt;Output Format:&lt;br /&gt;Height of tree T. Diameter of tree T.&lt;br /&gt;&lt;br /&gt;Sample Input&lt;br /&gt;10 15 5 7 4 3 12 6 17&lt;br /&gt;&lt;br /&gt;Sample Output:&lt;br /&gt;3&lt;br /&gt;6&lt;br /&gt;&lt;div&gt;&lt;br /&gt;&lt;/div&gt;&lt;div&gt;Solution:&lt;/div&gt;&lt;div&gt;The diameter of a tree is clearly explained in the question , the diameter of a tree can be entirely on the left hand side of the root , it can be entirely on the right side or it can stretch from left leaf node to the right leaf node , actually its the longest of these three , and height is the&amp;nbsp;&lt;/div&gt;&lt;div&gt;( no. of nodes in the longest path &amp;nbsp;- 1 ) and the longest path here stands for &amp;nbsp;the path from root to the leaf node.&lt;/div&gt;&lt;div&gt;&lt;br /&gt;&lt;/div&gt;&lt;div&gt;so here i am giving a recursive code to find the height of the tree and also the diameter of tree , and this code is written for taking the inputs till EOF also since the test cases can be very large there is a separate &amp;nbsp;function to FREE the nodes after each test case.&lt;br /&gt;&lt;br /&gt;&lt;script src=&quot;https://gist.github.com/bitgeeky/5983144.js&quot;&gt;&lt;/script&gt;&lt;/div&gt;&lt;/div&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Stack...( Largest Rectangle in a Histogram )</title>
-        <link>http://pankajmalhotra.com//Stack...(-Largest-Rectangle-in-a-Histogram-)</link>
-        <pubDate>Sun, 26 May 2013 21:02:20 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot; trbidi=&quot;on&quot;&gt;Another classical problem which involves use of stack is to find the area of the largest rectangle in a histogram.&lt;br /&gt;&lt;br /&gt;Problem:&lt;br /&gt;A histogram is a polygon composed of a sequence of rectangles aligned at  a common base line. The rectangles have equal widths but may have different heights. For example, the figure on the left shows the histogram that consists of  rectangles with the heights 2, 1, 4, 5, 1, 3, 3, measured in units  where 1 is the width of the rectangles:&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;center&gt;&lt;img height=&quot;99&quot; src=&quot;https://www.spoj.pl/content/wanderley:HISTOGRA.gif&quot; width=&quot;320&quot; /&gt;&lt;/center&gt;&lt;br /&gt;Usually, histograms are used to represent discrete distributions, e.g., the frequencies of characters in texts. Note that the order of the rectangles, i.e., their heights, is important. Calculate the area of the largest rectangle in a histogram that is aligned at the common base line, too. The figure on the right shows the largest aligned rectangle for the depicted histogram.  &lt;br /&gt;&lt;h3&gt;Input Specification&lt;/h3&gt;The input contains several test cases. Each test case describes a histogram and starts with an integer &lt;code&gt;n&lt;/code&gt;, denoting the number of rectangles it is composed of. You may assume that &lt;code&gt;1&amp;lt;=n&amp;lt;=100000&lt;/code&gt;. Then follow &lt;code&gt;n&lt;/code&gt; integers &lt;code&gt;h&lt;sub&gt;1&lt;/sub&gt;,...,h&lt;sub&gt;n&lt;/sub&gt;&lt;/code&gt;, where &lt;code&gt;0&amp;lt;=h&lt;sub&gt;i&lt;/sub&gt;&amp;lt;=1000000000&lt;/code&gt;. These numbers denote the heights of the rectangles of the histogram in left-to-right order. The width of each rectangle is &lt;code&gt;1&lt;/code&gt;. A zero follows the input for the last test case.   &lt;br /&gt;&lt;h3&gt;Output Specification&lt;/h3&gt;For each test case output on a single line the area of the largest rectangle in the specified histogram. Remember that this rectangle must be aligned at the common base line.  &lt;br /&gt;&lt;h3&gt;Sample Input&lt;/h3&gt;&lt;br /&gt;&lt;pre&gt;7 2 1 4 5 1 3 3&lt;br /&gt;4 1000 1000 1000 1000&lt;br /&gt;0&lt;br /&gt;&lt;/pre&gt;&lt;h3&gt;Sample Output&lt;/h3&gt;&lt;br /&gt;&lt;pre&gt;8&lt;br /&gt;4000&lt;br /&gt;&lt;/pre&gt;&lt;br /&gt;Solution:&lt;br /&gt;&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &lt;img alt=&quot;histogram&quot; class=&quot;aligncenter size-full wp-image-116597&quot; height=&quot;179&quot; src=&quot;http://www.geeksforgeeks.org/wp-content/uploads/histogram1.png&quot; width=&quot;200&quot; /&gt; &lt;br /&gt;&lt;br /&gt;For every bar ‘x’, we calculate the area with ‘x’ as the smallest bar  in the rectangle. If we calculate such area for every bar ‘x’ and find  the maximum of all areas, our task is done.  How to calculate area with  ‘x’ as smallest bar? We need to know index of the first smaller (smaller  than ‘x’) bar on left of ‘x’ and index of first smaller bar on right of  ‘x’. Let us call these indexes as ‘left index’ and ‘right index’  respectively.&lt;br /&gt;&lt;br /&gt;We traverse all bars from left to right, maintain a stack of bars.   Every bar is pushed to stack once.  A bar is popped from stack when a  bar of smaller height is seen.  When a bar is popped, we calculate the  area with the popped bar as smallest bar. How do we get left and right  indexes of the popped bar – the current index tells us the ‘right index’  and index of previous item in stack is the ‘left index’.  Following is  the complete algorithm. &lt;br /&gt;&lt;br /&gt;&lt;b&gt;1) &lt;/b&gt;Create an empty stack.&lt;br /&gt;&lt;b&gt;2) &lt;/b&gt;Start from first bar, and do following for every bar ‘hist[i]‘ where ‘i’ varies from 0 to n-1.&lt;br /&gt;……&lt;b&gt;a)&lt;/b&gt; If stack is empty or hist[i] is higher than the bar at top of stack, then push ‘i’ to stack.&lt;br /&gt;……&lt;b&gt;b)&lt;/b&gt; If this bar is smaller than the top of stack, then  keep removing the top of stack while top of the stack is greater. Let  the removed bar be hist[tp]. Calculate area  of rectangle with hist[tp]  as smallest bar. For hist[tp], the ‘left index’ is previous (previous to  tp) item in stack and ‘right index’ is ‘i’ (current index).&lt;br /&gt;&lt;b&gt;3)&lt;/b&gt; If the stack is not empty, then one by one remove all bars from stack and do step 2.b for every removed bar.&lt;br /&gt;&lt;br /&gt;&lt;script src=&quot;https://gist.github.com/bitgeeky/5653947.js&quot;&gt;&lt;/script&gt;&lt;br /&gt;&lt;br /&gt;&lt;/div&gt;
 </description>
       </item>
     
