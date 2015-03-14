@@ -2,10 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://pankajmalhotra.com/</loc>
-    <lastmod>2015-03-14T02:35:12+05:30</lastmod>
+    <lastmod>2015-03-14T06:45:25+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+    <url>
+      <loc>http://pankajmalhotra.com/Why-I-Deleted-My-Facebook-Account</loc>
+      
+        <lastmod>2015-03-14T11:39:45Z</lastmod>
+      
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+    </url>
   
     <url>
       <loc>http://pankajmalhotra.com/The-calm-before-the-storm</loc>
