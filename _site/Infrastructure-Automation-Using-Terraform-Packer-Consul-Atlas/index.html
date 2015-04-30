@@ -43,6 +43,9 @@
   <a href="/" title="Home"
      >Home</a>
   
+  <a href="/coding" title="Coding"
+     >Coding</a>
+  
   <a href="/about" title="About"
      >About</a>
   
@@ -114,13 +117,16 @@ resource &quot;aws_instance&quot; &quot;web&quot; {
 
 <p>So now you have the machine images and your terraform deployment configurations. Lets say, you want to share your infrastructure with one of the team members or you need a place to host the machine images, develop your infrastructure further and then deploy it immediately. This is what ATLAS is designed for. It provides a platform to perform all these operations at a single place.</p>
 
-<p>I would describe <a href="http://atlas.hashicorp.com/">ATLAS</a> as a utility to store and share your infrastrucutre. Like you can share and develop your application code on GitHub, ATAS provides a platform to develop and share you infrastructure while providing instant deployment option.</p>
+<p>I would describe <a href="http://atlas.hashicorp.com/">ATLAS</a> as a utility to store and share your infrastrucutre. Like you can share and develop your application code on GitHub, ATLAS provides a platform to develop and share you infrastructure while providing instant deployment option.</p>
 
-<p>The workflow of ATLAS is like:
-1. Create machine images using Packer and push them to Atlas.
-2. Push the application code to Atlas. You can use a vagrant box for this.
-3. Link application code to infrastructure images.
-4. Deploy Atlas artifacts using Terraform on cloud.</p>
+<p>The workflow of ATLAS is like:</p>
+
+<ol>
+<li>Create machine images using Packer and push them to Atlas.</li>
+<li>Push the application code to Atlas. You can use a vagrant box for this.</li>
+<li>Link application code to infrastructure images.</li>
+<li>Deploy Atlas artifacts using Terraform on cloud.</li>
+</ol>
 
 <h2>What is Consul ?</h2>
 
@@ -132,7 +138,7 @@ resource &quot;aws_instance&quot; &quot;web&quot; {
 
 <h2>What examples I wrote ?</h2>
 
-<p>I wrote a couple of examples on how to deploy Wordpress, link Travis, deploy Docker, Discourse and tutorials on getting SSH access to the machines in infractructure using the ATLAS workflow. I will give a breif introduction and link for each of these in the next blog post.</p>
+<p>I wrote a couple of examples on how to deploy Wordpress, link Travis, deploy Docker, Discourse and tutorials on getting SSH access to the machines in infractructure using the ATLAS workflow. I will give a brief introduction and link for each of these in the next blog post.</p>
 
 </article>
 

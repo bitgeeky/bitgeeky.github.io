@@ -18,6 +18,18 @@
       <priority>0.5</priority>
     </url>
   {% endfor %}
+  {% for code in site.codes %}
+    <url>
+      <loc>http://pankajmalhotra.com{{ code.url }}</loc>
+      {% if code.lastmod == null %}
+        <lastmod>{{ code.date | date_to_xmlschema }}</lastmod>
+      {% else %}
+        <lastmod>{{ code.lastmod | date_to_xmlschema }}</lastmod>
+      {% endif %}
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+    </url>
+  {% endfor %}
   {% for page in site.pages %}
   <url>
     <loc>http://pankajmalhotra.com{{ page.url }}</loc>

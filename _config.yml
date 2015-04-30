@@ -3,7 +3,7 @@ highlighter: null
 permalink: /:title
 encoding: utf-8
 
-url: http://pankajmalhotra.com/
+url: http://pankajmalhotra.com
 baseurl:
 
 redcarpet:

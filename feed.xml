@@ -22,5 +22,15 @@ layout: none
       </item>
     {% endfor %}
 
+    {% for code in site.codes limit: 10 %}
+      <item>
+        <title>{{ code.title }}</title>
+        <link>{{ site.url }}{{ site.baseurl }}{{ code.url }}</link>
+        <pubDate>{{ code.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
+        <author>{{ site.data.brume.author}}</author>
+        <description>{{ code.content | xml_escape }}</description>
+      </item>
+      {% endfor %}
+
   </channel>
 </rss>
