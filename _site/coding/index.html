@@ -4,7 +4,7 @@
     <!-- meta information -->
 <meta charset="utf-8">
 <meta name="description" 
-      content="Algorithms and Codes.{% for post in site.codes %}{% unless post.next %}{% unless forloop.first %}{% endunless %}     ..." >
+      content="Algorithms and Coding.{% for post in site.categories['codingpage'] %}{% if forloop.first %}      {{ post.date | date:..." >
 <meta name="author" content="Pankaj Malhotra">
 
 <!-- Enable responsiveness on mobile devices-->
@@ -35,7 +35,7 @@
       <header class="top row gutters">
         <div class="col span_2 center">
           <!-- TODO: add baseurl to the logo link -->
-          <a href="http://pankajmalhotra.com/" id="logo" title="Pankaj Malhotra"
+          <a href="http://pankajmalhotra.com" id="logo" title="Pankaj Malhotra"
              style="background-image: url(/public/images/logo.png);"></a>
         </div>
         <nav class="col span_10 top-navbar">
@@ -53,8 +53,35 @@
 
       </header>
 
-      Algorithms and Codes.
+      Algorithms and Coding.
 <section class="archive">
+
+
+
+
+  <div class="bundle row gutters fadeInDown animated">
+    <h2 class="post-year col span_2">2015</h2>
+    <div class="posts-by-year col span_10">
+
+
+
+<article class="row gutters">
+    <a href="/Add-Two-Numbers-Without-Using-Arithmetic-Operators" title="Add-Two-Numbers-Without-Using-Arithmetic-Operators" class="col span_8">Add-Two-Numbers-Without-Using-Arithmetic-Operators</a>
+    <div class="post-date col span_4">
+      <time datetime="2015-05-04">4 May</time>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+</div></div>
+
+
 
 </section>
 

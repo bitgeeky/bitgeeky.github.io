@@ -2,8 +2,9 @@
 layout: post
 title: The Calm Before the Storm
 date: 2015-03-11 1:50:20 UTC
+updated: 2015-03-11 1:50:20 UTC
 comments: true
-categories: [Life Personal Achievments Problems Challenges Algorithms]
+categories: life personal achievments problems challenges algorithms homepage
 ---
 
 I had gone *almost* socially and publicaly silent for a couple of months. This was not by choice but I was busy experimenting with a lot of new things, had a few goals to achieve, learn new things and most of my time went in this. Still I have been wanting to write/blog about everything I tried, thing I learned, things I achieved and the challenging experience I had from past a few months but again time and the laziness was a big barrier.

@@ -4,14 +4,14 @@
     <!-- meta information -->
 <meta charset="utf-8">
 <meta name="description" 
-      content="Being heavily involved in Software Development and Automation from the last year, I didn't get much time to do compet..." >
+      content="Write a function Add() that returns sum of two integers. The function should not use any of the arithmetic operators ..." >
 <meta name="author" content="Pankaj Malhotra">
 
 <!-- Enable responsiveness on mobile devices-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 <!-- title -->
-<title>New Algorithms and Coding Section &middot; Pankaj Malhotra</title>
+<title>Add-Two-Numbers-Without-Using-Arithmetic-Operators &middot; Pankaj Malhotra</title>
 
 <!-- icons -->
 <link rel="shortcut icon" href="/public/images/favicon.ico" />
@@ -54,16 +54,48 @@
       </header>
 
       <article class="single row gutters">
-  <time class="published" datetime="2015-04-30">30 April 2015</time>
-  <h2>New Algorithms and Coding Section</h2>
+  <time class="published" datetime="2015-05-04">04 May 2015</time>
+  <h2>Add-Two-Numbers-Without-Using-Arithmetic-Operators</h2>
 
-  <p>Being heavily involved in Software Development and Automation from the last year, I didn&#39;t get much time to do competitive programming. I used to read algorithms and research papers in free time and implement some of them or solve some interesting problem. So to share these codes today I added a new section <a href="http://pankajmalhotra.com/coding">coding</a> to my site.</p>
+  <p>Write a function Add() that returns sum of two integers. The function should not use any of the arithmetic operators (+, ++, –, -, .. etc).</p>
 
-<h2>What will it contain ?</h2>
+<p>Sum of two bits can be obtained by performing XOR (^) of the two bits. Carry bit can be obtained by performing AND (&amp;) of two bits.
+Above is simple Half Adder logic that can be used to add 2 single bits. We can extend this logic for integers. If x and y don’t have set bits at same position(s), then bitwise XOR (^) of x and y gives the sum of x and y. To incorporate common set bits also, bitwise AND (&amp;) is used. Bitwise AND of x and y gives all carry bits. We calculate (x &amp; y) &lt;&lt; 1 and add it to x ^ y to get the required result.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">#include&lt;stdio.h&gt;
 
-<p>This new section will contain a very brief explanation of Algorithm or the problem and the code for implementing it. Most of the problems will be from <a href="http://www.topcoder.com/">TopCoder</a> , <a href="http://codeforces.com/">CodeForces</a> , <a href="http://www.codechef.com/">CodeChef</a> , <a href="https://www.hackerrank.com/">HackerRank</a> and <a href="http://www.spoj.com/">SPOJ</a>. I will add some brain teasers and logic puzzles too. Since I am planning to add them frequently, so they will not be verbose.</p>
+int Add(int x, int y)
+{
+    // Iterate till there is no carry  
+    while (y != 0)
+    {
+        // carry now contains common set bits of x and y
+        int carry = x &amp; y;  
 
-<p>This section might also sometimes contain cool and fun scripts, So keep checking !</p>
+        // Sum of bits of x and y where at least one of the bits is not set
+        x = x ^ y; 
+
+        // Carry is shifted by one so that adding it to x gives the required sum
+        y = carry &lt;&lt; 1;
+    }
+    return x;
+}
+
+int main()
+{
+    printf(&quot;%d&quot;, Add(15, 32));
+    return 0;
+}
+</code></pre></div>
+<p>Following is recursive implementation for the same approach.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">int Add(int x, int y)
+{
+    if (y == 0)
+        return x;
+    else
+        return Add( x ^ y, (x &amp; y) &lt;&lt; 1);
+}
+</code></pre></div>
+<p>Credits : http://www.geeksforgeeks.org</p>
 
 </article>
 

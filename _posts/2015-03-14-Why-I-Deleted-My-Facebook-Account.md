@@ -2,8 +2,9 @@
 layout: post
 title: Why I Deleted My Facebook Account
 date: 2015-03-14 11:39:45 UTC
+updated: 2015-03-14 11:39:45 UTC
 comments: true
-categories: [Life Personal Facebook Social]
+categories: life personal facebook social homepage
 ---
 
 Today I took a big decision to delete my Facebook account, went ahead and deleted it permanently. This wasn't a sudden decision, I have been planning to do this from a while and had a couple of experiments with my account before finally deleting it. I observed the statistics from the experiments really very carefully and took the decision in no hurry.

@@ -3,38 +3,41 @@ layout: default
 title: Coding
 comments: False
 ---
-Algorithms and Codes.
+Algorithms and Coding.
 <section class="archive">
-{% for post in site.codes %}
-{% unless post.next %}
+{% for post in site.categories['codingpage'] %}
 
-{% unless forloop.first %}</div></div>{% endunless %}
-
-  <div class="bundle row gutters fadeInDown animated">
-    <h2 class="post-year col span_2">{{ post.date | date: '%Y' }}</h2>
-    <div class="posts-by-year col span_10">
-
-{% else %}
-{% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-{% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
-{% if year != nyear %}
-
-{% unless forloop.first %}</div></div>{% endunless %}
+{% if forloop.first %}
 
   <div class="bundle row gutters fadeInDown animated">
     <h2 class="post-year col span_2">{{ post.date | date: '%Y' }}</h2>
     <div class="posts-by-year col span_10">
+
 {% endif %}
-{% endunless %}
 
-  <article class="row gutters">
+<article class="row gutters">
     <a href="{{ site.baseurl }}{{ post.url }}" title="{{ post.title }}" class="col span_8">{{ post.title }}</a>
     <div class="post-date col span_4">
       <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d %B" }}</time>
     </div>
-  </article>
+</article>
+
+{% if post.previous %}
+{% capture pyear %}{{ post.previous.date | date: '%Y' }}{% endcapture %}
+{% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+{% if pyear != year %}
+
+</div></div>
+    <div class="bundle row gutters fadeInDown animated">
+        <h2 class="post-year col span_2">{{ post.previous.date | date: '%Y' }}</h2>
+        <div class="posts-by-year col span_10">
+
+{% endif %}
+{% endif %}
+
 
 {% if forloop.last %}</div></div>{% endif %}
 
 {% endfor %}
+
 </section>

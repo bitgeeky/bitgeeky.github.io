@@ -2,8 +2,9 @@
 layout: post
 title: Infrastructure Automation Using Terraform, Packer, Consul and ATLAS Workflow
 date: 2015-04-17 03:35:19 UTC
+updated: 2015-04-17 03:35:19 UTC
 comments: true
-categories: [Infrastructure Automation Terraform Packer Consul Atlas]
+categories: infrastructure automation terraform packer consul atlas homepage
 ---
 
 I have been working as a software contractor for HashiCorp for over a month now. My main work is to write examples for HashiCorp [ATLAS](https://atlas.hashicorp.com/) which is an upcoming product from HashiCorp and is under tech review at the moment. During this time I got to work on tools like Terraform, Packer and Consul. These tools are all from HashiCorp. In this blog post I'll describe briefly what each of these tools is used for and about the examples I wrote for Atlas.

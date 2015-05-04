@@ -2,8 +2,9 @@
 layout: post
 title: Deploying Projects On AWS Using ATLAS Workflow
 date: 2015-04-18 04:41:38 UTC
+updated: 2015-04-18 04:41:38 UTC
 comments: true
-categories: [Infrastructure Automation Terraform Packer Consul Atlas Wordpress Travis SSH Docker Discourse]
+categories: infrastructure automation terraform packer consul atlas wordpress travis ssh docker discourse homepage
 ---
 
 In the [last](http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas/) post I talked about Infrastructure automation and gave a brief introduction about tools like Terraform, Packer, Consul and also talked about ATLAS and the workflow for deploying deploying infrastructure using it.

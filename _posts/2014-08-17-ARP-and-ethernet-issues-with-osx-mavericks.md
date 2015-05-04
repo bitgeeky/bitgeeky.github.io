@@ -2,8 +2,9 @@
 layout: post
 title: ARP and Thunderbolt-Ethernet issues with OS X Mavericks
 date: 2014-08-17 10:45:20 UTC
+updated: 2014-08-17 10:45:20 UTC
 comments: true
-categories: [ARP OSX Mavericks Thunderbolt Ethernet]
+categories: arp osx mavericks thunderbolt ethernet homepage
 ---
 
 Recently I got a new MacBook Pro(late 2013 model) 13.3 Retina display and everything was working like charm while I was using wifi to connect to internet and that pretty much should be because you expect everything perfect after spending that much amount on a machine.
