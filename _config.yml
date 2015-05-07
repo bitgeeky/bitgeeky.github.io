@@ -6,6 +6,8 @@ encoding: utf-8
 url: http://pankajmalhotra.com
 baseurl:
 
+twitter_username: bitgeekypankaj
+
 redcarpet:
   extensions: [strikethrough, tables]
 

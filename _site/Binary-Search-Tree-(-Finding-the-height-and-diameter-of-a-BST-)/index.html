@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/public/css/responsive.gs.12col.css">
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
+<link rel="stylesheet" href="/public/css/share-page.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
@@ -58,6 +59,14 @@
   <h2>Binary Search Tree ( Finding the height and diameter of a BST )</h2>
 
   <div dir="ltr" style="text-align: left;" trbidi="on">Passing over to Binary Search Tree , this one is an easy problem .<br />One should have a basic knowledge about BST and also know how to insert data into it . i am really not sure of whether it is a standard for BST or not but here i am going to use LDR to insert data in the tree , i.e ( if the value to be inserted is smaller than root it goes to left and if it is greater then it goes to right ) . Ok without taking much time i discuss the problem with u .<br /><br />Problem :<br /><br />The diameter of a tree is the number of nodes on the longest path between two leaves in the tree. The<br /><br />diameter of a tree T is the largest of the following quantities:<br />• The diameter of T’s left subtree<br />• The diameter of T’s right subtree<br />• The longest path between leaves that goes through the root of T(this can be computed from the<br />heights of the subtrees of T)<br />The Fig &nbsp;below shows a tree with diameter nine, the leaves that form the ends of a<br />longest path are shaded (note that there is more than one path in the tree of length nine, but no path<br />longer than nine nodes).<br /><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://3.bp.blogspot.com/-cMqO6wNKKjw/Ud_GfU0BR6I/AAAAAAAAAB0/tXXmoxmf3Wg/s1600/b1.png" imageanchor="1" style="text-align: center;"><img border="0" height="233" src="http://3.bp.blogspot.com/-cMqO6wNKKjw/Ud_GfU0BR6I/AAAAAAAAAB0/tXXmoxmf3Wg/s320/b1.png" width="320" /></a><br /><br />Input Format:<br />Sequence of Numbers(without repetition), terminated by newline character.<br /><br />Output Format:<br />Height of tree T. Diameter of tree T.<br /><br />Sample Input<br />10 15 5 7 4 3 12 6 17<br /><br />Sample Output:<br />3<br />6<br /><div><br /></div><div>Solution:</div><div>The diameter of a tree is clearly explained in the question , the diameter of a tree can be entirely on the left hand side of the root , it can be entirely on the right side or it can stretch from left leaf node to the right leaf node , actually its the longest of these three , and height is the&nbsp;</div><div>( no. of nodes in the longest path &nbsp;- 1 ) and the longest path here stands for &nbsp;the path from root to the leaf node.</div><div><br /></div><div>so here i am giving a recursive code to find the height of the tree and also the diameter of tree , and this code is written for taking the inputs till EOF also since the test cases can be very large there is a separate &nbsp;function to FREE the nodes after each test case.<br /><br /><script src="https://gist.github.com/bitgeeky/5983144.js"></script></div></div>
+
+
+<div class="share-page">
+    Share this on &rarr; 
+    <a href="https://twitter.com/intent/tweet?text=Binary Search Tree ( Finding the height and diameter of a BST )&url=http://pankajmalhotra.com/Binary-Search-Tree-(-Finding-the-height-and-diameter-of-a-BST-)&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
+    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Binary-Search-Tree-(-Finding-the-height-and-diameter-of-a-BST-)" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
+    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Binary-Search-Tree-(-Finding-the-height-and-diameter-of-a-BST-)" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
+</div>
 
 </article>
 
