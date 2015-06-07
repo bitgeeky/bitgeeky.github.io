@@ -6,9 +6,177 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Sun, 07 Jun 2015 02:38:07 +0530</pubDate>
-    <lastBuildDate>Sun, 07 Jun 2015 02:38:07 +0530</lastBuildDate>
+    <pubDate>Mon, 08 Jun 2015 03:20:30 +0530</pubDate>
+    <lastBuildDate>Mon, 08 Jun 2015 03:20:30 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>Injecting Javascript In HTML Content Using MITM Proxy</title>
+        <link>http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy</link>
+        <pubDate>Mon, 08 Jun 2015 21:43:10 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;Its been a few days that I have been learning about Man In The Middle MITM proxy, my use case was to inject a simple javascript to html pages that users open behind proxy server.&lt;/p&gt;
+
+&lt;p&gt;It actually involves a bit insight on how to do this, and a few small challenges. Here I describe the solutions I found to do this:&lt;/p&gt;
+
+&lt;h2&gt;What is MITM proxy ?&lt;/h2&gt;
+
+&lt;p&gt;An interactive console program that allows traffic flows to be intercepted, inspected, modified and replayed.
+So basically it gives the proxy administartor the power to modify any traffic that goes through the proxy. You can play with html content, inject elements, get header data, modify headers, dns spoofing, traffic filteration, redirection and a lot more things you can do with mitmproxy.
+&lt;br/&gt;
+&lt;a href=&quot;https://github.com/mitmproxy/mitmproxy/tree/master/examples&quot;&gt;Example scripts for doing experimentation&lt;/a&gt;
+&lt;br/&gt;
+For more information visit &lt;a href=&quot;https://mitmproxy.org/&quot;&gt;mitmproxy official website&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;For OS X its distributed as a homebrew package and is really simple to install, just do &lt;code&gt;$ brew install mitmproxy&lt;/code&gt;.
+For troubleshooting and setting environment variables have a look at the &lt;a href=&quot;https://mitmproxy.org/doc/install.html&quot;&gt;installation guide&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Make sure you have all the certificates used by mitm proxy in &lt;code&gt;~/.mitmproxy/&lt;/code&gt;. Install certificates on browser by browsing to &lt;code&gt;mitm.it&lt;/code&gt;. If the traffic is passing through the proxy server this page will show you options to install certificates, just select the platform you are browsing on.  For more information about generating and installing certificates see &lt;a href=&quot;https://mitmproxy.org/doc/certinstall.html&quot;&gt;about cerificates&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Running&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ mitmproxy -p port_number
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The default port on which proxy server runs is &lt;code&gt;8080&lt;/code&gt; but you can specify the &lt;code&gt;port_number&lt;/code&gt; by using &lt;code&gt;-p&lt;/code&gt; flag. It will open up a window showing traffic passing through proxy.&lt;/p&gt;
+
+&lt;p&gt;Configure browser to use proxy server by specifying host as &lt;code&gt;localhost&lt;/code&gt; and the port on which proxy server is listening.
+You will start seeing requests though the proxy and traffic passing through it.
+&lt;img src=&quot;/public/images/mitmproxy.png&quot; alt=&quot;MITM Console&quot; style=&quot;margin-right:15px; width: 100%; height: 100%&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Modifying traffic passing through proxy&lt;/h2&gt;
+
+&lt;p&gt;You can pass scripts as arguments while running proxy server which will modify the traffic according to the logic you specify in script.
+The script will operate on each request passing through proxy, and will make the desired modification.&lt;/p&gt;
+
+&lt;h3&gt;Inline Scripts&lt;/h3&gt;
+
+&lt;p&gt;Basic Structure of an Inline script is:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;def on_event(context, flow):
+    some_logic
+    another_logic
+    do_something
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The first argument to each event method is an instance of ScriptContext that lets the script interact with the global mitmproxy state. 
+&lt;code&gt;on_event&lt;/code&gt; can be an event like request, response, start, clientconnect, serverconnect or any other event from this &lt;a href=&quot;https://mitmproxy.org/doc/scripting/inlinescripts.html&quot;&gt;list&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Script to inject javascript to html content:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# Usage: mitmdump -s &amp;quot;js_injector.py src&amp;quot;
+# (this script works best with --anticache)
+from bs4 import BeautifulSoup
+from libmproxy.protocol.http import decoded
+
+# On start of proxy server ask for src as an argument
+def start(context, argv):
+    if len(argv) != 2:
+        raise ValueError(&amp;#39;Usage: -s &amp;quot;js_injector.py src&amp;quot;&amp;#39;)
+    context.src_url = argv[1]
+
+
+def response(context, flow):
+    if flow.request.host in context.src_url:
+        return # Make sure JS isn&amp;#39;t injected to itself
+    with decoded(flow.response):  # Remove content encoding (gzip, ...)
+        html = BeautifulSoup(flow.response.content)
+        if html.body:
+            script = html.new_tag(
+                &amp;quot;script&amp;quot;,
+                src=context.src_url,
+                type=&amp;#39;application/javascript&amp;#39;)
+            html.body.insert(0, script)
+            flow.response.content = str(html)
+            context.log(&amp;quot;Script injected.&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Run the mitm proxy using:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ mitmdump -p 8888 -s &amp;quot;js_injector.py http://path/to/src.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Note: that we are using &lt;code&gt;mitmdump&lt;/code&gt; istead of &lt;code&gt;mitmproxy&lt;/code&gt; for getting more detailed output.&lt;/p&gt;
+
+&lt;p&gt;Note: If you want to inject javascript in an &lt;code&gt;https&lt;/code&gt; website, your javascript file must also be hosted on &lt;code&gt;https&lt;/code&gt; server.&lt;/p&gt;
+
+&lt;p&gt;So far so good:
+Now open the url in browser configured to use proxy server, you should see a broken website.&lt;/p&gt;
+
+&lt;h3&gt;Any guess why the website is broken ?&lt;/h3&gt;
+
+&lt;p&gt;The website is broken because in previous script our javascript is getting injected on every resource on page having &lt;code&gt;html.body&lt;/code&gt; which should not be the case.&lt;/p&gt;
+
+&lt;p&gt;Replace:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;-- if html.body:
+with
+++ if html.body and (&amp;#39;text/html&amp;#39; in flow.response.headers[&amp;quot;content-type&amp;quot;][0]):
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;to make sure only requests with &lt;code&gt;text/html&lt;/code&gt; in their header get js injection.&lt;/p&gt;
+
+&lt;p&gt;Try to open the page again, it should now open fine with &lt;em&gt;almost&lt;/em&gt; all resources loading properly.&lt;/p&gt;
+
+&lt;h3&gt;So why &lt;em&gt;almost&lt;/em&gt; all and not &lt;em&gt;ALL&lt;/em&gt; ? Try to figure it out and read further:&lt;/h3&gt;
+
+&lt;p&gt;The reason is that an html page has multiple resources that can be of type text/html for example an iframe loading content from an external resource. But we want to inject our js only to the page that is opened by user at current time i.e the main page.&lt;/p&gt;
+
+&lt;p&gt;Its not possible to do this without knowing what page is the main page and what are the elements within it. Therefore to overcome this situation we come up with a filter.&lt;/p&gt;
+
+&lt;p&gt;filter.js&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;if(parent.document.URL!=document.location.href)
+       throw new Error(&amp;quot;Not the main page&amp;quot;);
+
+(function(e){e.setAttribute(&amp;quot;src&amp;quot;,&amp;quot;http://path/to/script.js&amp;quot;);
+document.getElementsByTagName(&amp;quot;body&amp;quot;)[0].appendChild(e);})
+(document.createElement(&amp;quot;script&amp;quot;));void(0);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;So basically injecting this filter on proxy server side by replacing path/to/script.js with the path to actual js that we want to inject will do a client side verification to identify the main page and allow execution of js only on main page otherwise it will throw an error &amp;quot;Not the main page&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;This solves our problem of js getting executed multiple times on a single page. Now the js we inject will execute only once but still on the proxy server side our js filter will get inject to all valid html resources i.e which have &lt;code&gt;text/html&lt;/code&gt; as their &lt;code&gt;content-type&lt;/code&gt; in header response.&lt;/p&gt;
+
+&lt;h2&gt;Final Steps:&lt;/h2&gt;
+
+&lt;p&gt;Inject JS filter on html resources:&lt;/p&gt;
+
+&lt;p&gt;Final version of &lt;code&gt;js_injector.py&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# Usage: mitmdump -s &amp;quot;js_injector.py src&amp;quot;
+# (this script works best with --anticache)
+from bs4 import BeautifulSoup
+from libmproxy.protocol.http import decoded
+
+# On start of proxy server ask for src as an argument
+def start(context, argv):
+    if len(argv) != 2:
+        raise ValueError(&amp;#39;Usage: -s &amp;quot;js_injector.py src&amp;quot;&amp;#39;)
+    context.src_url = argv[1]
+
+
+def response(context, flow):
+    with decoded(flow.response):  # Remove content encoding (gzip, ...)
+        html = BeautifulSoup(flow.response.content)
+        &amp;quot;&amp;quot;&amp;quot;
+        # To Allow CORS
+        if &amp;quot;Content-Security-Policy&amp;quot; in flow.response.headers:
+            del flow.response.headers[&amp;quot;Content-Security-Policy&amp;quot;]
+        &amp;quot;&amp;quot;&amp;quot;
+        if html.body and (&amp;#39;text/html&amp;#39; in flow.response.headers[&amp;quot;content-type&amp;quot;][0]):
+            script = html.new_tag(
+                &amp;quot;script&amp;quot;,
+                src=context.src_url)
+            html.body.insert(0, script)
+            flow.response.content = str(html)
+            context.log(&amp;quot;******* Filter Injected *******&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ mitmdump -p 8888 -s &amp;quot;js_injector.py http://path/to/filter.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Final version of &lt;code&gt;filter.js&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;if(parent.document.URL!=document.location.href)
+       throw new Error(&amp;quot;Not the main page&amp;quot;);
+
+(function(e){e.setAttribute(&amp;quot;src&amp;quot;,&amp;quot;http://path/to/script.js&amp;quot;);
+document.getElementsByTagName(&amp;quot;body&amp;quot;)[0].appendChild(e);})
+(document.createElement(&amp;quot;script&amp;quot;));void(0);
+
+console.log(&amp;quot;******* Script Injected *******&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Replace &lt;code&gt;/path/to/script.js&lt;/code&gt; in &lt;code&gt;filter.js&lt;/code&gt; with path to the script you want to actually inject.&lt;/p&gt;
+
+&lt;p&gt;That&amp;#39;s it ! Now the JS you inject will be executed only one time per page i.e the actual page and not the resources in it.&lt;/p&gt;
+</description>
+      </item>
     
       <item>
         <title>Simple HTTPS Server In Python Using Self Signed Certs</title>
@@ -19,7 +187,7 @@
 
 &lt;h2&gt;Generate self signed certificates using OpenSSL&lt;/h2&gt;
 
-&lt;h3&gt;Generate you server key&lt;/h3&gt;
+&lt;h3&gt;Generate your server key&lt;/h3&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ openssl genrsa -des3 -out server.key 1024
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;You will be prompted for a password for your key. Enter, confirm and continue.&lt;/p&gt;
@@ -535,15 +703,6 @@ as a regular contributor and take up internship at Mozilla next year.
         <pubDate>Fri, 16 May 2014 09:03:05 +0000</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot; trbidi=&quot;on&quot;&gt;Last week we were pretty much concerned about what to use and what not ?&lt;br /&gt;and what changes we shall introduce in our model of Testing ?&lt;br /&gt;&lt;br /&gt;So may be if you have curiosity about what we used and what we decided, This post is for you !&lt;br /&gt;&lt;br /&gt;Overall Scenario last week: We wanted to use FactoryBoy for database object modelling and reliable data for tests.&lt;br /&gt;So using FactoryBoy meant that we had to keep our Functional Tests with the application itself.&lt;br /&gt;This was the change we decided to have and pretty much kicked of the work and &lt;a href=&quot;https://github.com/mozilla/oneanddone/pull/111&quot; target=&quot;_blank&quot;&gt;initialized the test objects in application repository&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;So what next ?&lt;br /&gt;In our old testing model we ran the Functional tests on staging/production application already running. So now the challenge was:&lt;br /&gt;How will we trigger the server ?&lt;br /&gt;&lt;br /&gt;One of the solution which instantly came to mind was using &lt;a href=&quot;https://docs.djangoproject.com/en/1.4/topics/testing/#django.test.LiveServerTestCase&quot; target=&quot;_blank&quot;&gt;LiveServerTestCase&amp;nbsp;&lt;/a&gt;&lt;br /&gt;So things were *almost* finalized !!&lt;br /&gt;&lt;br /&gt;But things come to mind as we start working, and this time it was not something which could be ignored.&lt;br /&gt;Man, we would not be able to run the tests on Staging and Production or in general any other remotely hosted clone of OneAndDone, Also running the tests locally would mean setting up of a local instance of OneAndDone. This was what came to mind as soon as I began writing the first test and it was for sure not what we wanted, because&amp;nbsp; of mainly two reasons:&lt;br /&gt;&lt;br /&gt;&lt;ol style=&quot;text-align: left;&quot;&gt;&lt;li&gt;Why will a contributor developing a test case want to set up the application locally ? We definitely don&#39;t want to assume our contributors to be Application developers. So this was a hindrance for contributors.&lt;/li&gt;&lt;li&gt;We wanted to run the tests on staging and production because it gives us a better idea of current state of Application.&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;So we decided to give it a rethought.&lt;br /&gt;&lt;br /&gt;After many discussions with other team members it settled down to two options:&lt;br /&gt;&lt;ol style=&quot;text-align: left;&quot;&gt;&lt;li&gt;Keep the tests local for better data population and faster test runs.&lt;/li&gt;&lt;li&gt;Have the tests in a separate repository making it easy for contributors to work on and to make us able to run the tests on stage/prod.&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;Finally we decided to go with the second one because of the above mentioned limitations of first, or the benefits of second overpowered the benefits of first. We realized our current model to be more advance than most of the other methods discovered.&lt;br /&gt;&lt;br /&gt;The main changes we decided to have in these tests that make them better and advance than the tests for most of the other Web QA projects are:&lt;br /&gt;&lt;br /&gt;&lt;ul style=&quot;text-align: left;&quot;&gt;&lt;li&gt;Develop and Use a REST API which interacts with database objects remotely. So it helps us to create/delete the test data. For developing this API we decided to use &lt;a href=&quot;http://www.django-rest-framework.org/&quot; target=&quot;_blank&quot;&gt;Django REST framework&lt;/a&gt; over &lt;a href=&quot;http://tastypieapi.org/&quot; target=&quot;_blank&quot;&gt;tastypie&lt;/a&gt; for some reasons based on prior experiences of developers.&lt;/li&gt;&lt;li&gt;We decided to use &lt;a href=&quot;http://pytest.org/latest/fixture.html&quot; target=&quot;_blank&quot;&gt;pytest fixtures&lt;/a&gt; instead of SetUp and TearDown methods which will allow creation/deletion of mock objects using the REST API.&lt;/li&gt;&lt;/ul&gt;&lt;br /&gt;We again kicked off the work by initializing the &lt;a href=&quot;https://github.com/mozilla/oneanddone-tests/pull/1&quot; target=&quot;_blank&quot;&gt;Page Objects and Base Class&lt;/a&gt; and opened some Test Case bugs.&lt;br /&gt;Now I am looking forward to developing the REST API and start writing the tests next week.&lt;/div&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Test Automation - Tools and Practices</title>
-        <link>http://pankajmalhotra.com/Test-Automation-Best-Practices</link>
-        <pubDate>Mon, 05 May 2014 04:58:55 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot; trbidi=&quot;on&quot;&gt;Ok after stumbling upon various IRC channels, having talk to some top most QA testers, Automation geeks, and&amp;nbsp; API developers this week I am here with a few thoughts. So this week was a part of my research period, My main goals for this week were :&lt;br /&gt;&lt;br /&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;/b&gt;&lt;br /&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 16px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;Goals for this week&lt;/span&gt;&lt;/b&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 16px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;First Task&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 16px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt; &lt;/span&gt;&lt;/b&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;This week I will mainly concentrate on exploring and researching about the model of the testing that we are going to use for this application. Whether a change is required or not ? If yes are we in a position to make that change ? If no , explore more about other methods that can tackle the problem for database object modelling.&lt;/span&gt;&lt;/b&gt;&lt;/div&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;br /&gt;&lt;/b&gt;&lt;br /&gt;&lt;ul style=&quot;margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;li dir=&quot;ltr&quot; style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;&quot;&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;Explore more about the number of tests that require modelling of database objects to make sure that do we really need FactoryBoy and how will it be useful.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li dir=&quot;ltr&quot; style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;&quot;&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;If we need FactoryBoy then can we merge the code for tests with the application code ? Explore advantages and disadvantages for merging the code.&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;li dir=&quot;ltr&quot; style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; list-style-type: disc; text-decoration: none; vertical-align: baseline;&quot;&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;If we cannot merge the code are there any other alternatives that will allow better modelling of Database objects ?&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;/b&gt;&lt;/ul&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;br /&gt;&lt;/b&gt;&lt;br /&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt; &amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;&lt;img height=&quot;363px;&quot; src=&quot;https://docs.google.com/drawings/d/sWWCvZciXb26mvfzryw4xIQ/image?w=602&amp;amp;h=363&amp;amp;rev=752&amp;amp;ac=1&quot; style=&quot;-webkit-transform: rotate(0.00rad); border: none; transform: rotate(0.00rad);&quot; width=&quot;602px;&quot; /&gt;&lt;/span&gt;&lt;/b&gt;&lt;/div&gt;&lt;b id=&quot;docs-internal-guid-36c4a6fa-ca8d-948d-b38b-b0249bebb385&quot; style=&quot;font-weight: normal;&quot;&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;After answering these questions with concrete arguments and proofs I would like to discuss it with the team and may be have a poll ?&lt;/span&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;Some of the references I am exploring:&lt;/span&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;a href=&quot;http://sqa.stackexchange.com/questions/2143/keeping-automation-code-away-from-application-source-code/&quot; style=&quot;text-decoration: none;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;http://sqa.stackexchange.com/questions/2143/keeping-automation-code-away-from-application-source-code/&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;a href=&quot;http://sqa.stackexchange.com/questions/1260/whats-the-recommended-practice-for-separating-unit-tests-from-integration-tests&quot; style=&quot;text-decoration: none;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;http://sqa.stackexchange.com/questions/1260/whats-the-recommended-practice-for-separating-unit-tests-from-integration-tests&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;a href=&quot;https://groups.google.com/forum/#!topic/selenium-users/2KH8v7vVBs4&quot; style=&quot;text-decoration: none;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: #1155cc; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: underline; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;https://groups.google.com/forum/#!topic/selenium-users/2KH8v7vVBs4&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;I will also like to explore the problems and limitations(if any) that might arise if we are ready to use FactoryBoy using past examples from Rails applications testing using FactoryGirl and see if we have a solution to them.&lt;/span&gt;&lt;/div&gt;&lt;br /&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;Second Task&lt;/span&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;The second task I will like to take up this week is to discuss with lizzard, pragmatic, rbillings, marcia and team to come up with a more specific design for template for task creation as discussed in meeting yesterday.&lt;/span&gt;&lt;/div&gt;&lt;br /&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;The template would later help to autofill the tasks after scraping bugs data from other API’s,&lt;/span&gt;&lt;/div&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;inturn helping in Task creation automation that I proposed in my proposal.&lt;/span&gt;&lt;/div&gt;&lt;br /&gt;&lt;div dir=&quot;ltr&quot; style=&quot;line-height: 1.15; margin-bottom: 0pt; margin-top: 0pt;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: black; font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: bold; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;&quot;&gt;Along with this I will use this time to become familiar with OneandDone codebase.&lt;/span&gt;&lt;/div&gt;&lt;/b&gt;&lt;br /&gt;&lt;br class=&quot;Apple-interchange-newline&quot; /&gt;So I have roughly achieved most of the tasks on the list, and have explored many resources related to Test Automation.&lt;br /&gt;&lt;br class=&quot;Apple-interchange-newline&quot; /&gt;Here are some resources that I went through and found really very useful&lt;br /&gt;&lt;br /&gt;1 Talk on testing django applications using pytest by Andreas Pelme(who himself is an author of pytest-django) &lt;a href=&quot;https://www.youtube.com/watch?v=aUf8Fkb7TaY&quot; target=&quot;_blank&quot;&gt;Link to Video&lt;/a&gt; &lt;br /&gt;2 Talk on Integration and Functional Testing using LiveServerTestCase and Selenium &lt;a href=&quot;https://www.youtube.com/watch?v=BSYg9-sxSjM&quot; target=&quot;_blank&quot;&gt;Link to Video&lt;/a&gt;&lt;br /&gt;3 A Presentation on Testing and Django &lt;a href=&quot;http://carljm.github.io/django-testing-slides/#1&quot; target=&quot;_blank&quot;&gt;Link to Slides&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;I also came across some of talks from very experienced Python developers who highlighted the advantages of pytest for easier and better testing.&lt;br /&gt;&lt;br /&gt;1 &lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;span class=&quot;watch-title long-title yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Holger Krekel: Improving automated testing with py.test - PyCon 2014&quot;&gt;Holger Krekel: Improving automated testing with py.test &lt;a href=&quot;https://www.youtube.com/watch?v=AiThU6JQbE8&quot; target=&quot;_blank&quot;&gt;Link to Video&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;&lt;br /&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;span class=&quot;watch-title long-title yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Holger Krekel: Improving automated testing with py.test - PyCon 2014&quot;&gt;2 Andy Todd: &lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;Why I use py.test and maybe you should too&amp;nbsp; &lt;a href=&quot;https://www.youtube.com/watch?v=P-AhpukDIik&quot; target=&quot;_blank&quot;&gt;Link to Video&lt;/a&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;Also while talking to a one of the pytest developers I came across a completely new framework for automated testing : &lt;a href=&quot;http://robotframework.org/&quot; target=&quot;_blank&quot;&gt;Robot Framework&lt;/a&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;I believe this is as far the most advance tool for acceptance testing that I came across which integrates with Selenium to provide better test coverage and test outputs as shown in one of videos &lt;a href=&quot;https://www.youtube.com/watch?v=fnsVPz8QTsI&quot; target=&quot;_blank&quot;&gt;Link to Video&lt;/a&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;But our existing test suites are quite different from the Robot Framework and we are more concerned about Integration&amp;nbsp;+ Functional testing. So in our case it might not be of much use, but really it was a fun to get to know more about this framework. &lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;Exploring these tools and talking to so many developers, I am in an opinion to keep the test suite with application itself so that we can use &lt;a href=&quot;https://factoryboy.readthedocs.org/en/latest/&quot; target=&quot;_blank&quot;&gt;FactoryBoy&lt;/a&gt; for better data population along with &lt;a href=&quot;http://pytest.org/latest/fixture.html&quot; target=&quot;_blank&quot;&gt;pytest fixtures&lt;/a&gt;&lt;/span&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt; but since this time the tests will be with the application itself we have an option for using &lt;a href=&quot;https://docs.djangoproject.com/en/1.4/topics/testing/#django.test.LiveServerTestCase&quot; target=&quot;_blank&quot;&gt;LiveServerTestCase&lt;/a&gt;&amp;nbsp;&lt;/span&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt; or the original &lt;a href=&quot;https://pypi.python.org/pypi/pytest-mozwebqa/&quot; target=&quot;_blank&quot;&gt;pytest-mozwebqa&lt;/a&gt; plugin.&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;yt&quot; id=&quot;watch-headline-title&quot; style=&quot;text-align: left;&quot;&gt;&lt;span class=&quot;watch-title  yt-uix-expander-head&quot; dir=&quot;ltr&quot; id=&quot;eow-title&quot; title=&quot;Why I use py.test and maybe you should too&quot;&gt;I am still not sure about how pytest-mozwebqa will integrate with Fixtures and LiveServerTestCase if we use it, but I am looking forward to talk with my mentor and team about it and finalize the tools by next week.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
       </item>
     
