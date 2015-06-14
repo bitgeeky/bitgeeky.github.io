@@ -6,9 +6,61 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Mon, 08 Jun 2015 03:20:30 +0530</pubDate>
-    <lastBuildDate>Mon, 08 Jun 2015 03:20:30 +0530</lastBuildDate>
+    <pubDate>Sun, 14 Jun 2015 16:59:40 +0530</pubDate>
+    <lastBuildDate>Sun, 14 Jun 2015 16:59:40 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>Websockets SSL/TLS Termination Using NGINX Proxy</title>
+        <link>http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy</link>
+        <pubDate>Sun, 14 Jun 2015 09:17:00 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;There can be a situation where your application is configured to communicate via websockets protocol &lt;code&gt;ws&lt;/code&gt; and you want to expose it over the internet while still keeping the client side secure by SSL/TLS or say the client will always get an &lt;code&gt;HTTPS&lt;/code&gt; page.&lt;/p&gt;
+
+&lt;p&gt;In such a situation the &lt;code&gt;HTTPS&lt;/code&gt; page won&amp;#39;t allow insecure content to be present on the page so you need a &lt;code&gt;wss&lt;/code&gt; protocol, but in my case I had no control over the application server. So a solution to such a problem is to use a SSL/TLS terminator in between the application server and the client.&lt;/p&gt;
+
+&lt;p&gt;There are a few options which act as a websockets proxy, I decided to use NGINX because of the variety of options it provides such as listening mutiple ports, allowing multiple upstreams, support for unix sockets and a bunch of other features without comprimising the performace parameters.&lt;/p&gt;
+
+&lt;p&gt;The final architecture after using NGINX as a websockets proxy is:
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;img src=&quot;/public/images/nginx.png&quot; alt=&quot;NGINX Proxy&quot; style=&quot;margin-right:15px; width: 100%; height: 100%&quot; /&gt;
+&lt;br/&gt;
+We use secure websockets communication on client side using the &lt;code&gt;wss&lt;/code&gt; protocol and inbetween client and application server is a NGINX proxy server which allows to terminate the SSL/TLS connection and establishes an insecure connection using &lt;code&gt;ws&lt;/code&gt; protocol.&lt;/p&gt;
+
+&lt;p&gt;All that is needed to convert an instance of NGINX to a proxy server is a few changes in configuration file.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;map $http_upgrade $connection_upgrade {
+    default upgrade;
+    &amp;#39;&amp;#39; close;
+}
+
+upstream appserver {
+    server 192.168.100.10:9222; # appserver_ip:ws_port
+}
+
+server {
+    listen 8888; // client_wss_port
+
+    ssl on;
+    ssl_certificate /path/to/crt;
+    ssl_certificate_key /path/to/key;
+
+
+    location / {
+        proxy_pass http://appserver;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The above configuration should be within &lt;code&gt;http{ }&lt;/code&gt; block.&lt;/p&gt;
+
+&lt;p&gt;Replace the &lt;code&gt;appserver_ip&lt;/code&gt; and &lt;code&gt;ws_port&lt;/code&gt; with the ip and port of your application server, &lt;code&gt;client_wss_port&lt;/code&gt; with the port on which client makes a &lt;code&gt;wss&lt;/code&gt; connection and provide paths to certificate/key.&lt;/p&gt;
+
+&lt;p&gt;Just reload the NGINX configuration or restart the server to get everything up and running.&lt;/p&gt;
+</description>
+      </item>
     
       <item>
         <title>Injecting Javascript In HTML Content Using MITM Proxy</title>
@@ -694,15 +746,6 @@ By the end I also found myself helping other contributors, giving code reviews a
 
 This sums up my whole Google Summer of Code Project 2014 and my experience working with the awesome teams at Mozilla and I look forward to continue
 as a regular contributor and take up internship at Mozilla next year.
-</description>
-      </item>
-    
-      <item>
-        <title>REST API using Django REST Framework</title>
-        <link>http://pankajmalhotra.com/REST-API-Using-DRF</link>
-        <pubDate>Fri, 16 May 2014 09:03:05 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;div dir=&quot;ltr&quot; style=&quot;text-align: left;&quot; trbidi=&quot;on&quot;&gt;Last week we were pretty much concerned about what to use and what not ?&lt;br /&gt;and what changes we shall introduce in our model of Testing ?&lt;br /&gt;&lt;br /&gt;So may be if you have curiosity about what we used and what we decided, This post is for you !&lt;br /&gt;&lt;br /&gt;Overall Scenario last week: We wanted to use FactoryBoy for database object modelling and reliable data for tests.&lt;br /&gt;So using FactoryBoy meant that we had to keep our Functional Tests with the application itself.&lt;br /&gt;This was the change we decided to have and pretty much kicked of the work and &lt;a href=&quot;https://github.com/mozilla/oneanddone/pull/111&quot; target=&quot;_blank&quot;&gt;initialized the test objects in application repository&lt;/a&gt;.&lt;br /&gt;&lt;br /&gt;So what next ?&lt;br /&gt;In our old testing model we ran the Functional tests on staging/production application already running. So now the challenge was:&lt;br /&gt;How will we trigger the server ?&lt;br /&gt;&lt;br /&gt;One of the solution which instantly came to mind was using &lt;a href=&quot;https://docs.djangoproject.com/en/1.4/topics/testing/#django.test.LiveServerTestCase&quot; target=&quot;_blank&quot;&gt;LiveServerTestCase&amp;nbsp;&lt;/a&gt;&lt;br /&gt;So things were *almost* finalized !!&lt;br /&gt;&lt;br /&gt;But things come to mind as we start working, and this time it was not something which could be ignored.&lt;br /&gt;Man, we would not be able to run the tests on Staging and Production or in general any other remotely hosted clone of OneAndDone, Also running the tests locally would mean setting up of a local instance of OneAndDone. This was what came to mind as soon as I began writing the first test and it was for sure not what we wanted, because&amp;nbsp; of mainly two reasons:&lt;br /&gt;&lt;br /&gt;&lt;ol style=&quot;text-align: left;&quot;&gt;&lt;li&gt;Why will a contributor developing a test case want to set up the application locally ? We definitely don&#39;t want to assume our contributors to be Application developers. So this was a hindrance for contributors.&lt;/li&gt;&lt;li&gt;We wanted to run the tests on staging and production because it gives us a better idea of current state of Application.&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;So we decided to give it a rethought.&lt;br /&gt;&lt;br /&gt;After many discussions with other team members it settled down to two options:&lt;br /&gt;&lt;ol style=&quot;text-align: left;&quot;&gt;&lt;li&gt;Keep the tests local for better data population and faster test runs.&lt;/li&gt;&lt;li&gt;Have the tests in a separate repository making it easy for contributors to work on and to make us able to run the tests on stage/prod.&lt;/li&gt;&lt;/ol&gt;&lt;br /&gt;Finally we decided to go with the second one because of the above mentioned limitations of first, or the benefits of second overpowered the benefits of first. We realized our current model to be more advance than most of the other methods discovered.&lt;br /&gt;&lt;br /&gt;The main changes we decided to have in these tests that make them better and advance than the tests for most of the other Web QA projects are:&lt;br /&gt;&lt;br /&gt;&lt;ul style=&quot;text-align: left;&quot;&gt;&lt;li&gt;Develop and Use a REST API which interacts with database objects remotely. So it helps us to create/delete the test data. For developing this API we decided to use &lt;a href=&quot;http://www.django-rest-framework.org/&quot; target=&quot;_blank&quot;&gt;Django REST framework&lt;/a&gt; over &lt;a href=&quot;http://tastypieapi.org/&quot; target=&quot;_blank&quot;&gt;tastypie&lt;/a&gt; for some reasons based on prior experiences of developers.&lt;/li&gt;&lt;li&gt;We decided to use &lt;a href=&quot;http://pytest.org/latest/fixture.html&quot; target=&quot;_blank&quot;&gt;pytest fixtures&lt;/a&gt; instead of SetUp and TearDown methods which will allow creation/deletion of mock objects using the REST API.&lt;/li&gt;&lt;/ul&gt;&lt;br /&gt;We again kicked off the work by initializing the &lt;a href=&quot;https://github.com/mozilla/oneanddone-tests/pull/1&quot; target=&quot;_blank&quot;&gt;Page Objects and Base Class&lt;/a&gt; and opened some Test Case bugs.&lt;br /&gt;Now I am looking forward to developing the REST API and start writing the tests next week.&lt;/div&gt;
 </description>
       </item>
     

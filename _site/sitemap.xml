@@ -2,10 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://pankajmalhotra.com/</loc>
-    <lastmod>2015-06-08T03:20:30+05:30</lastmod>
+    <lastmod>2015-06-14T16:59:40+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+    <url>
+      <loc>http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy</loc>
+      
+        <lastmod>2015-06-14T09:17:00Z</lastmod>
+      
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+    </url>
   
     <url>
       <loc>http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy</loc>
@@ -173,7 +182,7 @@
   <url>
     <loc>http://pankajmalhotra.com/404.html</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -186,7 +195,7 @@
   <url>
     <loc>http://pankajmalhotra.com/feed.xml</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -199,7 +208,7 @@
   <url>
     <loc>http://pankajmalhotra.com/utils/git.html</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -212,7 +221,7 @@
   <url>
     <loc>http://pankajmalhotra.com/coding/index.html</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -225,7 +234,7 @@
   <url>
     <loc>http://pankajmalhotra.com/index.html</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -238,7 +247,7 @@
   <url>
     <loc>http://pankajmalhotra.com/about/index.html</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -251,7 +260,7 @@
   <url>
     <loc>http://pankajmalhotra.com/public/css/main.css</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -264,7 +273,7 @@
   <url>
     <loc>http://pankajmalhotra.com/sitemap.xml</loc>
     
-      <lastmod>2015-06-08</lastmod>
+      <lastmod>2015-06-14</lastmod>
     
     
       <changefreq>monthly</changefreq>
