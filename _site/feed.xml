@@ -6,9 +6,56 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Sun, 28 Jun 2015 04:11:09 +0530</pubDate>
-    <lastBuildDate>Sun, 28 Jun 2015 04:11:09 +0530</lastBuildDate>
+    <pubDate>Sun, 28 Jun 2015 12:41:20 +0530</pubDate>
+    <lastBuildDate>Sun, 28 Jun 2015 12:41:20 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>Retrieving Safari History From JailBroken IOS Device</title>
+        <link>http://pankajmalhotra.com/Retrieving-Safari-History-From-JailBroken-IOS-Device</link>
+        <pubDate>Sun, 28 Jun 2015 07:10:58 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;h3&gt;This post is for Jail Broken devices and tested on IOS 8.1.2.&lt;/h3&gt;
+
+&lt;p&gt;This post explains how to retrieve safari history database from a jail broken ios device. Its a sqlite3 database file which contains all history data but the challenge is that there is no specific path on which the files exist, so you will have to first find the files.&lt;/p&gt;
+
+&lt;p&gt;1 Install OpenSSH on your jailbroken device (through Cydia).&lt;/p&gt;
+
+&lt;p&gt;2 Find History.db* files&lt;/p&gt;
+
+&lt;p&gt;Application data for most applications reside in subdirectories under:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;/private/var/mobile/Containers/Data/Application/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The files which contain safari history data are:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;History.db
+History.db-shm
+History.db-wal
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To find path to these files just do:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ find /private/var/mobile/Containers/Data/Application -iname &amp;#39;History.db*&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;3 SCP files to a local location&lt;/p&gt;
+
+&lt;p&gt;Basically to get the data from these files you need &lt;code&gt;sqlite3&lt;/code&gt;. You can either install &lt;code&gt;sqlite3&lt;/code&gt; app from cydia to the mobile or better just scp the datbase files to machine you are working on.&lt;/p&gt;
+
+&lt;p&gt;You can copy the files one by one or better use &lt;code&gt;sshpass&lt;/code&gt; and &lt;code&gt;xargs&lt;/code&gt; to copy all files at one go like:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ sshpass -p &amp;#39;alpine&amp;#39; ssh  root@mobile_ip &amp;quot;find /private/var/mobile/Containers/Data/Application -name &amp;#39;History.db*&amp;#39;&amp;quot; \
+    | xargs -I{} \
+    sshpass -p &amp;#39;alpine&amp;#39; scp -P $SSH_PORT root@mobile_ip:&amp;#39;{}&amp;#39; /path/to/tmp/db/on/local/machine;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;4 Load the sqlite database&lt;/p&gt;
+
+&lt;p&gt;If you change your working directory to the directory containing &lt;code&gt;History.db*&lt;/code&gt; files and do:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ sqlite3 History.db
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;It will load sqlite3 database and now you can get any data you want about browser history.&lt;/p&gt;
+
+&lt;p&gt;5 Example query to get latest page visited:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;gt; select url from history_items where id in( select history_item from history_visits order by visit_time desc limit 1);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That&amp;#39;s it ! Now you can just play around and get stats like number of times and time when a website was visited and much more.&lt;/p&gt;
+</description>
+      </item>
     
       <item>
         <title>Start App Service At BootUp On JailBroken IOS Device</title>
@@ -591,111 +638,6 @@ Apart from this I am planning to restructure my Blog and have some more features
 &lt;p&gt;Was working on some big things, had to forgo some minor things and didn&amp;#39;t get much time to blog. Would be blogging about most of those things in upcoming posts. &lt;/p&gt;
 
 &lt;h2&gt;Keep Checking !&lt;/h2&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>ARP and Thunderbolt-Ethernet issues with OS X Mavericks</title>
-        <link>http://pankajmalhotra.com/ARP-and-ethernet-issues-with-osx-mavericks</link>
-        <pubDate>Sun, 17 Aug 2014 10:45:20 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;Recently I got a new MacBook Pro(late 2013 model) 13.3 Retina display and everything was working like charm while I was using wifi to connect to internet and that pretty much should be because you expect everything perfect after spending that much amount on a machine.
-After moving to my university where wifi connectivity is not present at every place I switched to Thunderbolt to Gigabit Ethernet to connect to internet and this was the moment when things seemed to be changing and I started getting troubles connecting to internet.&lt;/p&gt;
-
-&lt;h2&gt;Problem&lt;/h2&gt;
-
-&lt;p&gt;At the first time when I connected to internet it took about 15 min for internet to get stabilized and was continuously connecting and dissconnecting as if someone was continuously playing with the Ethernet cable, I ignored it and continued with my work assuming some problem with the VLAN used in university hostel and after some time the internet got dissconnected again automatically while working and came back after around 2 min.&lt;/p&gt;
-
-&lt;p&gt;I tried to ping google from terminal and observed quite significant packet loss like this one:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;64 bytes from 74.125.236.128: icmp_seq=0 ttl=53 time=56.825 ms
-64 bytes from 74.125.236.128: icmp_seq=1 ttl=53 time=56.839 ms
-64 bytes from 74.125.236.128: icmp_seq=2 ttl=53 time=56.583 ms
-64 bytes from 74.125.236.128: icmp_seq=3 ttl=53 time=56.770 ms
-64 bytes from 74.125.236.128: icmp_seq=4 ttl=53 time=56.663 ms
-64 bytes from 74.125.236.128: icmp_seq=5 ttl=53 time=56.894 ms
-64 bytes from 74.125.236.128: icmp_seq=6 ttl=53 time=56.622 ms
-64 bytes from 74.125.236.128: icmp_seq=7 ttl=53 time=58.007 ms
-Request timeout for icmp_seq 8
-Request timeout for icmp_seq 9
-Request timeout for icmp_seq 10
-Request timeout for icmp_seq 11
-Request timeout for icmp_seq 12
-64 bytes from 74.125.236.128: icmp_seq=13 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=14 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=15 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=15 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=16 ttl=53 time=56.713 ms
-64 bytes from 74.125.236.128: icmp_seq=17 ttl=53 time=57.376 ms
-64 bytes from 74.125.236.128: icmp_seq=18 ttl=53 time=57.811 ms
-64 bytes from 74.125.236.128: icmp_seq=19 ttl=53 time=57.001 ms
-64 bytes from 74.125.236.128: icmp_seq=20 ttl=53 time=56.869 ms&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This was the first problem - Packet loss for ping requests. &lt;/p&gt;
-
-&lt;p&gt;It could still be tolerated but the most annoying part was I was not able to connect to internet after a reboot or sleep and had to wait for around 15-30 min everytime for the connection to get stabilized.
-I checked the netork preferences at the this time by going to &lt;/p&gt;
-
-&lt;p&gt;System Preference &amp;gt; Network and observed that machine could not even fetch the Ip address from DHCP server and the Thuderbot to ethernet connection was continuously flickering Green and Red light.&lt;/p&gt;
-
-&lt;p&gt;I googled about the problem to find if its just my machine or other users are facing this problem and found some very useful sources of discussion:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;a href=&quot;https://discussions.apple.com/thread/5483424?start=0&amp;amp;tstart=0&quot;&gt;Discussion on Apple Support&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.reddit.com/r/sysadmin/comments/1yc6n1/packet_losses_with_new_os_x_mavericks_make_sure&quot;&gt;Reddit Discussion&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.macstadium.com/blog/osx-10-9-mavericks-bugs/&quot;&gt;MacStadum Blog providing updates on issue&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Which clearly indicate this issue with ARP caching by OS X Mavericks and problem with only some of the machines and not all.
-So I was curious to check my arp output at this point of time and here is what it looked like:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.99) at 28:92:4a:43:c2:36 on en4 ifscope [ethernet]
-? (10.1.34.157) at b8:88:e3:e2:aa:c7 on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.70) at b4:b5:2f:2f:c4:64 on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This is at the moment when problem is lot worse.&lt;/p&gt;
-
-&lt;p&gt;I tried a bunch of proposed solution proposed on various internet sites but nothing worked for me and then I came across a script which explains the problem and gives a solution that worked for many other users &lt;a href=&quot;https://github.com/MacMiniVault/Mac-Scripts/blob/master/unicastarp/unicastarp-README.md&quot;&gt;Disable Unicast ARP Cache Validation&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;As mentioned it disables Unicast ARP cache validation. But... unfortunately this also did not work for me :-(&lt;/p&gt;
-
-&lt;h2&gt;Solution&lt;/h2&gt;
-
-&lt;p&gt;The solution which is quite promising and worked for me is to:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Bind MAC address of networking interface(Thunderbolt to Gigabit ethernet in this case) to IP Address in DHCP configuration so that problem with ARP requests reduces quite significantly.&lt;/li&gt;
-&lt;li&gt;After this it is also useful to remove all network interfaces from network preferences by clicking the &amp;quot;-&amp;quot; button shown in image and reboot. It is because I observed Thunderbolt-Bridge interfaring with the Thunderbolt-Ethernet and making it Fail in Assist-Me menu for network configuration.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/public/images/network.png&quot; alt=&quot;Network Preferences OS X Mavericks&quot; style=&quot;float:left; margin-right:15px;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This solution works fine for me and I am able to connect to internet using Thunderbolt to Gigabit Ethernet but at times I still see some packet loss which is almost insignificant.&lt;/p&gt;
-
-&lt;p&gt;So there is no permanent solution as of now but I hope Apple to investigate more on this and fix this in their next release. Some people are really pushing them to fix the problem and I think most of updates about this issue can be found on &lt;a href=&quot;http://www.macstadium.com/blog/osx-10-9-mavericks-bugs/&quot;&gt;MacStadium Blog&lt;/a&gt; who are using Mac Mini&amp;#39;s in their data centeres, having the same problem with many of their machines and are in regular contact with the Apple Developers.&lt;/p&gt;
-
-&lt;p&gt;I thought this piece of interrogation and ispection worth sharing with everyone so that you don&amp;#39;t waste time trying random hacks described on various internet websites if you have the same issue.&lt;/p&gt;
 </description>
       </item>
     

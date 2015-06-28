@@ -2,10 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://pankajmalhotra.com/</loc>
-    <lastmod>2015-06-28T04:11:09+05:30</lastmod>
+    <lastmod>2015-06-28T12:41:20+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+    <url>
+      <loc>http://pankajmalhotra.com/Retrieving-Safari-History-From-JailBroken-IOS-Device</loc>
+      
+        <lastmod>2015-06-28T07:10:58Z</lastmod>
+      
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+    </url>
   
     <url>
       <loc>http://pankajmalhotra.com/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device</loc>
