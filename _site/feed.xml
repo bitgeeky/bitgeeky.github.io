@@ -6,9 +6,101 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Sun, 28 Jun 2015 12:41:20 +0530</pubDate>
-    <lastBuildDate>Sun, 28 Jun 2015 12:41:20 +0530</lastBuildDate>
+    <pubDate>Mon, 27 Jul 2015 02:43:13 +0530</pubDate>
+    <lastBuildDate>Mon, 27 Jul 2015 02:43:13 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>Skip SSL HostName Verification Java HttpsURLConnection</title>
+        <link>http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection</link>
+        <pubDate>Mon, 27 Jul 2015 20:39:10 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;There might arise a situation when you have to make a secure request to a server with certificates that do not have host name to which you are making a request.&lt;/p&gt;
+
+&lt;p&gt;For example a certificate generated for &lt;code&gt;https://example.com&lt;/code&gt; might not support its ip address &lt;code&gt;https://ex.com.ip.add&lt;/code&gt; as a valid host name.&lt;/p&gt;
+
+&lt;p&gt;PS: This situation is different from errors arrising from invalid or self signed certificates. This situation arrises when certificates are valid but the host name verification fails.&lt;/p&gt;
+
+&lt;p&gt;You might see an error like&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;java.io.IOException: Hostname &amp;#39;0.0.0.0&amp;#39; was not verified
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Where in place of &lt;code&gt;0.0.0.0&lt;/code&gt; its the server&amp;#39;s ip address.&lt;/p&gt;
+
+&lt;p&gt;In such a situation all you need to do is to skip host name verification for the URL connection. You can Override the default &lt;code&gt;HostnameVerifier&lt;/code&gt; with a custom verifier to add exception for the host you are making request to.&lt;/p&gt;
+
+&lt;p&gt;This should be done only if you are confident that the server you are sending request to doesn&amp;#39;t has any kind of security issues, because when you skip host name verification there is actually no point of &lt;code&gt;HTTPS/SSL&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For a particular host you can write a custom &lt;code&gt;HostnameVerifier&lt;/code&gt; like:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+    @Override
+    public boolean verify(String hostname, SSLSession session) {
+        HostnameVerifier hv =
+            HttpsURLConnection.getDefaultHostnameVerifier();
+        return hv.verify(&amp;quot;hostname&amp;quot;, session);
+    }
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;or just &lt;code&gt;return true&lt;/code&gt; if you want to skip for all hosts on a particular URL connection.&lt;/p&gt;
+
+&lt;p&gt;A sample code that fetches JSON data using such request:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.Exception;
+import java.net.URL;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
+public class SkipVerification implements Runnable {
+
+    private static final String TAG = SkipVerification.class.toString();
+    private String server_port;
+    private String serverIP;
+
+    public SkipVerification(String serverIP, String server_port){
+        this.serverIP = serverIP;
+        this.server_port = server_port;
+    }
+
+    public void run() {
+        try {
+            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            };
+
+            URL url = new URL(&amp;quot;https://&amp;quot; + serverIP + &amp;quot;:&amp;quot; + server_port + &amp;quot;/json&amp;quot;);
+            InputStream inStream = null;
+
+            try {
+                HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
+                urlConnection.setRequestProperty(&amp;quot;Content-Type&amp;quot;, &amp;quot;application/json&amp;quot;);
+                urlConnection.setHostnameVerifier(hostnameVerifier);
+                inStream = urlConnection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+            } catch (Exception e) {
+                Log.e(TAG, &amp;quot;error fetching data from server&amp;quot;, e);
+            } finally {
+                if (inStream != null) {
+                    inStream.close();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, &amp;quot;error initializing SkipVerificationn thread&amp;quot;, e);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The above code makes a &lt;code&gt;https&lt;/code&gt; request to a server whose certificate doesn&amp;#39;t have an entry of its ip address as a verified hostname. The custom &lt;code&gt;HostnameVerifier&lt;/code&gt; skips any kind of hostname verification particular to a &lt;code&gt;HttpsURLConnection&lt;/code&gt;.&lt;/p&gt;
+</description>
+      </item>
     
       <item>
         <title>Retrieving Safari History From JailBroken IOS Device</title>
@@ -580,64 +672,6 @@ resource &amp;quot;aws_instance&amp;quot; &amp;quot;web&amp;quot; {
 &lt;h2&gt;What examples I wrote ?&lt;/h2&gt;
 
 &lt;p&gt;I wrote a couple of examples on how to deploy Wordpress, link Travis, deploy Docker, Discourse and tutorials on getting SSH access to the machines in infractructure using the ATLAS workflow. I will give a brief introduction and link for each of these in the next blog post.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>The Calm Before the Storm</title>
-        <link>http://pankajmalhotra.com/The-calm-before-the-storm</link>
-        <pubDate>Wed, 11 Mar 2015 01:50:20 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;I had gone &lt;em&gt;almost&lt;/em&gt; socially and publicaly silent for a couple of months. This was not by choice but I was busy experimenting with a lot of new things, had a few goals to achieve, learn new things and most of my time went in this. Still I have been wanting to write/blog about everything I tried, thing I learned, things I achieved and the challenging experience I had from past a few months but again time and the laziness was a big barrier.&lt;/p&gt;
-
-&lt;p&gt;Its not that I am completely free now and had nothing else to do than write a blog post but as I say I was learning things and one of the things which I iterated learning was managing my time.
-So yeah after managing my time I got a couple of moments in which I can share and write about things, I really have been longing to write about.&lt;/p&gt;
-
-&lt;p&gt;I am planning to roll out the blog post about these things in a weekly post manner i.e one post per week. This will give me enough time to write a quality post and since the reader would be able to appreciate them.&lt;img src=&quot;/public/images/blog_posts_are_coming.jpg&quot; alt=&quot;Brace Yourselves, Blog Posts Are Coming&quot; style=&quot;float:left; margin-right:15px; margin-top:15px; width: 40%; height: 40%&quot; /&gt; 
-These post range from a wide range of topics from my experimens with my diet, social life/facebook new feed, my achievement in these months from being and Intel Embedded Challenge Winner to working as a part time developer with HashiCorp and getting an Internship at BrowserStack while also discussing about the challenges I faced during this period.&lt;/p&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h2&gt;Upcoming Blog Posts &lt;/h2&gt;
-
-&lt;p&gt;These are some of the topics I have been wanting to write about and definitely as I write I will have more to share.&lt;/p&gt;
-
-&lt;h2&gt;1. Being Technical Reviewer for PACKT Publishing&lt;/h2&gt;
-
-&lt;p&gt;I got an offer from PACKT publishing to be a technical reviewer for one the their books on JQuery. I accpeted their offer but had to leave in between because of some reasons. There wasn&amp;#39;t any sort of contract. I would be blogging about my views on accepting the offer at first and reject it before even starting so that there isn&amp;#39;t any kind of loss.&lt;/p&gt;
-
-&lt;h2&gt;2. Winning Intel India Embedded Challenge 2014&lt;/h2&gt;
-
-&lt;p&gt;This was one of the best thing I had done in all the years I spent in college till now. I along with my two friends participated in Intel IEC 2014 and won the Jury&amp;#39;s popular choice award, a fat cash prize and a lot of fame. &lt;a href=&quot;https://iec2014.intel.com/winner2014.aspx&quot;&gt;Official Results&lt;/a&gt;.&lt;img src=&quot;/public/images/Intel_IEC.jpg&quot; alt=&quot;Intel IEC&quot; style=&quot;float:right; margin-left:15px; margin-top:15px; width: 50%; height: 50%&quot; /&gt;Thanks to the team, this would not have been possible without Aditya Jindal and Shubham Chhabra. We built an &amp;quot;Ambulatory EEG and seizure alert system&amp;quot;. Will be discussing more on this in the post and all about the competetion. One thing I would not miss out here is that this was the best Judgement I have ever seen. The Jury was of the most notable alumni of top most institutions and corporates and comprised of Judges with very diverse fields Mangament, Entrepreneurs, Engineers, Teachers, Proffesors and Doctors.&lt;/p&gt;
-
-&lt;h2&gt;3. Algorithms and competetive programming&lt;/h2&gt;
-
-&lt;p&gt;Honestly speaking I wasn&amp;#39;t much into Algorithms and competetive programming till I realised that things would be really tough if I would not practice enough Algorithms to crack interviews for Software Engineering Intern and yes from that point I started reading a lot of Algorithsm and would solve a few problems daily.
-I gradually developed interest and saw its intersection with Software Development. Obviously, you would never be able to write a good software unless you know your Algorithms and Data Structures. This thing wasn&amp;#39;t actually too obvious to me initially.&lt;/p&gt;
-
-&lt;h2&gt;4. Software Developer Contractor for &lt;a href=&quot;http://atlas.hashicorp.com/&quot;&gt;HashiCorp ATLAS&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;I am writing code for &lt;a href=&quot;https://hashicorp.com/&quot;&gt;HashiCorp&lt;/a&gt;, YES you heard it right ! This was something I have been wanting to do since when I started programming but I didn&amp;#39;t know my interest because I never knew what DevOps is and what Distributed Systems is.&lt;img src=&quot;/public/images/HashiCorp_Logo.png&quot; alt=&quot;HashiCorp Logo&quot; style=&quot;float:left; margin-right:15px; margin-top:15px; width: 20%; height: 20%&quot; /&gt;I always wanted to make things which could communicate in real time and send data across machines,  I developed a few multiplayer games and used Socket IO alot to make chat applications. But now I know what I want to do and I read a lot about distributed algorithms, protocols and networking.
-I can&amp;#39;t write much on this because of a contract but I would be blogging about my adventures with ATLAS.&lt;/p&gt;
-
-&lt;h2&gt;5. Summer Internship 2015 at &lt;a href=&quot;http://www.browserstack.com/&quot;&gt;BrowserStack&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/public/images/BrowserStack_Logo.png&quot; alt=&quot;BrowserStack Logo&quot; style=&quot;float:left; margin-right:15px; width: 20%; height: 20%&quot; /&gt;I will be working with BrowseStack as a summer Intern this year. I will blog about the reasons why I chose BrowserStack to work for.&lt;/p&gt;
-
-&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
-
-&lt;h2&gt;Blog Renovation&lt;/h2&gt;
-
-&lt;p&gt;For now I have initialised this Queue for Blog posts with these topics and hope to make each post on time.
-Apart from this I am planning to restructure my Blog and have some more features, I chose Jekyll and github.io for hosting in a hurry when I started blogging, but this it definitely lacks SEO optimisations.&lt;/p&gt;
-
-&lt;p&gt;Restructuring the site is a less priority, and would do when I have enough time to design and plan a good one.&lt;/p&gt;
-
-&lt;h2&gt;TL;DR&lt;/h2&gt;
-
-&lt;p&gt;Was working on some big things, had to forgo some minor things and didn&amp;#39;t get much time to blog. Would be blogging about most of those things in upcoming posts. &lt;/p&gt;
-
-&lt;h2&gt;Keep Checking !&lt;/h2&gt;
 </description>
       </item>
     

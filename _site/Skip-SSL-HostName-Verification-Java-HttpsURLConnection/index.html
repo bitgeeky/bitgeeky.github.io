@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- meta information -->
+<meta charset="utf-8">
+<meta name="description" 
+      content="There might arise a situation when you have to make a secure request to a server with certificates that do not have h..." >
+<meta name="author" content="Pankaj Malhotra">
+
+<!-- Enable responsiveness on mobile devices-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<!-- title -->
+<title>Skip SSL HostName Verification Java HttpsURLConnection &middot; Pankaj Malhotra</title>
+
+<!-- icons -->
+<link rel="shortcut icon" href="/public/images/favicon.ico" />
+
+<!-- stylesheets -->
+<link rel="stylesheet" href="/public/css/responsive.gs.12col.css">
+<link rel="stylesheet" href="/public/css/animate.min.css">
+<link rel="stylesheet" href="/public/css/main.css">
+<link rel="stylesheet" href="/public/css/share-page.css">
+
+<!-- Google fonts -->
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+
+
+
+<!-- feed links -->
+<link rel="alternate" href="/feed.xml" type="application/rss+xml" title="">
+
+  </head>
+  <body>
+    <div class="container azul">
+      <header class="top row gutters">
+        <div class="col span_2 center">
+          <!-- TODO: add baseurl to the logo link -->
+          <a href="http://pankajmalhotra.com" id="logo" title="Pankaj Malhotra"
+             style="background-image: url(/public/images/logo.png);"></a>
+        </div>
+        <nav class="col span_10 top-navbar">
+  
+  <a href="/" title="Home"
+     >Home</a>
+  
+  <a href="/coding" title="Coding"
+     >Coding</a>
+  
+  <a href="/about" title="About"
+     >About</a>
+  
+</nav>
+
+      </header>
+
+      <article class="single row gutters">
+  <time class="published" datetime="2015-07-27">27 July 2015</time>
+  <h2>Skip SSL HostName Verification Java HttpsURLConnection</h2>
+
+  <p>There might arise a situation when you have to make a secure request to a server with certificates that do not have host name to which you are making a request.</p>
+
+<p>For example a certificate generated for <code>https://example.com</code> might not support its ip address <code>https://ex.com.ip.add</code> as a valid host name.</p>
+
+<p>PS: This situation is different from errors arrising from invalid or self signed certificates. This situation arrises when certificates are valid but the host name verification fails.</p>
+
+<p>You might see an error like</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">java.io.IOException: Hostname &#39;0.0.0.0&#39; was not verified
+</code></pre></div>
+<p>Where in place of <code>0.0.0.0</code> its the server&#39;s ip address.</p>
+
+<p>In such a situation all you need to do is to skip host name verification for the URL connection. You can Override the default <code>HostnameVerifier</code> with a custom verifier to add exception for the host you are making request to.</p>
+
+<p>This should be done only if you are confident that the server you are sending request to doesn&#39;t has any kind of security issues, because when you skip host name verification there is actually no point of <code>HTTPS/SSL</code>.</p>
+
+<p>For a particular host you can write a custom <code>HostnameVerifier</code> like:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+    @Override
+    public boolean verify(String hostname, SSLSession session) {
+        HostnameVerifier hv =
+            HttpsURLConnection.getDefaultHostnameVerifier();
+        return hv.verify(&quot;hostname&quot;, session);
+    }
+};
+</code></pre></div>
+<p>or just <code>return true</code> if you want to skip for all hosts on a particular URL connection.</p>
+
+<p>A sample code that fetches JSON data using such request:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.Exception;
+import java.net.URL;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
+public class SkipVerification implements Runnable {
+
+    private static final String TAG = SkipVerification.class.toString();
+    private String server_port;
+    private String serverIP;
+
+    public SkipVerification(String serverIP, String server_port){
+        this.serverIP = serverIP;
+        this.server_port = server_port;
+    }
+
+    public void run() {
+        try {
+            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            };
+
+            URL url = new URL(&quot;https://&quot; + serverIP + &quot;:&quot; + server_port + &quot;/json&quot;);
+            InputStream inStream = null;
+
+            try {
+                HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
+                urlConnection.setRequestProperty(&quot;Content-Type&quot;, &quot;application/json&quot;);
+                urlConnection.setHostnameVerifier(hostnameVerifier);
+                inStream = urlConnection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+            } catch (Exception e) {
+                Log.e(TAG, &quot;error fetching data from server&quot;, e);
+            } finally {
+                if (inStream != null) {
+                    inStream.close();
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, &quot;error initializing SkipVerificationn thread&quot;, e);
+        }
+    }
+}
+</code></pre></div>
+<p>The above code makes a <code>https</code> request to a server whose certificate doesn&#39;t have an entry of its ip address as a verified hostname. The custom <code>HostnameVerifier</code> skips any kind of hostname verification particular to a <code>HttpsURLConnection</code>.</p>
+
+
+<div class="share-page">
+    Share this on &rarr;
+    <a href="https://twitter.com/intent/tweet?text=Skip SSL HostName Verification Java HttpsURLConnection&url=http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
+    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
+    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
+</div>
+
+</article>
+
+      
+          <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'pankajmalhotracom'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+
+      
+
+      <footer>
+          <p>
+          Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
+          </p>
+        <p>
+          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+        </p>
+      </footer>
+    </div>
+
+    <!-- scripts -->
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51408334-1', 'pankajmalhotra.com');
+  ga('send', 'pageview');
+
+</script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/public/js/jquery.fitvids.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("article").fitVids();
+      });
+    </script>
+  </body>
+</html>
