@@ -6,9 +6,27 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Mon, 27 Jul 2015 02:43:13 +0530</pubDate>
-    <lastBuildDate>Mon, 27 Jul 2015 02:43:13 +0530</lastBuildDate>
+    <pubDate>Fri, 31 Jul 2015 03:15:55 +0530</pubDate>
+    <lastBuildDate>Fri, 31 Jul 2015 03:15:55 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>GoSprint and GoRhythms - Algorithms In GoLang</title>
+        <link>http://pankajmalhotra.com/GoSprint-And-GoRhythms-Algorithms-In-GoLang</link>
+        <pubDate>Fri, 31 Jul 2015 20:31:35 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;Few weeks back I started a new section called &lt;code&gt;coding&lt;/code&gt; on my blog. If you follow my blog you would have seen that there wasn&amp;#39;t much activity and posts around that section as promised.
+Its not that I have stoppped reading algorithms and just doing so called &lt;code&gt;cool&lt;/code&gt; stuff, the reason for not making regular posts in that section is that most of the times when I read an algorithm, its implementation in C++ is given along with it. So writing the same code again isn&amp;#39;t interesting, but I feel like implementing the algorithm and make a blog post whenever I read something new.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/images/gopher.png&quot; alt=&quot;Gophers&quot; style=&quot;float:left; margin-right:20px; margin-top:15px; width: 40%; height: 40%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To deal with this problem, I am planning to do a &lt;code&gt;GoSprint&lt;/code&gt;. In coming days whatever algorithm I read I&amp;#39;ll post Go source code for its imlementation. This will allow me to implement the algorithm I read and also help me get a better grip on language.&lt;/p&gt;
+
+&lt;p&gt;I initiated a repository &lt;a href=&quot;https://github.com/bitgeeky/GoRhythms&quot;&gt;GoRhythms&lt;/a&gt; on GitHub which will contain all the code snippets, also I am renaming the &lt;code&gt;coding&lt;/code&gt; section on my blog to &lt;code&gt;GoRhythms&lt;/code&gt; since all the algorithms will now be posted under this section.&lt;/p&gt;
+
+&lt;p&gt;Shout out to all the Gophers out there, pull requests welcomed !&lt;/p&gt;
+</description>
+      </item>
     
       <item>
         <title>Skip SSL HostName Verification Java HttpsURLConnection</title>
@@ -582,96 +600,6 @@ int main()
 &lt;p&gt;There are many other examples in official HashiCorp&amp;#39;s &lt;a href=&quot;https://github.com/hashicorp/atlas-examples&quot;&gt;ATLAS Examples&lt;/a&gt; respository on GitHub. I would recommend to go through some of them to get a good grip of how things work. &lt;/p&gt;
 
 &lt;p&gt;If you think any project is missing feel free to raise an issue or You Can Add One Too !&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Infrastructure Automation Using Terraform, Packer, Consul and ATLAS Workflow</title>
-        <link>http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas</link>
-        <pubDate>Fri, 17 Apr 2015 03:35:19 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;I have been working as a software contractor for HashiCorp for over a month now. My main work is to write examples for HashiCorp &lt;a href=&quot;https://atlas.hashicorp.com/&quot;&gt;ATLAS&lt;/a&gt; which is an upcoming product from HashiCorp and is under tech review at the moment. During this time I got to work on tools like Terraform, Packer and Consul. These tools are all from HashiCorp. In this blog post I&amp;#39;ll describe briefly what each of these tools is used for and about the examples I wrote for Atlas.&lt;/p&gt;
-
-&lt;h2&gt;What is Infrastructure Automation ?&lt;/h2&gt;
-
-&lt;p&gt;As the name suggests its automating the process of creating vm&amp;#39;s, managing load balancers, security groups, ssh-keys, ip-address and all the other resources that are associated with the machine or container.
-When the size of data centres is large and it consists of hundreds or thousands of nodes and servers its impossible to handle these resources manually. So you need an automation tool that would do the work for you and to preserve all the infrastructure as a code, configuration files to be more precise. Based on the infrastructure configuration and the commands you pass every thing in cloud can be controlled using the automation tool.&lt;/p&gt;
-
-&lt;h2&gt;What is Terraform ?&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.terraform.io/&quot;&gt;Terraform&lt;/a&gt; is an Infrastructure automation tool used to store infrastructure as code. Its written in &lt;code&gt;go&lt;/code&gt; and has its own syntax for writing infrastructure configuration using &lt;code&gt;*.tf&lt;/code&gt; file. A sample terraform file looks like:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;provider &amp;quot;aws&amp;quot; {
-    access_key = &amp;quot;ACCESS_KEY_HERE&amp;quot;
-    secret_key = &amp;quot;SECRET_KEY_HERE&amp;quot;
-    region = &amp;quot;us-east-1&amp;quot;
-}
-
-resource &amp;quot;aws_instance&amp;quot; &amp;quot;web&amp;quot; {
-    instance_type = &amp;quot;t1.micro&amp;quot;
-    ami = &amp;quot;ami-408c7f28&amp;quot;
-
-    # This will create 1 instances
-    count = 1
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;So you can specify the priver AWS in this case and specify the resources you want to create on that provider like &lt;code&gt;aws_instance&lt;/code&gt; in this case. On running &lt;code&gt;$ terraform plan&lt;/code&gt; you can check the validity of your terraform configuration, it will give an error if there is any syntax issue, resource dependency issues and performs validation of resources, credentials etc but the actual output you get on running &lt;code&gt;$ terraform apply&lt;/code&gt; - which actually deploys these resources might differ from the output of &lt;code&gt;$ terraform plan&lt;/code&gt; in some cases.&lt;/p&gt;
-
-&lt;p&gt;So running &lt;code&gt;$ terraform apply&lt;/code&gt; on this will create an aws instance with specified configuration. It actually creates a graph on backend to check for resource dependencies and you can get the graph using the commnd &lt;code&gt;$ terraform graph&lt;/code&gt;. If anything goes wrong you can run &lt;code&gt;$ terraform destroy&lt;/code&gt; to destroy the complete infrastructure.&lt;/p&gt;
-
-&lt;p&gt;It comes with support from a lot of service providers AWS, Azure, Digital Ocean, Heroku, Google Cloud, Docker etc. All these service providers actually provide api&amp;#39;s to communicate with their services and terraform provides an abstarction layer over these api&amp;#39;s along with other very useful features.&lt;/p&gt;
-
-&lt;p&gt;This is a very small example to just give an idea what terraform is all about, you should see the &lt;a href=&quot;https://www.terraform.io/docs/index.html&quot;&gt;official docmentation&lt;/a&gt; for many other features that it offers. It has developed a very good community also you can visit &lt;code&gt;#terraform-tool&lt;/code&gt; on freenode to ask any doubts etc.&lt;/p&gt;
-
-&lt;h2&gt;What is Packer ?&lt;/h2&gt;
-
-&lt;p&gt;Writing terraform files can get a lot complex sometimes when you need to install some packages on your machine or make a particular setup on the machine you just created. Its always advised to machine a machine image for whatever you want to do. In the machine image you can specify the packages you want to install on the machine, configuration you need to make before the machine actually gets created or scripts you want to execute after you create the machine.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.packer.io/&quot;&gt;Packer&lt;/a&gt; allows you to deal with this task of creating machine images so that they can be deployed cross platform on multiple resource providers parallely. Its also written in &lt;code&gt;go&lt;/code&gt; and all the image configuration can be written in a simple &lt;code&gt;json&lt;/code&gt; format. A sample configuration looks like:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;{
-  &amp;quot;variables&amp;quot;: {
-    &amp;quot;aws_access_key&amp;quot;: &amp;quot;ACCESS_KEY_HERE&amp;quot;,
-    &amp;quot;aws_secret_key&amp;quot;: &amp;quot;SECRET_KEY_HERE&amp;quot;
-  },
-  &amp;quot;builders&amp;quot;: [{
-    &amp;quot;type&amp;quot;: &amp;quot;amazon-ebs&amp;quot;,
-    &amp;quot;access_key&amp;quot;: &amp;quot;&amp;quot;,
-    &amp;quot;secret_key&amp;quot;: &amp;quot;&amp;quot;,
-    &amp;quot;region&amp;quot;: &amp;quot;us-east-1&amp;quot;,
-    &amp;quot;source_ami&amp;quot;: &amp;quot;ami-9eaa1cf6&amp;quot;,
-    &amp;quot;instance_type&amp;quot;: &amp;quot;t2.micro&amp;quot;,
-    &amp;quot;ssh_username&amp;quot;: &amp;quot;ubuntu&amp;quot;,
-    &amp;quot;ami_name&amp;quot;: &amp;quot;packer-example &amp;quot;
-  }]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Similar to &lt;code&gt;$ terraform plan&lt;/code&gt; you can validate the configuration using &lt;code&gt;$ packer validate example.json&lt;/code&gt; and the run &lt;code&gt;$ packer build example.json&lt;/code&gt; to actually create the machine image.&lt;/p&gt;
-
-&lt;h2&gt;What is ATLAS ?&lt;/h2&gt;
-
-&lt;p&gt;So now you have the machine images and your terraform deployment configurations. Lets say, you want to share your infrastructure with one of the team members or you need a place to host the machine images, develop your infrastructure further and then deploy it immediately. This is what ATLAS is designed for. It provides a platform to perform all these operations at a single place.&lt;/p&gt;
-
-&lt;p&gt;I would describe &lt;a href=&quot;http://atlas.hashicorp.com/&quot;&gt;ATLAS&lt;/a&gt; as a utility to store and share your infrastrucutre. Like you can share and develop your application code on GitHub, ATLAS provides a platform to develop and share you infrastructure while providing instant deployment option.&lt;/p&gt;
-
-&lt;p&gt;The workflow of ATLAS is like:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Create machine images using Packer and push them to Atlas.&lt;/li&gt;
-&lt;li&gt;Push the application code to Atlas. You can use a vagrant box for this.&lt;/li&gt;
-&lt;li&gt;Link application code to infrastructure images.&lt;/li&gt;
-&lt;li&gt;Deploy Atlas artifacts using Terraform on cloud.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2&gt;What is Consul ?&lt;/h2&gt;
-
-&lt;p&gt;Now that the infrastructure is up and running, how do we find that all nodes in our infrastrucure are behaving as expected and are up and running ? In another case say you deployed database on one of the nodes and application on the other one, now how does one nodes comes to know about other ? How can the application and database nodes communicate with each other ?&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://consul.io/&quot;&gt;Consul&lt;/a&gt; provides a solution to these problems. Its basically a service discovery and health monitoring tool. Apart from this it can also be used as a Key/Value Storage and it can work across multi datacenters. So the nodes monitored by consul need not be present in the same datacenter. Its based on the &lt;code&gt;gossip&lt;/code&gt; protocol which itself utilises &lt;code&gt;udp&lt;/code&gt; for data transfer.&lt;/p&gt;
-
-&lt;p&gt;So these are the interesting things I am working on. Apart from these I also worked on Docker containers and Vagrant boxes but those are quite common now.&lt;/p&gt;
-
-&lt;h2&gt;What examples I wrote ?&lt;/h2&gt;
-
-&lt;p&gt;I wrote a couple of examples on how to deploy Wordpress, link Travis, deploy Docker, Discourse and tutorials on getting SSH access to the machines in infractructure using the ATLAS workflow. I will give a brief introduction and link for each of these in the next blog post.&lt;/p&gt;
 </description>
       </item>
     

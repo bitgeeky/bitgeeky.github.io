@@ -4,14 +4,14 @@
     <!-- meta information -->
 <meta charset="utf-8">
 <meta name="description" 
-      content="There can be a situation where your application is configured to communicate via websockets protocol `ws` and you wan..." >
+      content="Few weeks back I started a new section called `coding` on my blog. If you follow my blog you would have seen that the..." >
 <meta name="author" content="Pankaj Malhotra">
 
 <!-- Enable responsiveness on mobile devices-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 <!-- title -->
-<title>Websockets SSL/TLS Termination Using NGINX Proxy &middot; Pankaj Malhotra</title>
+<title>GoSprint and GoRhythms - Algorithms In GoLang &middot; Pankaj Malhotra</title>
 
 <!-- icons -->
 <link rel="shortcut icon" href="/public/images/favicon.ico" />
@@ -55,60 +55,26 @@
       </header>
 
       <article class="single row gutters">
-  <time class="published" datetime="2015-06-14">14 June 2015</time>
-  <h2>Websockets SSL/TLS Termination Using NGINX Proxy</h2>
+  <time class="published" datetime="2015-07-31">31 July 2015</time>
+  <h2>GoSprint and GoRhythms - Algorithms In GoLang</h2>
 
-  <p>There can be a situation where your application is configured to communicate via websockets protocol <code>ws</code> and you want to expose it over the internet while still keeping the client side secure by SSL/TLS or say the client will always get an <code>HTTPS</code> page.</p>
+  <p>Few weeks back I started a new section called <code>coding</code> on my blog. If you follow my blog you would have seen that there wasn&#39;t much activity and posts around that section as promised.
+Its not that I have stoppped reading algorithms and just doing so called <code>cool</code> stuff, the reason for not making regular posts in that section is that most of the times when I read an algorithm, its implementation in C++ is given along with it. So writing the same code again isn&#39;t interesting, but I feel like implementing the algorithm and make a blog post whenever I read something new.</p>
 
-<p>In such a situation the <code>HTTPS</code> page won&#39;t allow insecure content to be present on the page so you need a <code>wss</code> protocol, but in my case I had no control over the application server. So a solution to such a problem is to use a SSL/TLS terminator in between the application server and the client.</p>
+<p><img src="/public/images/gopher.png" alt="Gophers" style="float:left; margin-right:20px; margin-top:15px; width: 40%; height: 40%" /></p>
 
-<p>There are a few options which act as a websockets proxy, I decided to use NGINX because of the variety of options it provides such as listening mutiple ports, allowing multiple upstreams, support for unix sockets and a bunch of other features without comprimising the performace parameters.</p>
+<p>To deal with this problem, I am planning to do a <code>GoSprint</code>. In coming days whatever algorithm I read I&#39;ll post Go source code for its imlementation. This will allow me to implement the algorithm I read and also help me get a better grip on language.</p>
 
-<p>The final architecture after using NGINX as a websockets proxy is:
-<br/>
-<br/>
-<img src="/public/images/nginx.png" alt="NGINX Proxy" style="margin-right:15px; width: 100%; height: 100%" />
-<br/>
-We use secure websockets communication on client side using the <code>wss</code> protocol and inbetween client and application server is a NGINX proxy server which allows to terminate the SSL/TLS connection and establishes an insecure connection using <code>ws</code> protocol.</p>
+<p>I initiated a repository <a href="https://github.com/bitgeeky/GoRhythms">GoRhythms</a> on GitHub which will contain all the code snippets, also I am renaming the <code>coding</code> section on my blog to <code>GoRhythms</code> since all the algorithms will now be posted under this section.</p>
 
-<p>All that is needed to convert an instance of NGINX to a proxy server is a few changes in configuration file.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">map $http_upgrade $connection_upgrade {
-    default upgrade;
-    &#39;&#39; close;
-}
-
-upstream appserver {
-    server 192.168.100.10:9222; # appserver_ip:ws_port
-}
-
-server {
-    listen 8888; // client_wss_port
-
-    ssl on;
-    ssl_certificate /path/to/crt;
-    ssl_certificate_key /path/to/key;
-
-
-    location / {
-        proxy_pass http://appserver;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-    }
-}
-</code></pre></div>
-<p>The above configuration should be within <code>http{ }</code> block.</p>
-
-<p>Replace the <code>appserver_ip</code> and <code>ws_port</code> with the ip and port of your application server, <code>client_wss_port</code> with the port on which client makes a <code>wss</code> connection and provide paths to certificate/key.</p>
-
-<p>Just reload the NGINX configuration or restart the server to get everything up and running.</p>
+<p>Shout out to all the Gophers out there, pull requests welcomed !</p>
 
 
 <div class="share-page">
     Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Websockets SSL/TLS Termination Using NGINX Proxy&url=http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
+    <a href="https://twitter.com/intent/tweet?text=GoSprint and GoRhythms - Algorithms In GoLang&url=http://pankajmalhotra.com/GoSprint-And-GoRhythms-Algorithms-In-GoLang&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
+    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/GoSprint-And-GoRhythms-Algorithms-In-GoLang" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
+    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/GoSprint-And-GoRhythms-Algorithms-In-GoLang" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
 </div>
 
 </article>
