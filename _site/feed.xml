@@ -6,9 +6,37 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Fri, 31 Jul 2015 03:15:55 +0530</pubDate>
-    <lastBuildDate>Fri, 31 Jul 2015 03:15:55 +0530</lastBuildDate>
+    <pubDate>Tue, 04 Aug 2015 06:37:18 +0530</pubDate>
+    <lastBuildDate>Tue, 04 Aug 2015 06:37:18 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>My Talk Proposal for JSFoo 2015 - Debugging Javascript on Mobile Browsers</title>
+        <link>http://pankajmalhotra.com/My-Talk-Proposal-for-JSFoo-2015-Debugging-Javascript-on-Mobile-Browsers</link>
+        <pubDate>Tue, 04 Aug 2015 00:44:52 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;Here is a proposal of my talk titled &amp;quot;Debugging Javascript on Mobile-Browsers&amp;quot; for JSFoo 2015. It covers a major part of the research work I did while interning with Mobile team at BrowserStack.&lt;/p&gt;
+
+&lt;p&gt;Although the tools mentioned in this talk are for general Mobile Web Debugging which provide JS Debugging, Element Inspection, Network, Resources, Sources, Profiling etc depending on tool, but in the talk I&amp;#39;ll mainly concentrate on JS Debugging.&lt;/p&gt;
+
+&lt;h1&gt;Link to Proposal&lt;/h1&gt;
+
+&lt;p&gt;https://jsfoo.talkfunnel.com/2015/48-debugging-javascript-on-mobile-browsers&lt;/p&gt;
+
+&lt;h1&gt;Gist of Talk&lt;/h1&gt;
+
+&lt;iframe width=&quot;420&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/ngedIOe4Eiw&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h1&gt;Slides for Talk&lt;/h1&gt;
+
+&lt;script async class=&quot;speakerdeck-embed&quot; data-id=&quot;c0422e727ba043babcacf30a5060bfb0&quot; data-ratio=&quot;1.33333333333333&quot; src=&quot;//speakerdeck.com/assets/embed.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;I wish it gets selected, and I get a chance to speak at JSFoo this year.
+This is a completely fresh set of slides, so do suggest any modifications so that it can be made better.&lt;/p&gt;
+
+&lt;p&gt;Drop me a mail if you want me to speak at your event/conference on &amp;quot;Mobile Web Debugging&amp;quot;.&lt;/p&gt;
+</description>
+      </item>
     
       <item>
         <title>GoSprint and GoRhythms - Algorithms In GoLang</title>
@@ -549,57 +577,6 @@ int main()
 &lt;p&gt;This new section will contain a very brief explanation of Algorithm or the problem and the code for implementing it. Most of the problems will be from &lt;a href=&quot;http://www.topcoder.com/&quot;&gt;TopCoder&lt;/a&gt; , &lt;a href=&quot;http://codeforces.com/&quot;&gt;CodeForces&lt;/a&gt; , &lt;a href=&quot;http://www.codechef.com/&quot;&gt;CodeChef&lt;/a&gt; , &lt;a href=&quot;https://www.hackerrank.com/&quot;&gt;HackerRank&lt;/a&gt; and &lt;a href=&quot;http://www.spoj.com/&quot;&gt;SPOJ&lt;/a&gt;. I will add some brain teasers and logic puzzles too. Since I am planning to add them frequently, so they will not be verbose.&lt;/p&gt;
 
 &lt;p&gt;This section might also sometimes contain cool and fun scripts, So keep checking !&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Deploying Projects On AWS Using ATLAS Workflow</title>
-        <link>http://pankajmalhotra.com/Deploying-Projects-On-AWS-Using-ATLAS-Workflow</link>
-        <pubDate>Sat, 18 Apr 2015 04:41:38 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;In the &lt;a href=&quot;http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas/&quot;&gt;last&lt;/a&gt; post I talked about Infrastructure automation and gave a brief introduction about tools like Terraform, Packer, Consul and also talked about ATLAS and the workflow for deploying deploying infrastructure using it.&lt;/p&gt;
-
-&lt;p&gt;Today I am gonna get into details on how to actually deploy projects like a LAMP server, Wordpress, Discourse, Docker on AWS using Atlas workflow and how to generate and associate RSA keys and security group to SSH into any of your machines.&lt;/p&gt;
-
-&lt;p&gt;Most of the informtion is in linked guides for each of the projects, I&amp;#39;ll concentrate on main parts and things to pay special attention to.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&quot;https://atlas.hashicorp.com/help/getting-started/getting-started-overview&quot;&gt;getting-started&lt;/a&gt; guide gives a very good idea about how things work and practically explains the complete ATLAS workflow with a very easy example.&lt;/p&gt;
-
-&lt;h2&gt;Deploying Wordpress on AWS&lt;/h2&gt;
-
-&lt;p&gt;Main thing to note on this tutorial is that you have to deploy database on a separate node since the aws instance gets rebuild everytime you push a new version of you application or make any configuration changes, so to preserve the application data its advised to deploy database on a separate node. We are using Consul here as a service discovery tool so that we get to get information about our application and databse server. So you don&amp;#39;t have to hardcode any ip address or any other other resource attached to a particular service.&lt;/p&gt;
-
-&lt;p&gt;Since we are using Consul here, we will have to allow &lt;code&gt;udp&lt;/code&gt; traffic on the port which Consul is running. As mentioned consul uses a &lt;code&gt;gossip&lt;/code&gt; protocol to establish communication between services.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/hashicorp/atlas-examples/tree/master/wordpress&quot;&gt;Link to tutorial&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Using Travis to push Application code to ATLAS&lt;/h2&gt;
-
-&lt;p&gt;As the name suggests this is an example demonstarting how to push application code to ATLAS from Travis. Here we use &lt;a href=&quot;https://github.com/hashicorp/atlas-upload-cli&quot;&gt;ATLAS Upload CLI&lt;/a&gt;, a simple utility to push application code to Atlas.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/hashicorp/atlas-examples/tree/master/TravisCI&quot;&gt;Link to tutorial&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;SSH in an AWS Instance&lt;/h2&gt;
-
-&lt;p&gt;If you are setting up a production infrastructure, its advised not to allow any ports open or leave any authentication keys in aws instance but surely for debugging purpose you need to sometimes SSH in the instance you created using ATLAS workflow.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/hashicorp/atlas-examples/blob/master/AWS-SSH-Setup/ssh.md&quot;&gt;Link to tutorial&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Deploy Docker Container on AWS&lt;/h2&gt;
-
-&lt;p&gt;Support for Docker provider is released in recent version of terraform &lt;code&gt;0.4&lt;/code&gt;, it still lacks some of requirements but the work is under progress and more features are expected to be released in upcoming versions.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/bitgeeky/atlas-examples/tree/docker/Docker&quot;&gt;Link to tutorial&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Deploy Discourse on AWS&lt;/h2&gt;
-
-&lt;p&gt;Discourse uses docker and does a lot of bootstraping to the instance before deploying the actual application code. So its advised to follow their official guide and treat the bootstraping part as a black box to avoid breaking anything.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://github.com/bitgeeky/atlas-examples/tree/discourse/Discourse&quot;&gt;Link to tutorial&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;There are many other examples in official HashiCorp&amp;#39;s &lt;a href=&quot;https://github.com/hashicorp/atlas-examples&quot;&gt;ATLAS Examples&lt;/a&gt; respository on GitHub. I would recommend to go through some of them to get a good grip of how things work. &lt;/p&gt;
-
-&lt;p&gt;If you think any project is missing feel free to raise an issue or You Can Add One Too !&lt;/p&gt;
 </description>
       </item>
     
