@@ -6,9 +6,17 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Thu, 17 Sep 2015 16:26:57 +0530</pubDate>
-    <lastBuildDate>Thu, 17 Sep 2015 16:26:57 +0530</lastBuildDate>
+    <pubDate>Fri, 18 Sep 2015 19:23:18 +0530</pubDate>
+    <lastBuildDate>Fri, 18 Sep 2015 19:23:18 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>JSFoo 2015 Conference and Workshops on JavaScript</title>
+        <link>http://pankajmalhotra.com/JSFoo-2015-Conference-and-Workshops-on-JavaScript</link>
+        <pubDate>Fri, 18 Sep 2015 00:44:52 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description></description>
+      </item>
     
       <item>
         <title>My Talk Proposal for JSFoo 2015 - Debugging Javascript on Mobile Browsers</title>
@@ -562,21 +570,6 @@ int main()
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Credits : http://www.geeksforgeeks.org&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>New Algorithms and Coding Section</title>
-        <link>http://pankajmalhotra.com/New-Algorithms-and-Coding-Section</link>
-        <pubDate>Thu, 30 Apr 2015 14:02:15 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;Being heavily involved in Software Development and Automation from the last year, I didn&amp;#39;t get much time to do competitive programming. I used to read algorithms and research papers in free time and implement some of them or solve some interesting problem. So to share these codes today I added a new section &lt;a href=&quot;http://pankajmalhotra.com/coding&quot;&gt;coding&lt;/a&gt; to my site.&lt;/p&gt;
-
-&lt;h2&gt;What will it contain ?&lt;/h2&gt;
-
-&lt;p&gt;This new section will contain a very brief explanation of Algorithm or the problem and the code for implementing it. Most of the problems will be from &lt;a href=&quot;http://www.topcoder.com/&quot;&gt;TopCoder&lt;/a&gt; , &lt;a href=&quot;http://codeforces.com/&quot;&gt;CodeForces&lt;/a&gt; , &lt;a href=&quot;http://www.codechef.com/&quot;&gt;CodeChef&lt;/a&gt; , &lt;a href=&quot;https://www.hackerrank.com/&quot;&gt;HackerRank&lt;/a&gt; and &lt;a href=&quot;http://www.spoj.com/&quot;&gt;SPOJ&lt;/a&gt;. I will add some brain teasers and logic puzzles too. Since I am planning to add them frequently, so they will not be verbose.&lt;/p&gt;
-
-&lt;p&gt;This section might also sometimes contain cool and fun scripts, So keep checking !&lt;/p&gt;
 </description>
       </item>
     

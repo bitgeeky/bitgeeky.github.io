@@ -1,38 +1,53 @@
 ---
-layout: none
+layout: live
 title: Live blog
-comments: False
+comments: True
 ---
-<html>
- <head>
-    {% include head.html %}
-  </head>
+<section class="archive">
+{% for post in site.categories['livepage'] %}
 
-<body>
-<div class="container" style="max-width: 500px;">
-<header>
-    <img src="/public/images/tv.png" style="width:70px; height:70px; margin:30px 0px 0px 0px;"  alt="TV"/>
-    <h1 style="display:inline-block; padding:0px 0px 0px 5px;">
-    Live blog
-    </h1>
-    <img src="/public/images/loading_dots.gif" style="width:50px; height:50px;"  alt="Loading Dots"/>
-</header>
+{% if forloop.first %}
+    <!--
+  <div class="bundle row gutters fadeInDown animated">
+      <h2 class="post-year col span_2">{{ post.date | date: '%Y' }}</h2>
+    <div class="posts-by-year col span_10">
+    -->
+    <h2>{{ post.title }}</h2>
+    <p>
+    {{ post.description }}
+    </p>
+    {{ post.content }}
 
-<div class="bundle">
-</div>
+<h2>
+Past Events
+</h2>
 
-<div class="container not-found">
-      <h2 class="bounceInDown animated">Stay Tuned !</h2>
-      <p>
-        Upcoming Event 
-      </p>
-      <p>
-        JSFoo 2015, Conference and Workshops on JavaScript.
-      </p>
-      <p>
-        18-20th September 2015 
-      </p>
-</div>
-</div>
-</body>
-</html>
+{% else %}
+
+<article class="row gutters">
+    <a href="{{ site.baseurl }}{{ post.url }}" title="{{ post.title }}" class="col span_8">{{ post.title }}</a>
+    <div class="post-date col span_4">
+        <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d %B %Y" }}</time>
+    </div>
+</article>
+
+{% if post.previous %}
+{% capture pyear %}{{ post.previous.date | date: '%Y' }}{% endcapture %}
+{% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+{% if pyear != year %}
+
+</div></div>
+    <div class="bundle row gutters fadeInDown animated">
+        <h2 class="post-year col span_2">{{ post.previous.date | date: '%Y' }}</h2>
+        <div class="posts-by-year col span_10">
+
+{% endif %}
+{% endif %}
+
+
+{% if forloop.last %}</div></div>{% endif %}
+
+{% endif %}
+{% endfor %}
+
+</section>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    {% include head.html %}
+
+    <style>
+    h2 { 
+        display: block;
+        margin-bottom: -0.20em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: bold;
+    }
+    </style>
+    
+  </head>
+
+<body>
+<div class="container" style="max-width: 500px;">
+<a href="/live/">
+<header>
+    <img src="/public/images/tv.png" style="width:70px; height:70px; margin:30px 0px 0px 0px;"  alt="TV"/>
+    <h1 style="display:inline-block; padding:0px 0px 0px 5px;">
+    Live blog
+    </h1>
+    <img src="/public/images/loading_dots.gif" style="width:50px; height:50px;"  alt="Loading Dots"/>
+</header>
+</a>
+<div class="bundle">
+
+{% if page.live == false %}
+<h2>{{ page.title }}</h2>
+<p>
+{{ page.description }}
+</p>
+{% endif %}
+
+{{ content }}
+</div>
+
+</div>
+</body>
+
+</html>
