@@ -6,8 +6,8 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Fri, 18 Sep 2015 19:23:18 +0530</pubDate>
-    <lastBuildDate>Fri, 18 Sep 2015 19:23:18 +0530</lastBuildDate>
+    <pubDate>Sun, 20 Sep 2015 20:41:29 +0530</pubDate>
+    <lastBuildDate>Sun, 20 Sep 2015 20:41:29 +0530</lastBuildDate>
 
     
       <item>
@@ -15,7 +15,89 @@
         <link>http://pankajmalhotra.com/JSFoo-2015-Conference-and-Workshops-on-JavaScript</link>
         <pubDate>Fri, 18 Sep 2015 00:44:52 +0000</pubDate>
         <author>Pankaj Malhotra</author>
-        <description></description>
+        <description>&lt;h2&gt;Enjoying weather sitting outside airport&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
+
+&lt;p&gt;Sitting outside airport, having a cup of tea. It&amp;#39;s still raining, weather is really good. I have started feeling a little bit cold now. I really like this kind of a place, seeing people passing by, some are coming, some are leaving and some sitting beside me filling their appetite, all kind of people from different age groups.&lt;/p&gt;
+
+&lt;h2&gt;It started raining&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
+
+&lt;p&gt;It has started raining now, planning to leave for airport.
+&lt;img src=&quot;http://i.imgur.com/dsg28Kj.jpg&quot; alt=&quot;It started raining&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Tikki Tikki&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
+
+&lt;p&gt;We had to checkout at 12 pm. Left the hotel to explore city, having some snacks at a place called Tikki Tikki, it&amp;#39;s a snack made of pita bread pocket filled with cutlet, veggies and some tasty sauces.
+&lt;img src=&quot;http://i.imgur.com/Fub28DE.jpg&quot; alt=&quot;Tikki Tikki&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;We are in a Book Fair&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
+
+&lt;p&gt;Looks like my idea of exploring the city is working out well. I just saw a banner titled Book Fair, and didn&amp;#39;t take a moment to go inside.
+&lt;img src=&quot;http://i.imgur.com/54Du7uB.jpg&quot; alt=&quot;We are in a Book Fair&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Getting ready for the day&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
+
+&lt;p&gt;I am planning to explore the city, and skipping NodeBots &amp;amp; JS Hardware Workshop. I hope I don&amp;#39;t regret it later.
+&lt;img src=&quot;http://i.imgur.com/yT5rbzs.jpg&quot; alt=&quot;Getting ready for the day&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Guillermo Rauch live on stage&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-19&lt;/h5&gt;
+
+&lt;p&gt;Creator of Socket.IO talks on future of Chat and Rich Realtime JavaScript application
+&lt;img src=&quot;http://i.imgur.com/fxBYyr6.jpg&quot; alt=&quot;Guillermo Rauch live on stage&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Droids, JavaScript and Web Connected Hardware&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-19&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/IPR6dnQ.jpg&quot; alt=&quot;Droids, JavaScript and Web Connected Hardware&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Nice use of Web Audio API&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-19&lt;/h5&gt;
+
+&lt;p&gt;These guys are playing live Djembe and filling the hall with music. They are using Web Audio API to capture sound signals and P5.js to visualze the music and beat being played. They are going to talk about the algorithm they are using to perfectly capture and process sound signals.
+&lt;img src=&quot;http://i.imgur.com/PYnqSP6.jpg&quot; alt=&quot;Nice use of Web Audio API&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Mathias Talk on RegExp and Unicode&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-18&lt;/h5&gt;
+
+&lt;p&gt;A very good talk on how unicode can be pain with RegExp and how &lt;code&gt;u&lt;/code&gt; flag in ES6 helps solve the problem.
+&lt;img src=&quot;http://i.imgur.com/gnseXuA.jpg&quot; alt=&quot;Mathias Talk on RegExp and Unicode&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Welcome Board&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-18&lt;/h5&gt;
+
+&lt;p&gt;Its actually a very huge board, I&amp;#39;ll capture a small part of it.
+&lt;img src=&quot;http://i.imgur.com/m9AIzoG.jpg&quot; alt=&quot;Welcome Board&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Sunshine&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-18&lt;/h5&gt;
+
+&lt;p&gt;I got a window seat, on the emergency exit door with an extra leg space, so comfortable.
+&lt;img src=&quot;http://i.imgur.com/pF3mxWP.jpg&quot; alt=&quot;Sunshine&quot; /&gt;&lt;/p&gt;
+
+&lt;h2&gt;Ready to board&lt;/h2&gt;
+
+&lt;h5&gt;Friday 2015-09-18&lt;/h5&gt;
+
+&lt;p&gt;It&amp;#39;s very calm and silent today, the sun hasn&amp;#39;t risen yet. Waiting to board the plane. Will be taking off for bengaluru in a few more minutes.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/879UMbF.jpg&quot; alt=&quot;Plane&quot; /&gt;&lt;/p&gt;
+</description>
       </item>
     
       <item>
