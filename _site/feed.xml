@@ -6,9 +6,22 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Wed, 21 Oct 2015 05:19:03 +0530</pubDate>
-    <lastBuildDate>Wed, 21 Oct 2015 05:19:03 +0530</lastBuildDate>
+    <pubDate>Thu, 17 Dec 2015 21:06:24 +0530</pubDate>
+    <lastBuildDate>Thu, 17 Dec 2015 21:06:24 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>Dynamic Resource Management in IaaS Cloud</title>
+        <link>http://pankajmalhotra.com/Dynamic-Resource-Management-in-IaaS-Cloud</link>
+        <pubDate>Thu, 17 Dec 2015 15:00:00 +0000</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;Few months back, I started working on a problem to dynamically manage resources in an Infrastructure as a Service platform, I wanted to build a model that would scale infrastrcuture based on application needs, and would help to reduce the cost and resource over utilization for the infrastructure provider and make the application robust by providing right amount of resources at the right time.&lt;/p&gt;
+
+&lt;p&gt;Due to academic workload and deadlines I had to shift my focus and adjust my priorities, thus moving away from the project. I am not entirely sure if and when I will be able to get back to this project, so I am making my research, explorations and experiments public in form of a summary/report, so that someone else working on the same problem would be able to make good use of my study and can continue from the point where I left.&lt;/p&gt;
+
+&lt;script async class=&quot;speakerdeck-embed&quot; data-id=&quot;6ee5dbc85fe94574bb6ce9f42dbb0b44&quot; data-ratio=&quot;0.772830188679245&quot; src=&quot;//speakerdeck.com/assets/embed.js&quot;&gt;&lt;/script&gt;
+</description>
+      </item>
     
       <item>
         <title>JSFoo 2015 Conference and Workshops on JavaScript</title>
@@ -605,53 +618,6 @@ Go to &lt;code&gt;https://localhost:4443&lt;/code&gt; and click &lt;code&gt;Adva
 &lt;p&gt;&lt;a href=&quot;https://developer.salesforce.com/blogs/developer-relations/2011/05/generating-valid-self-signed-certificates.html&quot;&gt;Generating valid self signed certificates for localhost development&lt;/a&gt;
 &lt;br/&gt;
 &lt;a href=&quot;http://www.piware.de/2011/01/creating-an-https-server-in-python/&quot;&gt;Creating an HTTPS server in Python&lt;/a&gt;&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Add Two Numbers Without Using Arithmetic Operators</title>
-        <link>http://pankajmalhotra.com/Add-Two-Numbers-Without-Using-Arithmetic-Operators</link>
-        <pubDate>Mon, 04 May 2015 07:10:56 +0000</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;Write a function Add() that returns sum of two integers. The function should not use any of the arithmetic operators (+, ++, –, -, .. etc).&lt;/p&gt;
-
-&lt;p&gt;Sum of two bits can be obtained by performing XOR (^) of the two bits. Carry bit can be obtained by performing AND (&amp;amp;) of two bits.
-Above is simple Half Adder logic that can be used to add 2 single bits. We can extend this logic for integers. If x and y don’t have set bits at same position(s), then bitwise XOR (^) of x and y gives the sum of x and y. To incorporate common set bits also, bitwise AND (&amp;amp;) is used. Bitwise AND of x and y gives all carry bits. We calculate (x &amp;amp; y) &amp;lt;&amp;lt; 1 and add it to x ^ y to get the required result.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;#include&amp;lt;stdio.h&amp;gt;
-
-int Add(int x, int y)
-{
-    // Iterate till there is no carry  
-    while (y != 0)
-    {
-        // carry now contains common set bits of x and y
-        int carry = x &amp;amp; y;  
-
-        // Sum of bits of x and y where at least one of the bits is not set
-        x = x ^ y; 
-
-        // Carry is shifted by one so that adding it to x gives the required sum
-        y = carry &amp;lt;&amp;lt; 1;
-    }
-    return x;
-}
-
-int main()
-{
-    printf(&amp;quot;%d&amp;quot;, Add(15, 32));
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Following is recursive implementation for the same approach.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;int Add(int x, int y)
-{
-    if (y == 0)
-        return x;
-    else
-        return Add( x ^ y, (x &amp;amp; y) &amp;lt;&amp;lt; 1);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Credits : http://www.geeksforgeeks.org&lt;/p&gt;
 </description>
       </item>
     
