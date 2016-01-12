@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://pankajmalhotra.com/</loc>
-    <lastmod>2015-12-17T21:06:24+05:30</lastmod>
+    <lastmod>2016-01-12T07:36:45+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -10,7 +10,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Dynamic-Resource-Management-in-IaaS-Cloud</loc>
       
-        <lastmod>2015-12-17T15:00:00Z</lastmod>
+        <lastmod>2015-12-17T20:30:00+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -19,7 +19,7 @@
     <url>
       <loc>http://pankajmalhotra.com/JSFoo-2015-Conference-and-Workshops-on-JavaScript</loc>
       
-        <lastmod>2015-09-18T00:44:52Z</lastmod>
+        <lastmod>2015-09-18T06:14:52+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -28,7 +28,7 @@
     <url>
       <loc>http://pankajmalhotra.com/My-Talk-Proposal-for-JSFoo-2015-Debugging-Javascript-on-Mobile-Browsers</loc>
       
-        <lastmod>2015-08-04T00:44:52Z</lastmod>
+        <lastmod>2015-08-04T06:14:52+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -37,7 +37,7 @@
     <url>
       <loc>http://pankajmalhotra.com/GoSprint-And-GoRhythms-Algorithms-In-GoLang</loc>
       
-        <lastmod>2015-07-31T20:31:35Z</lastmod>
+        <lastmod>2015-08-01T02:01:35+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -46,7 +46,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection</loc>
       
-        <lastmod>2015-07-27T20:39:10Z</lastmod>
+        <lastmod>2015-07-28T02:09:10+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -55,7 +55,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Retrieving-Safari-History-From-JailBroken-IOS-Device</loc>
       
-        <lastmod>2015-06-28T07:10:58Z</lastmod>
+        <lastmod>2015-06-28T12:40:58+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -64,7 +64,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device</loc>
       
-        <lastmod>2015-06-27T07:19:35Z</lastmod>
+        <lastmod>2015-06-27T12:49:35+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -73,7 +73,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy</loc>
       
-        <lastmod>2015-06-14T09:17:00Z</lastmod>
+        <lastmod>2015-06-14T14:47:00+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -82,7 +82,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy</loc>
       
-        <lastmod>2015-06-08T21:43:10Z</lastmod>
+        <lastmod>2015-06-09T03:13:10+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -91,7 +91,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Simple-HTTPS-Server-In-Python-Using-Self-Signed-Certs</loc>
       
-        <lastmod>2015-06-07T20:54:20Z</lastmod>
+        <lastmod>2015-06-08T02:24:20+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -100,7 +100,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Add-Two-Numbers-Without-Using-Arithmetic-Operators</loc>
       
-        <lastmod>2015-05-04T07:10:56Z</lastmod>
+        <lastmod>2015-05-04T12:40:56+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -109,7 +109,7 @@
     <url>
       <loc>http://pankajmalhotra.com/New-Algorithms-and-Coding-Section</loc>
       
-        <lastmod>2015-04-30T14:02:15Z</lastmod>
+        <lastmod>2015-04-30T19:32:15+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -118,7 +118,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Deploying-Projects-On-AWS-Using-ATLAS-Workflow</loc>
       
-        <lastmod>2015-04-18T04:41:38Z</lastmod>
+        <lastmod>2015-04-18T10:11:38+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -127,7 +127,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas</loc>
       
-        <lastmod>2015-04-17T03:35:19Z</lastmod>
+        <lastmod>2015-04-17T09:05:19+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -136,7 +136,7 @@
     <url>
       <loc>http://pankajmalhotra.com/The-calm-before-the-storm</loc>
       
-        <lastmod>2015-03-11T01:50:20Z</lastmod>
+        <lastmod>2015-03-11T07:20:20+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -145,7 +145,7 @@
     <url>
       <loc>http://pankajmalhotra.com/ARP-and-ethernet-issues-with-osx-mavericks</loc>
       
-        <lastmod>2014-08-17T10:45:20Z</lastmod>
+        <lastmod>2014-08-17T16:15:20+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -154,7 +154,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Project-Wrap-Up</loc>
       
-        <lastmod>2014-08-01T09:31:54Z</lastmod>
+        <lastmod>2014-08-01T15:01:54+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -163,7 +163,7 @@
     <url>
       <loc>http://pankajmalhotra.com/REST-API-Using-DRF</loc>
       
-        <lastmod>2014-05-16T09:03:05Z</lastmod>
+        <lastmod>2014-05-16T14:33:05+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -172,7 +172,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Test-Automation-Best-Practices</loc>
       
-        <lastmod>2014-05-05T04:58:55Z</lastmod>
+        <lastmod>2014-05-05T10:28:55+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -181,7 +181,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Google-Summer-of-Code-with-Mozilla</loc>
       
-        <lastmod>2014-04-23T12:43:36Z</lastmod>
+        <lastmod>2014-04-23T18:13:36+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -190,7 +190,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Factory-Boy</loc>
       
-        <lastmod>2014-02-23T12:31:54Z</lastmod>
+        <lastmod>2014-02-23T18:01:54+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -199,7 +199,7 @@
     <url>
       <loc>http://pankajmalhotra.com/TREAP-(-Binary-Search-Tree-+-Heap-)</loc>
       
-        <lastmod>2013-10-18T19:54:39Z</lastmod>
+        <lastmod>2013-10-19T01:24:39+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -208,7 +208,7 @@
     <url>
       <loc>http://pankajmalhotra.com/HEAP-(Min-Heap)</loc>
       
-        <lastmod>2013-08-03T20:09:43Z</lastmod>
+        <lastmod>2013-08-04T01:39:43+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -217,7 +217,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Binary-Search-Tree-(-Finding-the-height-and-diameter-of-a-BST-)</loc>
       
-        <lastmod>2013-07-12T09:50:02Z</lastmod>
+        <lastmod>2013-07-12T15:20:02+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -226,7 +226,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Stack...(-Largest-Rectangle-in-a-Histogram-)</loc>
       
-        <lastmod>2013-05-26T21:02:20Z</lastmod>
+        <lastmod>2013-05-27T02:32:20+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -235,7 +235,7 @@
     <url>
       <loc>http://pankajmalhotra.com/Stack...-(-Reverse-Polish-Notation-or-Infix-To-Post-Fix)</loc>
       
-        <lastmod>2013-05-26T20:50:00Z</lastmod>
+        <lastmod>2013-05-27T02:20:00+05:30</lastmod>
       
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
@@ -243,9 +243,9 @@
   
   
   <url>
-    <loc>http://pankajmalhotra.com/404.html</loc>
+    <loc>http://pankajmalhotra.com/404</loc>
     
-      <lastmod>2015-12-17</lastmod>
+      <lastmod>2016-01-12</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -258,7 +258,7 @@
   <url>
     <loc>http://pankajmalhotra.com/feed.xml</loc>
     
-      <lastmod>2015-12-17</lastmod>
+      <lastmod>2016-01-12</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -269,22 +269,9 @@
   </url>
   
   <url>
-    <loc>http://pankajmalhotra.com/utils/git.html</loc>
+    <loc>http://pankajmalhotra.com/utils/git</loc>
     
-      <lastmod>2015-12-17</lastmod>
-    
-    
-      <changefreq>monthly</changefreq>
-    
-    
-      <priority>0.3</priority>
-    
-  </url>
-  
-  <url>
-    <loc>http://pankajmalhotra.com/index.html</loc>
-    
-      <lastmod>2015-12-17</lastmod>
+      <lastmod>2016-01-12</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -295,22 +282,9 @@
   </url>
   
   <url>
-    <loc>http://pankajmalhotra.com/coding/index.html</loc>
+    <loc>http://pankajmalhotra.com/coding/</loc>
     
-      <lastmod>2015-12-17</lastmod>
-    
-    
-      <changefreq>monthly</changefreq>
-    
-    
-      <priority>0.3</priority>
-    
-  </url>
-  
-  <url>
-    <loc>http://pankajmalhotra.com/live/index.html</loc>
-    
-      <lastmod>2015-12-17</lastmod>
+      <lastmod>2016-01-12</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -321,9 +295,35 @@
   </url>
   
   <url>
-    <loc>http://pankajmalhotra.com/about/index.html</loc>
+    <loc>http://pankajmalhotra.com/live/</loc>
     
-      <lastmod>2015-12-17</lastmod>
+      <lastmod>2016-01-12</lastmod>
+    
+    
+      <changefreq>monthly</changefreq>
+    
+    
+      <priority>0.3</priority>
+    
+  </url>
+  
+  <url>
+    <loc>http://pankajmalhotra.com/</loc>
+    
+      <lastmod>2016-01-12</lastmod>
+    
+    
+      <changefreq>monthly</changefreq>
+    
+    
+      <priority>0.3</priority>
+    
+  </url>
+  
+  <url>
+    <loc>http://pankajmalhotra.com/about/</loc>
+    
+      <lastmod>2016-01-12</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -336,7 +336,7 @@
   <url>
     <loc>http://pankajmalhotra.com/public/css/main.css</loc>
     
-      <lastmod>2015-12-17</lastmod>
+      <lastmod>2016-01-12</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -349,7 +349,7 @@
   <url>
     <loc>http://pankajmalhotra.com/sitemap.xml</loc>
     
-      <lastmod>2015-12-17</lastmod>
+      <lastmod>2016-01-12</lastmod>
     
     
       <changefreq>monthly</changefreq>

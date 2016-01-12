@@ -4,7 +4,7 @@ title: Add Two Numbers Without Using Arithmetic Operators
 date: 2015-05-4 07:10:56 UTC
 updated: 2015-05-4 07:10:56 UTC
 comments: true
-categories: algorithms coding spoj codeforces codechef topcoder programming codingpage
+categories: algorithms coding spoj codeforces codechef topcoder programming homepage
 ---
 
 Write a function Add() that returns sum of two integers. The function should not use any of the arithmetic operators (+, ++, –, -, .. etc).

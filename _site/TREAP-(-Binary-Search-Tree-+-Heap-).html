@@ -4,14 +4,14 @@
     <!-- meta information -->
 <meta charset="utf-8">
 <meta name="description" 
-      content="{% highlight bash %}Workflow for working on GIT and GithubSet Git Env variables:git config --global user.name "Full N..." >
+      content="Getting back to Data Structures after quite a long time :P ( Hope this makes a good read )Useful links to understand ..." >
 <meta name="author" content="Pankaj Malhotra">
 
 <!-- Enable responsiveness on mobile devices-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
 <!-- title -->
-<title>Git and GitHub workflow &middot; Pankaj Malhotra</title>
+<title>TREAP ( Binary Search Tree + Heap ) &middot; Pankaj Malhotra</title>
 
 <!-- icons -->
 <link rel="shortcut icon" href="/public/images/favicon.ico" />
@@ -54,55 +54,21 @@
 
       </header>
 
-      <figure class="highlight"><pre><code class="language-bash" data-lang="bash">Workflow for working on GIT and Github
+      <article class="single row gutters">
+  <time class="published" datetime="2013-10-19">19 October 2013</time>
+  <h2>TREAP ( Binary Search Tree + Heap )</h2>
 
-Set Git Env variables:
-git config --global user.name &quot;Full Name&quot;
-git config --global user.email &quot;user@example.com&quot;
-git config --global core.editor vim
-git config --global merge.tool vimdiff
+  <div dir="ltr" style="text-align: left;" trbidi="on">Getting back to Data Structures after quite a long time :P ( Hope this makes a good read )<br /><br />Useful links to understand TREAP :<br /><a href="http://faculty.cs.niu.edu/~freedman/340/340notes/340treap.htm">http://faculty.cs.niu.edu/~freedman/340/340notes/340treap.htm</a><br /><a href="http://www.cs.cornell.edu/Courses/cs312/2003sp/lectures/lec26.html">http://www.cs.cornell.edu/Courses/cs312/2003sp/lectures/lec26.html</a><br />http://electures.informatik.uni-freiburg.de/portal/download/7/8207/04_Treaps_4up.pdf<br /><a href="http://ieng6.ucsd.edu/~cs100s/Exams/TreapExamples.pdf">http://ieng6.ucsd.edu/~cs100s/Exams/TreapExamples.pdf</a><br /><br />Input :<br />i n &nbsp; &nbsp; &nbsp;// to insert n<br />d n &nbsp; &nbsp;// to delete n<br />s n &nbsp; &nbsp;// to search for n<br />p &nbsp; &nbsp; &nbsp;// to print the current situation of treap<br /><br /><script src="https://gist.github.com/bitgeeky/7046983.js"></script><br /><br /><br /><br /><br /><br /></div>
 
-Proxy Settings:
-git config --global http.proxy http://proxyuser:proxypwd@proxy.server.com:8080
-git config --global https.proxy https://proxyuser:proxypwd@proxy.server.com:8080
 
-1) Fork the orgs repo in Github
+<div class="share-page">
+    Share this on &rarr;
+    <a href="https://twitter.com/intent/tweet?text=TREAP ( Binary Search Tree + Heap )&url=http://pankajmalhotra.com/TREAP-(-Binary-Search-Tree-+-Heap-)&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
+    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/TREAP-(-Binary-Search-Tree-+-Heap-)" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
+    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/TREAP-(-Binary-Search-Tree-+-Heap-)" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
+</div>
 
-2) Clone the repo from your Github Account
-git clone &lt;clone url of repo in your github account&gt; 
-
-3) git remote add upstream &lt;clone url for orgs repo on github &gt;
-
-4) origin is our repo(the url to repo in our github account) by default 
-check by : git remote show origin
-
-5) we have a master branch by default
-check by : git branch
-
-6) create a new working branch ( do not work in master branch )
-git checkout -b working
--make changes on this branch
-
-7) update master branch everytime you start working
-(since the org code might have changed while you were working on it)
-git checkout master
-git pull --rebase upstream master
-
-8) rebase the working branch to master branch(to apply you changes on latest code)
-git checkout working
-git rebase master
-
-// not necessary for first time users
-9) squash the commits // if you have more than one 
-// commits combine them into single commit
-git rebase -i HEAD~x 
-
-11) And for publishing the code 
-push code to working branch
-git push origin working 
-
-12) Send a pull request (change the default master branch to working)
-branch from where u want the code to be pulled</code></pre></figure>
+</article>
 
       
           <div id="disqus_thread"></div>

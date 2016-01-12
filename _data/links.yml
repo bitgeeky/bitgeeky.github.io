@@ -1,8 +1,9 @@
 - url: /
   title: Home
 
-- url: /coding
-  title: GoRhythms
+# No need of coding page for now
+# - url: /coding
+#  title: GoRhythms
 
 - url: /live
   title: Live
