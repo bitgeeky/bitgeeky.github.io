@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -79,8 +83,8 @@ For troubleshooting and setting environment variables have a look at the <a href
 <p>Make sure you have all the certificates used by mitm proxy in <code>~/.mitmproxy/</code>. Install certificates on browser by browsing to <code>mitm.it</code>. If the traffic is passing through the proxy server this page will show you options to install certificates, just select the platform you are browsing on.  For more information about generating and installing certificates see <a href="https://mitmproxy.org/doc/certinstall.html">about cerificates</a></p>
 
 <h2>Running</h2>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">$ mitmproxy -p port_number
-</code></pre></figure>
+<div class="highlight"><pre><code class="language-" data-lang="">$ mitmproxy -p port_number
+</code></pre></div>
 <p>The default port on which proxy server runs is <code>8080</code> but you can specify the <code>port_number</code> by using <code>-p</code> flag. It will open up a window showing traffic passing through proxy.</p>
 
 <p>Configure browser to use proxy server by specifying host as <code>localhost</code> and the port on which proxy server is listening.
@@ -95,16 +99,16 @@ The script will operate on each request passing through proxy, and will make the
 <h3>Inline Scripts</h3>
 
 <p>Basic Structure of an Inline script is:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">def on_event(context, flow):
+<div class="highlight"><pre><code class="language-" data-lang="">def on_event(context, flow):
     some_logic
     another_logic
     do_something
-</code></pre></figure>
+</code></pre></div>
 <p>The first argument to each event method is an instance of ScriptContext that lets the script interact with the global mitmproxy state. 
 <code>on_event</code> can be an event like request, response, start, clientconnect, serverconnect or any other event from this <a href="https://mitmproxy.org/doc/scripting/inlinescripts.html">list</a></p>
 
 <p>Script to inject javascript to html content:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text"># Usage: mitmdump -s &quot;js_injector.py src&quot;
+<div class="highlight"><pre><code class="language-" data-lang=""># Usage: mitmdump -s "js_injector.py src"
 # (this script works best with --anticache)
 from bs4 import BeautifulSoup
 from libmproxy.protocol.http import decoded
@@ -112,27 +116,27 @@ from libmproxy.protocol.http import decoded
 # On start of proxy server ask for src as an argument
 def start(context, argv):
     if len(argv) != 2:
-        raise ValueError(&#39;Usage: -s &quot;js_injector.py src&quot;&#39;)
+        raise ValueError('Usage: -s "js_injector.py src"')
     context.src_url = argv[1]
 
 
 def response(context, flow):
     if flow.request.host in context.src_url:
-        return # Make sure JS isn&#39;t injected to itself
+        return # Make sure JS isn't injected to itself
     with decoded(flow.response):  # Remove content encoding (gzip, ...)
         html = BeautifulSoup(flow.response.content)
         if html.body:
             script = html.new_tag(
-                &quot;script&quot;,
+                "script",
                 src=context.src_url,
-                type=&#39;application/javascript&#39;)
+                type='application/javascript')
             html.body.insert(0, script)
             flow.response.content = str(html)
-            context.log(&quot;Script injected.&quot;)
-</code></pre></figure>
+            context.log("Script injected.")
+</code></pre></div>
 <p>Run the mitm proxy using:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">$ mitmdump -p 8888 -s &quot;js_injector.py http://path/to/src.js&quot;
-</code></pre></figure>
+<div class="highlight"><pre><code class="language-" data-lang="">$ mitmdump -p 8888 -s "js_injector.py http://path/to/src.js"
+</code></pre></div>
 <p>Note: that we are using <code>mitmdump</code> istead of <code>mitmproxy</code> for getting more detailed output.</p>
 
 <p>Note: If you want to inject javascript in an <code>https</code> website, your javascript file must also be hosted on <code>https</code> server.</p>
@@ -145,10 +149,10 @@ Now open the url in browser configured to use proxy server, you should see a bro
 <p>The website is broken because in previous script our javascript is getting injected on every resource on page having <code>html.body</code> which should not be the case.</p>
 
 <p>Replace:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">-- if html.body:
+<div class="highlight"><pre><code class="language-" data-lang="">-- if html.body:
 with
-++ if html.body and (&#39;text/html&#39; in flow.response.headers[&quot;content-type&quot;][0]):
-</code></pre></figure>
+++ if html.body and ('text/html' in flow.response.headers["content-type"][0]):
+</code></pre></div>
 <p>to make sure only requests with <code>text/html</code> in their header get js injection.</p>
 
 <p>Try to open the page again, it should now open fine with <em>almost</em> all resources loading properly.</p>
@@ -160,13 +164,13 @@ with
 <p>Its not possible to do this without knowing what page is the main page and what are the elements within it. Therefore to overcome this situation we come up with a filter.</p>
 
 <p>filter.js</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">if(parent.document.URL!=document.location.href)
-       throw new Error(&quot;Not the main page&quot;);
+<div class="highlight"><pre><code class="language-" data-lang="">if(parent.document.URL!=document.location.href)
+       throw new Error("Not the main page");
 
-(function(e){e.setAttribute(&quot;src&quot;,&quot;http://path/to/script.js&quot;);
-document.getElementsByTagName(&quot;body&quot;)[0].appendChild(e);})
-(document.createElement(&quot;script&quot;));void(0);
-</code></pre></figure>
+(function(e){e.setAttribute("src","http://path/to/script.js");
+document.getElementsByTagName("body")[0].appendChild(e);})
+(document.createElement("script"));void(0);
+</code></pre></div>
 <p>So basically injecting this filter on proxy server side by replacing path/to/script.js with the path to actual js that we want to inject will do a client side verification to identify the main page and allow execution of js only on main page otherwise it will throw an error &quot;Not the main page&quot;.</p>
 
 <p>This solves our problem of js getting executed multiple times on a single page. Now the js we inject will execute only once but still on the proxy server side our js filter will get inject to all valid html resources i.e which have <code>text/html</code> as their <code>content-type</code> in header response.</p>
@@ -176,7 +180,7 @@ document.getElementsByTagName(&quot;body&quot;)[0].appendChild(e);})
 <p>Inject JS filter on html resources:</p>
 
 <p>Final version of <code>js_injector.py</code></p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text"># Usage: mitmdump -s &quot;js_injector.py src&quot;
+<div class="highlight"><pre><code class="language-" data-lang=""># Usage: mitmdump -s "js_injector.py src"
 # (this script works best with --anticache)
 from bs4 import BeautifulSoup
 from libmproxy.protocol.http import decoded
@@ -184,50 +188,44 @@ from libmproxy.protocol.http import decoded
 # On start of proxy server ask for src as an argument
 def start(context, argv):
     if len(argv) != 2:
-        raise ValueError(&#39;Usage: -s &quot;js_injector.py src&quot;&#39;)
+        raise ValueError('Usage: -s "js_injector.py src"')
     context.src_url = argv[1]
 
 
 def response(context, flow):
     with decoded(flow.response):  # Remove content encoding (gzip, ...)
         html = BeautifulSoup(flow.response.content)
-        &quot;&quot;&quot;
+        """
         # To Allow CORS
-        if &quot;Content-Security-Policy&quot; in flow.response.headers:
-            del flow.response.headers[&quot;Content-Security-Policy&quot;]
-        &quot;&quot;&quot;
-        if html.body and (&#39;text/html&#39; in flow.response.headers[&quot;content-type&quot;][0]):
+        if "Content-Security-Policy" in flow.response.headers:
+            del flow.response.headers["Content-Security-Policy"]
+        """
+        if html.body and ('text/html' in flow.response.headers["content-type"][0]):
             script = html.new_tag(
-                &quot;script&quot;,
+                "script",
                 src=context.src_url)
             html.body.insert(0, script)
             flow.response.content = str(html)
-            context.log(&quot;******* Filter Injected *******&quot;)
-</code></pre></figure><figure class="highlight"><pre><code class="language-text" data-lang="text">$ mitmdump -p 8888 -s &quot;js_injector.py http://path/to/filter.js&quot;
-</code></pre></figure>
+            context.log("******* Filter Injected *******")
+</code></pre></div><div class="highlight"><pre><code class="language-" data-lang="">$ mitmdump -p 8888 -s "js_injector.py http://path/to/filter.js"
+</code></pre></div>
 <p>Final version of <code>filter.js</code>:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">if(parent.document.URL!=document.location.href)
-       throw new Error(&quot;Not the main page&quot;);
+<div class="highlight"><pre><code class="language-" data-lang="">if(parent.document.URL!=document.location.href)
+       throw new Error("Not the main page");
 
-(function(e){e.setAttribute(&quot;src&quot;,&quot;http://path/to/script.js&quot;);
-document.getElementsByTagName(&quot;body&quot;)[0].appendChild(e);})
-(document.createElement(&quot;script&quot;));void(0);
+(function(e){e.setAttribute("src","http://path/to/script.js");
+document.getElementsByTagName("body")[0].appendChild(e);})
+(document.createElement("script"));void(0);
 
-console.log(&quot;******* Script Injected *******&quot;)
-</code></pre></figure>
+console.log("******* Script Injected *******")
+</code></pre></div>
 <p>Replace <code>/path/to/script.js</code> in <code>filter.js</code> with path to the script you want to actually inject.</p>
 
 <p>That&#39;s it ! Now the JS you inject will be executed only one time per page i.e the actual page and not the resources in it.</p>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Injecting Javascript In HTML Content Using MITM Proxy&url=http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -247,13 +245,14 @@ console.log(&quot;******* Script Injected *******&quot;)
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

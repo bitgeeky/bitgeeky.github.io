@@ -1,5 +1,5 @@
-- url: /
-  title: Home
+- url: /blog
+  title: Blog
 
 # No need of coding page for now
 # - url: /coding
@@ -8,6 +8,9 @@
 - url: /live
   title: Live
 
-- url: /about
-  title: About
+- url: /til
+  title: Til
+# Remove about page
+# - url: /about
+#  title: About
 

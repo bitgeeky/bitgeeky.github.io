@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -62,7 +66,7 @@
 
 <p>Sum of two bits can be obtained by performing XOR (^) of the two bits. Carry bit can be obtained by performing AND (&amp;) of two bits.
 Above is simple Half Adder logic that can be used to add 2 single bits. We can extend this logic for integers. If x and y don’t have set bits at same position(s), then bitwise XOR (^) of x and y gives the sum of x and y. To incorporate common set bits also, bitwise AND (&amp;) is used. Bitwise AND of x and y gives all carry bits. We calculate (x &amp; y) &lt;&lt; 1 and add it to x ^ y to get the required result.</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">#include&lt;stdio.h&gt;
+<div class="highlight"><pre><code class="language-" data-lang="">#include&lt;stdio.h&gt;
 
 int Add(int x, int y)
 {
@@ -83,30 +87,24 @@ int Add(int x, int y)
 
 int main()
 {
-    printf(&quot;%d&quot;, Add(15, 32));
+    printf("%d", Add(15, 32));
     return 0;
 }
-</code></pre></figure>
+</code></pre></div>
 <p>Following is recursive implementation for the same approach.</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">int Add(int x, int y)
+<div class="highlight"><pre><code class="language-" data-lang="">int Add(int x, int y)
 {
     if (y == 0)
         return x;
     else
         return Add( x ^ y, (x &amp; y) &lt;&lt; 1);
 }
-</code></pre></figure>
+</code></pre></div>
 <p>Credits : http://www.geeksforgeeks.org</p>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Add Two Numbers Without Using Arithmetic Operators&url=http://pankajmalhotra.com/Add-Two-Numbers-Without-Using-Arithmetic-Operators&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Add-Two-Numbers-Without-Using-Arithmetic-Operators" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Add-Two-Numbers-Without-Using-Arithmetic-Operators" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -126,13 +124,14 @@ int main()
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

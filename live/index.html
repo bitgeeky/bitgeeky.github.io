@@ -3,10 +3,14 @@ layout: live
 title: Live blog
 comments: True
 ---
+<p>
+This is a live-*ish blog. It gets updated quite frequently when I go for travel or on an event. Its more or less like a Twitter feed, but I wanted to build this because it allows me to have customizations and the most awesome part there's no word limit.
+</p>
 <section class="archive">
 {% for post in site.categories['livepage'] %}
 
-{% if forloop.first %}
+
+{% if post.live %}
     <!--
   <div class="bundle row gutters fadeInDown animated">
       <h2 class="post-year col span_2">{{ post.date | date: '%Y' }}</h2>
@@ -18,11 +22,19 @@ comments: True
     </p>
     {{ post.content }}
 
-<h2>
-Past Events
-</h2>
 
 {% else %}
+
+{% if forloop.first %}
+<p>
+<h3>
+There is no live event at the moment. You may want to sit back and enjoy one of the past events in meantime.
+</h3>
+</p>
+<h3>
+Past Events :
+</h3>
+{% endif %}
 
 <article class="row gutters">
     <a href="{{ site.baseurl }}{{ post.url }}" title="{{ post.title }}" class="col span_8">{{ post.title }}</a>
@@ -31,21 +43,6 @@ Past Events
     </div>
 </article>
 
-{% if post.previous %}
-{% capture pyear %}{{ post.previous.date | date: '%Y' }}{% endcapture %}
-{% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-{% if pyear != year %}
-
-</div></div>
-    <div class="bundle row gutters fadeInDown animated">
-        <h2 class="post-year col span_2">{{ post.previous.date | date: '%Y' }}</h2>
-        <div class="posts-by-year col span_10">
-
-{% endif %}
-{% endif %}
-
-
-{% if forloop.last %}</div></div>{% endif %}
 
 {% endif %}
 {% endfor %}

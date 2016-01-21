@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -68,20 +72,20 @@ When the size of data centres is large and it consists of hundreds or thousands 
 <h2>What is Terraform ?</h2>
 
 <p><a href="https://www.terraform.io/">Terraform</a> is an Infrastructure automation tool used to store infrastructure as code. Its written in <code>go</code> and has its own syntax for writing infrastructure configuration using <code>*.tf</code> file. A sample terraform file looks like:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">provider &quot;aws&quot; {
-    access_key = &quot;ACCESS_KEY_HERE&quot;
-    secret_key = &quot;SECRET_KEY_HERE&quot;
-    region = &quot;us-east-1&quot;
+<div class="highlight"><pre><code class="language-" data-lang="">provider "aws" {
+    access_key = "ACCESS_KEY_HERE"
+    secret_key = "SECRET_KEY_HERE"
+    region = "us-east-1"
 }
 
-resource &quot;aws_instance&quot; &quot;web&quot; {
-    instance_type = &quot;t1.micro&quot;
-    ami = &quot;ami-408c7f28&quot;
+resource "aws_instance" "web" {
+    instance_type = "t1.micro"
+    ami = "ami-408c7f28"
 
     # This will create 1 instances
     count = 1
 }
-</code></pre></figure>
+</code></pre></div>
 <p>So you can specify the priver AWS in this case and specify the resources you want to create on that provider like <code>aws_instance</code> in this case. On running <code>$ terraform plan</code> you can check the validity of your terraform configuration, it will give an error if there is any syntax issue, resource dependency issues and performs validation of resources, credentials etc but the actual output you get on running <code>$ terraform apply</code> - which actually deploys these resources might differ from the output of <code>$ terraform plan</code> in some cases.</p>
 
 <p>So running <code>$ terraform apply</code> on this will create an aws instance with specified configuration. It actually creates a graph on backend to check for resource dependencies and you can get the graph using the commnd <code>$ terraform graph</code>. If anything goes wrong you can run <code>$ terraform destroy</code> to destroy the complete infrastructure.</p>
@@ -95,23 +99,23 @@ resource &quot;aws_instance&quot; &quot;web&quot; {
 <p>Writing terraform files can get a lot complex sometimes when you need to install some packages on your machine or make a particular setup on the machine you just created. Its always advised to machine a machine image for whatever you want to do. In the machine image you can specify the packages you want to install on the machine, configuration you need to make before the machine actually gets created or scripts you want to execute after you create the machine.</p>
 
 <p><a href="https://www.packer.io/">Packer</a> allows you to deal with this task of creating machine images so that they can be deployed cross platform on multiple resource providers parallely. Its also written in <code>go</code> and all the image configuration can be written in a simple <code>json</code> format. A sample configuration looks like:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">{
-  &quot;variables&quot;: {
-    &quot;aws_access_key&quot;: &quot;ACCESS_KEY_HERE&quot;,
-    &quot;aws_secret_key&quot;: &quot;SECRET_KEY_HERE&quot;
-  },
-  &quot;builders&quot;: [{
-    &quot;type&quot;: &quot;amazon-ebs&quot;,
-    &quot;access_key&quot;: &quot;&quot;,
-    &quot;secret_key&quot;: &quot;&quot;,
-    &quot;region&quot;: &quot;us-east-1&quot;,
-    &quot;source_ami&quot;: &quot;ami-9eaa1cf6&quot;,
-    &quot;instance_type&quot;: &quot;t2.micro&quot;,
-    &quot;ssh_username&quot;: &quot;ubuntu&quot;,
-    &quot;ami_name&quot;: &quot;packer-example &quot;
-  }]
-}
-</code></pre></figure>
+<div class="highlight"><pre><code class="language-" data-lang=""><span class="p">{</span><span class="w">
+  </span><span class="nt">"variables"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"aws_access_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACCESS_KEY_HERE"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"aws_secret_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SECRET_KEY_HERE"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"builders"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"amazon-ebs"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"access_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"secret_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"us-east-1"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"source_ami"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ami-9eaa1cf6"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"instance_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"t2.micro"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"ssh_username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ubuntu"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"ami_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"packer-example "</span><span class="w">
+  </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <p>Similar to <code>$ terraform plan</code> you can validate the configuration using <code>$ packer validate example.json</code> and the run <code>$ packer build example.json</code> to actually create the machine image.</p>
 
 <h2>What is ATLAS ?</h2>
@@ -142,14 +146,8 @@ resource &quot;aws_instance&quot; &quot;web&quot; {
 <p>I wrote a couple of examples on how to deploy Wordpress, link Travis, deploy Docker, Discourse and tutorials on getting SSH access to the machines in infractructure using the ATLAS workflow. I will give a brief introduction and link for each of these in the next blog post.</p>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Infrastructure Automation Using Terraform, Packer, Consul and ATLAS Workflow&url=http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -169,13 +167,14 @@ resource &quot;aws_instance&quot; &quot;web&quot; {
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

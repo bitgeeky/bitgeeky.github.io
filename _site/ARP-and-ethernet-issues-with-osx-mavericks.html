@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -67,28 +71,28 @@ After moving to my university where wifi connectivity is not present at every pl
 
 <p>I tried to ping google from terminal and observed quite significant packet loss like this one:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">64 bytes from 74.125.236.128: icmp_seq=0 ttl=53 time=56.825 ms
-64 bytes from 74.125.236.128: icmp_seq=1 ttl=53 time=56.839 ms
-64 bytes from 74.125.236.128: icmp_seq=2 ttl=53 time=56.583 ms
-64 bytes from 74.125.236.128: icmp_seq=3 ttl=53 time=56.770 ms
-64 bytes from 74.125.236.128: icmp_seq=4 ttl=53 time=56.663 ms
-64 bytes from 74.125.236.128: icmp_seq=5 ttl=53 time=56.894 ms
-64 bytes from 74.125.236.128: icmp_seq=6 ttl=53 time=56.622 ms
-64 bytes from 74.125.236.128: icmp_seq=7 ttl=53 time=58.007 ms
-Request timeout for icmp_seq 8
-Request timeout for icmp_seq 9
-Request timeout for icmp_seq 10
-Request timeout for icmp_seq 11
-Request timeout for icmp_seq 12
-64 bytes from 74.125.236.128: icmp_seq=13 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=14 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=15 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=15 ttl=53 time=57.267 ms
-64 bytes from 74.125.236.128: icmp_seq=16 ttl=53 time=56.713 ms
-64 bytes from 74.125.236.128: icmp_seq=17 ttl=53 time=57.376 ms
-64 bytes from 74.125.236.128: icmp_seq=18 ttl=53 time=57.811 ms
-64 bytes from 74.125.236.128: icmp_seq=19 ttl=53 time=57.001 ms
-64 bytes from 74.125.236.128: icmp_seq=20 ttl=53 time=56.869 ms</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>0 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.825 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.839 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>2 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.583 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>3 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.770 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>4 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.663 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>5 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.894 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>6 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.622 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>7 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>58.007 ms
+Request timeout <span class="k">for </span>icmp_seq 8
+Request timeout <span class="k">for </span>icmp_seq 9
+Request timeout <span class="k">for </span>icmp_seq 10
+Request timeout <span class="k">for </span>icmp_seq 11
+Request timeout <span class="k">for </span>icmp_seq 12
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>13 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>57.267 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>14 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>57.267 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>15 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>57.267 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>15 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>57.267 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>16 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.713 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>17 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>57.376 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>18 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>57.811 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>19 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>57.001 ms
+64 bytes from 74.125.236.128: <span class="nv">icmp_seq</span><span class="o">=</span>20 <span class="nv">ttl</span><span class="o">=</span>53 <span class="nb">time</span><span class="o">=</span>56.869 ms</code></pre></figure>
 
 <p>This was the first problem - Packet loss for ping requests. </p>
 
@@ -108,30 +112,30 @@ I checked the netork preferences at the this time by going to </p>
 <p>Which clearly indicate this issue with ARP caching by OS X Mavericks and problem with only some of the machines and not all.
 So I was curious to check my arp output at this point of time and here is what it looked like:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.99) at 28:92:4a:43:c2:36 on en4 ifscope [ethernet]
-? (10.1.34.157) at b8:88:e3:e2:aa:c7 on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-? (10.1.34.1) at 0:7:e:64:f9:3f on en4 ifscope [ethernet]
-? (10.1.34.70) at b4:b5:2f:2f:c4:64 on en4 ifscope [ethernet]
-? (10.1.34.255) at ff:ff:ff:ff:ff:ff on en4 ifscope [ethernet]
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a
-Pankajs-MacBook-Pro:~ bitgeeky$ arp -a</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+? <span class="o">(</span>10.1.34.1<span class="o">)</span> at 0:7:e:64:f9:3f on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.255<span class="o">)</span> at ff:ff:ff:ff:ff:ff on en4 ifscope <span class="o">[</span>ethernet]
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+? <span class="o">(</span>10.1.34.1<span class="o">)</span> at 0:7:e:64:f9:3f on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.255<span class="o">)</span> at ff:ff:ff:ff:ff:ff on en4 ifscope <span class="o">[</span>ethernet]
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+? <span class="o">(</span>10.1.34.1<span class="o">)</span> at 0:7:e:64:f9:3f on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.99<span class="o">)</span> at 28:92:4a:43:c2:36 on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.157<span class="o">)</span> at b8:88:e3:e2:aa:c7 on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.255<span class="o">)</span> at ff:ff:ff:ff:ff:ff on en4 ifscope <span class="o">[</span>ethernet]
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+? <span class="o">(</span>10.1.34.1<span class="o">)</span> at 0:7:e:64:f9:3f on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.255<span class="o">)</span> at ff:ff:ff:ff:ff:ff on en4 ifscope <span class="o">[</span>ethernet]
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+? <span class="o">(</span>10.1.34.1<span class="o">)</span> at 0:7:e:64:f9:3f on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.70<span class="o">)</span> at b4:b5:2f:2f:c4:64 on en4 ifscope <span class="o">[</span>ethernet]
+? <span class="o">(</span>10.1.34.255<span class="o">)</span> at ff:ff:ff:ff:ff:ff on en4 ifscope <span class="o">[</span>ethernet]
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a
+Pankajs-MacBook-Pro:~ bitgeeky<span class="nv">$ </span>arp -a</code></pre></figure>
 
 <p>This is at the moment when problem is lot worse.</p>
 
@@ -157,14 +161,8 @@ Pankajs-MacBook-Pro:~ bitgeeky$ arp -a</code></pre></figure>
 <p>I thought this piece of interrogation and ispection worth sharing with everyone so that you don&#39;t waste time trying random hacks described on various internet websites if you have the same issue.</p>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=ARP and Thunderbolt-Ethernet issues with OS X Mavericks&url=http://pankajmalhotra.com/ARP-and-ethernet-issues-with-osx-mavericks&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/ARP-and-ethernet-issues-with-osx-mavericks" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/ARP-and-ethernet-issues-with-osx-mavericks" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -184,13 +182,14 @@ Pankajs-MacBook-Pro:~ bitgeeky$ arp -a</code></pre></figure>
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

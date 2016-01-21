@@ -1,0 +1,25 @@
+#console {
+    background-color: #000;
+    border-radius: 5px;
+    font-family: courier, monospace;
+    color: #fff;
+    width:750px;
+    height: 400px; 
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:20px;
+    font-size:14px;
+}
+#console > a {
+    color: #0bc;
+    text-decoration: none;
+}
+#console > #a {
+    color: #0f0;
+}
+#console > #c {
+    color: #0bc;
+}
+#console > #b {
+    color: #ff0096;
+}

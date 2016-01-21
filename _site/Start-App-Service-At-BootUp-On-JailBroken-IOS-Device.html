@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -68,48 +72,42 @@
 This can be anything as simpler as a bash script or anything that launches your app.</p>
 
 <p>3 Write a plist for application. An example plist for application is:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
-&lt;plist version=&quot;1.0&quot;&gt;
-&lt;dict&gt;
-        &lt;key&gt;Label&lt;/key&gt;
-        &lt;string&gt;com.example.BackgroundService&lt;/string&gt;
+<div class="highlight"><pre><code class="language-" data-lang=""><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;dict&gt;</span>
+        <span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;string&gt;</span>com.example.BackgroundService<span class="nt">&lt;/string&gt;</span>
 
-        &lt;key&gt;ProgramArguments&lt;/key&gt;
-        &lt;array&gt;
-        &lt;string&gt;/path/to/program/eg/bin/bash&lt;/string&gt;
-        &lt;string&gt;path/to/launchscript/eg/root/BackgroundService&lt;/string&gt;
-        &lt;/array&gt;
+        <span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;array&gt;</span>
+        <span class="nt">&lt;string&gt;</span>/path/to/program/eg/bin/bash<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;string&gt;</span>path/to/launchscript/eg/root/BackgroundService<span class="nt">&lt;/string&gt;</span>
+        <span class="nt">&lt;/array&gt;</span>
 
-        &lt;key&gt;RunAtLoad&lt;/key&gt;
-        &lt;true/&gt;
+        <span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;true/&gt;</span>
 
-        &lt;key&gt;StandardErrorPath&lt;/key&gt;
-        &lt;string&gt;/var/logs/BackgroundService.log&lt;/string&gt;
+        <span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;string&gt;</span>/var/logs/BackgroundService.log<span class="nt">&lt;/string&gt;</span>
 
-        &lt;key&gt;StandardOutPath&lt;/key&gt;
-        &lt;string&gt;/tmp/BackgroundService.log&lt;/string&gt;
-&lt;/dict&gt;
-&lt;/plist&gt;
-</code></pre></figure>
+        <span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
+        <span class="nt">&lt;string&gt;</span>/tmp/BackgroundService.log<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/plist&gt;</span>
+</code></pre></div>
 <p>You can name it anything for example <code>com.example.BackgroundService.plist</code></p>
 
 <p>4 Copy the <code>plist</code> file to <code>/Library/LaunchDaemons/</code> directory.</p>
 
 <p>5 Load the <code>plist</code> using:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">$ launchctl load /Library/LaunchDaemons/com.example.BackgroundService.plist
-</code></pre></figure>
+<div class="highlight"><pre><code class="language-" data-lang="">$ launchctl load /Library/LaunchDaemons/com.example.BackgroundService.plist
+</code></pre></div>
 <p>That&#39;s it ! Now every time you boot up the device your service will start running automatically.</p>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Start App Service At BootUp On JailBroken IOS Device&url=http://pankajmalhotra.com/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -129,13 +127,14 @@ This can be anything as simpler as a bash script or anything that launches your 
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -65,8 +69,8 @@
 <p>PS: This situation is different from errors arrising from invalid or self signed certificates. This situation arrises when certificates are valid but the host name verification fails.</p>
 
 <p>You might see an error like</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">java.io.IOException: Hostname &#39;0.0.0.0&#39; was not verified
-</code></pre></figure>
+<div class="highlight"><pre><code class="language-" data-lang="">java.io.IOException: Hostname '0.0.0.0' was not verified
+</code></pre></div>
 <p>Where in place of <code>0.0.0.0</code> its the server&#39;s ip address.</p>
 
 <p>In such a situation all you need to do is to skip host name verification for the URL connection. You can Override the default <code>HostnameVerifier</code> with a custom verifier to add exception for the host you are making request to.</p>
@@ -74,19 +78,19 @@
 <p>This should be done only if you are confident that the server you are sending request to doesn&#39;t has any kind of security issues, because when you skip host name verification there is actually no point of <code>HTTPS/SSL</code>.</p>
 
 <p>For a particular host you can write a custom <code>HostnameVerifier</code> like:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+<div class="highlight"><pre><code class="language-" data-lang="">HostnameVerifier hostnameVerifier = new HostnameVerifier() {
     @Override
     public boolean verify(String hostname, SSLSession session) {
         HostnameVerifier hv =
             HttpsURLConnection.getDefaultHostnameVerifier();
-        return hv.verify(&quot;hostname&quot;, session);
+        return hv.verify("hostname", session);
     }
 };
-</code></pre></figure>
+</code></pre></div>
 <p>or just <code>return true</code> if you want to skip for all hosts on a particular URL connection.</p>
 
 <p>A sample code that fetches JSON data using such request:</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">import android.util.Log;
+<div class="highlight"><pre><code class="language-" data-lang="">import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -119,39 +123,33 @@ public class SkipVerification implements Runnable {
                 }
             };
 
-            URL url = new URL(&quot;https://&quot; + serverIP + &quot;:&quot; + server_port + &quot;/json&quot;);
+            URL url = new URL("https://" + serverIP + ":" + server_port + "/json");
             InputStream inStream = null;
 
             try {
                 HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
-                urlConnection.setRequestProperty(&quot;Content-Type&quot;, &quot;application/json&quot;);
+                urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setHostnameVerifier(hostnameVerifier);
                 inStream = urlConnection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
             } catch (Exception e) {
-                Log.e(TAG, &quot;error fetching data from server&quot;, e);
+                Log.e(TAG, "error fetching data from server", e);
             } finally {
                 if (inStream != null) {
                     inStream.close();
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, &quot;error initializing SkipVerificationn thread&quot;, e);
+            Log.e(TAG, "error initializing SkipVerificationn thread", e);
         }
     }
 }
-</code></pre></figure>
+</code></pre></div>
 <p>The above code makes a <code>https</code> request to a server whose certificate doesn&#39;t have an entry of its ip address as a verified hostname. The custom <code>HostnameVerifier</code> skips any kind of hostname verification particular to a <code>HttpsURLConnection</code>.</p>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Skip SSL HostName Verification Java HttpsURLConnection&url=http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -171,13 +169,14 @@ public class SkipVerification implements Runnable {
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

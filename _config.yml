@@ -1,5 +1,5 @@
 markdown: redcarpet
-highlighter: null
+pygments: null
 permalink: /:title
 encoding: utf-8
 
@@ -7,6 +7,13 @@ url: http://pankajmalhotra.com
 baseurl:
 
 twitter_username: bitgeekypankaj
+
+
+github: bitgeeky
+twitter: bitgeekypankaj
+email: devpankaj1994@gmail.com
+linkedin: bitgeekypankaj
+stackoverflow: users/2437097/bitgeeky
 
 redcarpet:
   extensions: [strikethrough, tables]

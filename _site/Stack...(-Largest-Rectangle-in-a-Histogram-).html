@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -61,14 +65,8 @@
   <div dir="ltr" style="text-align: left;" trbidi="on">Another classical problem which involves use of stack is to find the area of the largest rectangle in a histogram.<br /><br />Problem:<br />A histogram is a polygon composed of a sequence of rectangles aligned at  a common base line. The rectangles have equal widths but may have different heights. For example, the figure on the left shows the histogram that consists of  rectangles with the heights 2, 1, 4, 5, 1, 3, 3, measured in units  where 1 is the width of the rectangles:<br /><br /><br /><center><img height="99" src="https://www.spoj.pl/content/wanderley:HISTOGRA.gif" width="320" /></center><br />Usually, histograms are used to represent discrete distributions, e.g., the frequencies of characters in texts. Note that the order of the rectangles, i.e., their heights, is important. Calculate the area of the largest rectangle in a histogram that is aligned at the common base line, too. The figure on the right shows the largest aligned rectangle for the depicted histogram.  <br /><h3>Input Specification</h3>The input contains several test cases. Each test case describes a histogram and starts with an integer <code>n</code>, denoting the number of rectangles it is composed of. You may assume that <code>1&lt;=n&lt;=100000</code>. Then follow <code>n</code> integers <code>h<sub>1</sub>,...,h<sub>n</sub></code>, where <code>0&lt;=h<sub>i</sub>&lt;=1000000000</code>. These numbers denote the heights of the rectangles of the histogram in left-to-right order. The width of each rectangle is <code>1</code>. A zero follows the input for the last test case.   <br /><h3>Output Specification</h3>For each test case output on a single line the area of the largest rectangle in the specified histogram. Remember that this rectangle must be aligned at the common base line.  <br /><h3>Sample Input</h3><br /><pre>7 2 1 4 5 1 3 3<br />4 1000 1000 1000 1000<br />0<br /></pre><h3>Sample Output</h3><br /><pre>8<br />4000<br /></pre><br />Solution:<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img alt="histogram" class="aligncenter size-full wp-image-116597" height="179" src="http://www.geeksforgeeks.org/wp-content/uploads/histogram1.png" width="200" /> <br /><br />For every bar ‘x’, we calculate the area with ‘x’ as the smallest bar  in the rectangle. If we calculate such area for every bar ‘x’ and find  the maximum of all areas, our task is done.  How to calculate area with  ‘x’ as smallest bar? We need to know index of the first smaller (smaller  than ‘x’) bar on left of ‘x’ and index of first smaller bar on right of  ‘x’. Let us call these indexes as ‘left index’ and ‘right index’  respectively.<br /><br />We traverse all bars from left to right, maintain a stack of bars.   Every bar is pushed to stack once.  A bar is popped from stack when a  bar of smaller height is seen.  When a bar is popped, we calculate the  area with the popped bar as smallest bar. How do we get left and right  indexes of the popped bar – the current index tells us the ‘right index’  and index of previous item in stack is the ‘left index’.  Following is  the complete algorithm. <br /><br /><b>1) </b>Create an empty stack.<br /><b>2) </b>Start from first bar, and do following for every bar ‘hist[i]‘ where ‘i’ varies from 0 to n-1.<br />……<b>a)</b> If stack is empty or hist[i] is higher than the bar at top of stack, then push ‘i’ to stack.<br />……<b>b)</b> If this bar is smaller than the top of stack, then  keep removing the top of stack while top of the stack is greater. Let  the removed bar be hist[tp]. Calculate area  of rectangle with hist[tp]  as smallest bar. For hist[tp], the ‘left index’ is previous (previous to  tp) item in stack and ‘right index’ is ‘i’ (current index).<br /><b>3)</b> If the stack is not empty, then one by one remove all bars from stack and do step 2.b for every removed bar.<br /><br /><script src="https://gist.github.com/bitgeeky/5653947.js"></script><br /><br /></div>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Stack...( Largest Rectangle in a Histogram )&url=http://pankajmalhotra.com/Stack...(-Largest-Rectangle-in-a-Histogram-)&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Stack...(-Largest-Rectangle-in-a-Histogram-)" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Stack...(-Largest-Rectangle-in-a-Histogram-)" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -88,13 +86,14 @@
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

@@ -21,9 +21,13 @@
 <link rel="stylesheet" href="/public/css/animate.min.css">
 <link rel="stylesheet" href="/public/css/main.css">
 <link rel="stylesheet" href="/public/css/share-page.css">
+<link rel="stylesheet" href="/public/css/social.css">
+<link rel="stylesheet" href="/public/css/console.css">
+<link rel="stylesheet" href="/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
 
 
@@ -41,14 +45,14 @@
         </div>
         <nav class="col span_10 top-navbar">
   
-  <a href="/" title="Home"
-     >Home</a>
+  <a href="/blog" title="Blog"
+     >Blog</a>
   
   <a href="/live" title="Live"
      >Live</a>
   
-  <a href="/about" title="About"
-     >About</a>
+  <a href="/til" title="Til"
+     >Til</a>
   
 </nav>
 
@@ -72,9 +76,9 @@
 We use secure websockets communication on client side using the <code>wss</code> protocol and inbetween client and application server is a NGINX proxy server which allows to terminate the SSL/TLS connection and establishes an insecure connection using <code>ws</code> protocol.</p>
 
 <p>All that is needed to convert an instance of NGINX to a proxy server is a few changes in configuration file.</p>
-<figure class="highlight"><pre><code class="language-text" data-lang="text">map $http_upgrade $connection_upgrade {
+<div class="highlight"><pre><code class="language-" data-lang="">map $http_upgrade $connection_upgrade {
     default upgrade;
-    &#39;&#39; close;
+    '' close;
 }
 
 upstream appserver {
@@ -96,7 +100,7 @@ server {
         proxy_set_header Connection $connection_upgrade;
     }
 }
-</code></pre></figure>
+</code></pre></div>
 <p>The above configuration should be within <code>http{ }</code> block.</p>
 
 <p>Replace the <code>appserver_ip</code> and <code>ws_port</code> with the ip and port of your application server, <code>client_wss_port</code> with the port on which client makes a <code>wss</code> connection and provide paths to certificate/key.</p>
@@ -104,14 +108,8 @@ server {
 <p>Just reload the NGINX configuration or restart the server to get everything up and running.</p>
 
 
-<div class="share-page">
-    Share this on &rarr;
-    <a href="https://twitter.com/intent/tweet?text=Websockets SSL/TLS Termination Using NGINX Proxy&url=http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy&via=bitgeekypankaj&related=bitgeekypankaj" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
-    <a href="https://facebook.com/sharer.php?u=http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-    <a href="https://plus.google.com/share?url=http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
-</div>
-
 </article>
+
 
       
           <div id="disqus_thread"></div>
@@ -131,13 +129,14 @@ server {
     
 
       
+      
+      
 
       <footer>
           <p>
           Subscribe to: <a href="/feed.xml" target="_blank">Posts(Atom)</a>
-          </p>
-        <p>
-          No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
+	  <br/>
+	  No Attributions, It's all yours under <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/"> Creative Commons CC0</a>.
         </p>
       </footer>
     </div>

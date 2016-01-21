@@ -19,14 +19,20 @@
 <link rel="stylesheet" href="{{site.baseurl}}/public/css/animate.min.css">
 <link rel="stylesheet" href="{{site.baseurl}}/public/css/main.css">
 <link rel="stylesheet" href="{{site.baseurl}}/public/css/share-page.css">
+<link rel="stylesheet" href="{{site.baseurl}}/public/css/social.css">
+<link rel="stylesheet" href="{{site.baseurl}}/public/css/console.css">
+<link rel="stylesheet" href="{{site.baseurl}}/public/css/til.css">
 
 <!-- Google fonts -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin-ext">
+<link href='https://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
 
-{% if site.paginate %}
+
+{% if site.paginate or page.social%}
 <!-- font Awesome -->
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!-- <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+-->
 {% endif %}
-
 <!-- feed links -->
 <link rel="alternate" href="{{ site.baseurl }}/feed.xml" type="application/rss+xml" title="{{ site.name }}">
