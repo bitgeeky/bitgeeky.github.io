@@ -6,9 +6,22 @@
     <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Sat, 23 Jan 2016 01:15:05 +0530</pubDate>
-    <lastBuildDate>Sat, 23 Jan 2016 01:15:05 +0530</lastBuildDate>
+    <pubDate>Wed, 20 Apr 2016 08:18:58 +0530</pubDate>
+    <lastBuildDate>Wed, 20 Apr 2016 08:18:58 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>Making My GSoC 2014 Project Proposal Public</title>
+        <link>http://pankajmalhotra.com/Making-My-GSoC-2014-Project-Proposal-Public</link>
+        <pubDate>Mon, 21 Mar 2016 04:56:12 +0530</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;Many of my juniors are applying for Google Summer of Code this year, and I have been giving them few tips on how to write a good proposal. I decided to make my own proposal public so that anyone who wants to get some hints can go through it. I spent a lot of time writing this proposal and I am thankful to my project mentor and team manager for their helpful quality reviews.&lt;/p&gt;
+
+&lt;p&gt;Although this proposal is two years old since I applied in 2014, but most of the points will still be useful since there hasn&amp;#39;t been much change in program since then.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://drive.google.com/file/d/0B49J04vfEogldmpoMjZOdlVqcFE/preview&quot; width=&quot;100%&quot; height=&quot;900&quot;&gt;&lt;/iframe&gt;
+</description>
+      </item>
     
       <item>
         <title>Dynamic Resource Management in IaaS Cloud</title>
@@ -565,59 +578,6 @@ console.log(&quot;******* Script Injected *******&quot;)
 &lt;p&gt;Replace &lt;code&gt;/path/to/script.js&lt;/code&gt; in &lt;code&gt;filter.js&lt;/code&gt; with path to the script you want to actually inject.&lt;/p&gt;
 
 &lt;p&gt;That&amp;#39;s it ! Now the JS you inject will be executed only one time per page i.e the actual page and not the resources in it.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Simple HTTPS Server In Python Using Self Signed Certs</title>
-        <link>http://pankajmalhotra.com/Simple-HTTPS-Server-In-Python-Using-Self-Signed-Certs</link>
-        <pubDate>Mon, 08 Jun 2015 02:24:20 +0530</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;So I came across a situation where I needed to boot up an https server to host some files and guess what its really very easy to do than what I imagined.&lt;/p&gt;
-
-&lt;h2&gt;Generate self signed certificates using OpenSSL&lt;/h2&gt;
-
-&lt;h3&gt;Generate your server key&lt;/h3&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ openssl genrsa -des3 -out server.key 1024
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;You will be prompted for a password for your key. Enter, confirm and continue.&lt;/p&gt;
-
-&lt;h3&gt;Generate your Certificate Signing Request (CSR)&lt;/h3&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ openssl req -new -key server.key -out server.csr
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;You will be prompted again for your key password. Enter the one you created from step 1 above. You can then accept the defaults for all of the prompts you are presented with except the Common Name. This is key, and what makes the enhanced certificate validation happy. Since we are doing local development your common name will be &lt;code&gt;localhost&lt;/code&gt;.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;Common Name (e.g. server FQDN or YOUR name) []:localhost
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;Generate your Certificate&lt;/h3&gt;
-
-&lt;p&gt;Lastly we need to create our certificate. Again, use your key password and you will be all set.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ openssl x509 -req -days 1024 -in server.csr -signkey server.key -out server.crt
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;Generate a pem file&lt;/h3&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ cat server.crt server.key &amp;gt; server.pem
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;Python implementation of server:&lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;BaseHTTPServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;SimpleHTTPServer&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;ssl&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BaseHTTPServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTPServer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;localhost&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4443&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SimpleHTTPServer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SimpleHTTPRequestHandler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;socket&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ssl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wrap_socket&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;socket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;certfile&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;/path/to/server.pem&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;server_side&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;httpd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;serve_forever&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Run &lt;code&gt;$ python server.py&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Default host here is &lt;code&gt;localhost&lt;/code&gt; and port is &lt;code&gt;4443&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;That&amp;#39;s it ! You have finally deployed an &lt;code&gt;https&lt;/code&gt; server.
-Go to &lt;code&gt;https://localhost:4443&lt;/code&gt; and click &lt;code&gt;Advanced &amp;gt; Proceed to localhost(unsafe)&lt;/code&gt; to accept certificates and see the serverd files.&lt;/p&gt;
-
-&lt;h3&gt;Sources:&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://developer.salesforce.com/blogs/developer-relations/2011/05/generating-valid-self-signed-certificates.html&quot;&gt;Generating valid self signed certificates for localhost development&lt;/a&gt;
-&lt;br/&gt;
-&lt;a href=&quot;http://www.piware.de/2011/01/creating-an-https-server-in-python/&quot;&gt;Creating an HTTPS server in Python&lt;/a&gt;&lt;/p&gt;
 </description>
       </item>
     
