@@ -10,6 +10,9 @@
 
 - url: /til
   title: Til
+
+- url: /public/docs/pankaj_malhotra_cv.pdf
+  title: CV
 # Remove about page
 # - url: /about
 #  title: About
