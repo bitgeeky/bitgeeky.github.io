@@ -4,7 +4,7 @@
     <!-- meta information -->
 <meta charset="utf-8">
 <meta name="description" 
-      content="Algorithms and Coding." >
+      content="Algorithms and Coding.{% for post in site.categories['codingpage'] %}{% if forloop.first %}      {{ post.date | date:..." >
 <meta name="author" content="Pankaj Malhotra">
 
 <!-- Enable responsiveness on mobile devices-->
@@ -40,7 +40,7 @@
       <header class="top row gutters">
         <div class="col span_2 center">
           <!-- TODO: add baseurl to the logo link -->
-          <a href="http://pankajmalhotra.com" id="logo" title="Pankaj Malhotra"
+          <a href="http://localhost:4000" id="logo" title="Pankaj Malhotra"
              style="background-image: url(/public/images/logo.png);"></a>
         </div>
         <nav class="col span_10 top-navbar">

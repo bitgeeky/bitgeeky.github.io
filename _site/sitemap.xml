@@ -2,10 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://pankajmalhotra.com/</loc>
-    <lastmod>2016-10-22T22:27:05+05:30</lastmod>
+    <lastmod>2016-11-13T04:45:55+05:30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+    <url>
+      <loc>http://pankajmalhotra.com/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1</loc>
+      
+        <lastmod>2016-11-12T14:07:59+05:30</lastmod>
+      
+      <changefreq>monthly</changefreq>
+      <priority>0.5</priority>
+    </url>
   
     <url>
       <loc>http://pankajmalhotra.com/Making-My-GSoC-2014-Project-Proposal-Public</loc>
@@ -254,7 +263,7 @@
   <url>
     <loc>http://pankajmalhotra.com/404</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -267,7 +276,7 @@
   <url>
     <loc>http://pankajmalhotra.com/feed.xml</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -280,7 +289,7 @@
   <url>
     <loc>http://pankajmalhotra.com/utils/git</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -293,7 +302,7 @@
   <url>
     <loc>http://pankajmalhotra.com/blog/</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -306,7 +315,7 @@
   <url>
     <loc>http://pankajmalhotra.com/coding/</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -319,7 +328,7 @@
   <url>
     <loc>http://pankajmalhotra.com/live/</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -332,7 +341,7 @@
   <url>
     <loc>http://pankajmalhotra.com/til/</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -345,7 +354,7 @@
   <url>
     <loc>http://pankajmalhotra.com/</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -358,7 +367,7 @@
   <url>
     <loc>http://pankajmalhotra.com/public/css/main.css</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>
@@ -371,7 +380,7 @@
   <url>
     <loc>http://pankajmalhotra.com/sitemap.xml</loc>
     
-      <lastmod>2016-10-22</lastmod>
+      <lastmod>2016-11-13</lastmod>
     
     
       <changefreq>monthly</changefreq>

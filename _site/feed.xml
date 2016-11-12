@@ -2,17 +2,135 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pankaj Malhotra</title>
-    <link>http://pankajmalhotra.com</link>
-    <atom:link href="http://pankajmalhotra.com/feed.xml" rel="self" type="application/rss+xml" />
+    <link>http://localhost:4000</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Sat, 22 Oct 2016 22:27:05 +0530</pubDate>
-    <lastBuildDate>Sat, 22 Oct 2016 22:27:05 +0530</lastBuildDate>
+    <pubDate>Sun, 13 Nov 2016 04:45:55 +0530</pubDate>
+    <lastBuildDate>Sun, 13 Nov 2016 04:45:55 +0530</lastBuildDate>
 
     
       <item>
+        <title>Redis For HA And Load Balancing Of A Service - Part-1</title>
+        <link>http://localhost:4000/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1</link>
+        <pubDate>Sat, 12 Nov 2016 14:07:59 +0530</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;Its been long since I have written a blog post, mostly because of my busy schedule and new life after University.
+A lot has happened since then, about which I plan to write seperate blog posts. &lt;/p&gt;
+
+&lt;p&gt;I have been working with the DevOps team at &lt;a href=&quot;http://browserstack.com/&quot;&gt;BrowserStack&lt;/a&gt; for a few months now. In this post I&amp;#39;ll describe an interesting problem I have been working on recently.&lt;/p&gt;
+
+&lt;h2&gt;Problem&lt;/h2&gt;
+
+&lt;p&gt;Writing a highly available/ multi AZ service deployed independently in each region which does aggregation of data in fixed time intervals and pushes to a database cluster.&lt;/p&gt;
+
+&lt;p&gt;Lets first look and try to understand the given architecture:
+&lt;img src=&quot;/public/images/event_data_service.png&quot; alt=&quot;Event Data Service&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;In the above architecture we have:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Multiple Services and Products all in same region. For example: us-east&lt;/li&gt;
+&lt;li&gt;All services communicate with database servers via DNS which provides round robin load balancing.&lt;/li&gt;
+&lt;li&gt;Machine-1 and Machine-2 both have exact same configuration and services - UDP broadcast relayer and InfluxDB in two availability zones. For example: us-east-1a and us-east-1b&lt;/li&gt;
+&lt;li&gt;If a request from any of the productA, productB etc hits our DNS it can be redirected to either Machine-1 or Machine-2.&lt;/li&gt;
+&lt;li&gt;UDP relayer make sure that both databases contain the same data, i.e if a request comes on Machine-1 it is automatically sent to Machine-2 and vice versa.&lt;/li&gt;
+&lt;li&gt;Each product sends the database cluster an event message whenever a user event happens on it.&lt;/li&gt;
+&lt;li&gt;The message contains 4 parameters (event-type, product, username, timestamp).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Event message examples:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername1 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;stuck_in_queue,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername2 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername3 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername4 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername1 1478507534415525890&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Note: The time stamp for the above events is in nanoseconds.&lt;/p&gt;
+
+&lt;p&gt;Consider the following use case:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;For instrumentation purpose, we need to count the total number of particular event types(eg: rails-5xx, browser_error, etc) which happened for a particular product(eg: live, automate) per minute and also get the same count for unique users.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;According to the given use case the above 5 example messages will yield an output:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2
+unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;stuck_in_queue,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;stuck_in_queue,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2
+cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2&gt;Understanding the above output&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;cumulative_user_event&lt;/code&gt; tag describes events which happened within one minute for a particular product, i.e if an event happened for testuser1 two times within a minute it will be counted two times. On the other hand&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;unique_user_event&lt;/code&gt; tag describes events which happened within one minute for a particular product, considering unique users only, i.e if an event happened for testuser1 two times withing a minute it will be counted once only.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The first output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;rails-5xx&lt;/code&gt; to 1 user only.&lt;/li&gt;
+&lt;li&gt;The second output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;rails-5xx&lt;/code&gt; 2 times.&lt;/li&gt;
+&lt;li&gt;The third output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;stuck_in_queue&lt;/code&gt; to 1 user only.&lt;/li&gt;
+&lt;li&gt;The fourth output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;stuck_in_queue&lt;/code&gt; 1 time only.&lt;/li&gt;
+&lt;li&gt;The fifth output message says: Within a duration of 1 minute the product &lt;code&gt;automate&lt;/code&gt; gave &lt;code&gt;browser_error&lt;/code&gt; to 2 users.&lt;/li&gt;
+&lt;li&gt;The sixth output message says: Within a duration of 1 minute the product &lt;code&gt;automate&lt;/code&gt; gave &lt;code&gt;browser_error&lt;/code&gt; 2 times.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2&gt;Service Requirements&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;#39;s call the above example messages as input, the output yield as output and the service to be implemented as Event Data Service.
+It should be pretty clear by now that we need to write a service which takes in the &lt;code&gt;input&lt;/code&gt; from multiple products and sends &lt;code&gt;output&lt;/code&gt; to the database cluster.&lt;/p&gt;
+
+&lt;h2&gt;Easy and unpromising solution&lt;/h2&gt;
+
+&lt;p&gt;We use a simple hash map with the following keys and values:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;cumulative_user_event,&amp;lt;product_type&amp;gt;,&amp;lt;event_type&amp;gt;&lt;/code&gt; : &lt;code&gt;(int)(count_of_events)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;unique_user_event,&amp;lt;product_type&amp;gt;,&amp;lt;event_type&amp;gt;&lt;/code&gt; : &lt;code&gt;(set)(usernames)&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Whenever a new message comes we increase the counter for cumulative&lt;em&gt;user&lt;/em&gt;event, and add a username to set corresposnding to unique&lt;em&gt;user&lt;/em&gt;event.
+Parallely, we run a loop every minute and send the aggregated ouput:
+&lt;code&gt;cumulative_user_event with the counter and unique_user_event with the cardinality of set&lt;/code&gt;
+to database cluster and clear the hash maps.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/images/event_data_service_easy_solution.png&quot; alt=&quot;Event Data Service Easy Solution&quot;/&gt;&lt;/p&gt;
+
+&lt;h2&gt;Problems with above solution&lt;/h2&gt;
+
+&lt;p&gt;The above solution works perfectly when deployed on a single machine as a service, but deploying the service on a single node makes it a single point of failure for our complete system, i.e even though we have HA for our database but whenever the node containing Event Data Service and all our database servers stop receiving data.&lt;/p&gt;
+
+&lt;p&gt;If you observe carefully, in this solution we can simply deploy the service on Machine-1 or Machine-2 and just point our DNS to one of them with deployed service. It will disable our HA and when the server pointed by DNS crashes whole of our system will crash.&lt;/p&gt;
+
+&lt;h2&gt;Deploying Event Data Service on multiple machines&lt;/h2&gt;
+
+&lt;p&gt;This is the actual solution for our problem and the main reason of this blog post, i.e we want to deploy our Event Data Service both on Machine-1 and Machine-2.&lt;/p&gt;
+
+&lt;h2&gt;Challenges and Brainstorming&lt;/h2&gt;
+
+&lt;p&gt;I&amp;#39;ll describe solution for how to achieve this in my next post i.e Part-2 of this series but I&amp;#39;ll leave some interesting hints for reader to brainstorm on:&lt;/p&gt;
+
+&lt;p&gt;When Event Data Service gets deployed to both Machine-1 and Machine-2, DNS points to both the machines and does regular round robin load balancing:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Which machine gets the event messages from products ?&lt;/li&gt;
+&lt;li&gt;When does that machine gets the message ?&lt;/li&gt;
+&lt;li&gt;Which machine processes and pushes data and at what intervals ?&lt;/li&gt;
+&lt;li&gt;Does the one minute loop finish at same time on both machines ?&lt;/li&gt;
+&lt;li&gt;What is the title of this post ? :)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Until then keep thinking and stay tuned. Feel free to discuss the possible solution with me in the meantime or ask questions if you couldn&amp;#39;t get the problem statement clearly.&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
         <title>Making My GSoC 2014 Project Proposal Public</title>
-        <link>http://pankajmalhotra.com/Making-My-GSoC-2014-Project-Proposal-Public</link>
+        <link>http://localhost:4000/Making-My-GSoC-2014-Project-Proposal-Public</link>
         <pubDate>Mon, 21 Mar 2016 04:56:12 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Many of my juniors are applying for Google Summer of Code this year, and I have been giving them few tips on how to write a good proposal. I decided to make my own proposal public so that anyone who wants to get some hints can go through it. I spent a lot of time writing this proposal and I am thankful to my project mentor and team manager for their helpful quality reviews.&lt;/p&gt;
@@ -25,7 +143,7 @@
     
       <item>
         <title>Dynamic Resource Management in IaaS Cloud</title>
-        <link>http://pankajmalhotra.com/Dynamic-Resource-Management-in-IaaS-Cloud</link>
+        <link>http://localhost:4000/Dynamic-Resource-Management-in-IaaS-Cloud</link>
         <pubDate>Thu, 17 Dec 2015 20:30:00 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Few months back, I started working on a problem to dynamically manage resources in an Infrastructure as a Service platform, I wanted to build a model that would scale infrastrcuture based on application needs, and would help to reduce the cost and resource over utilization for the infrastructure provider and make the application robust by providing right amount of resources at the right time.&lt;/p&gt;
@@ -38,7 +156,7 @@
     
       <item>
         <title>JSFoo 2015 Conference and Workshops on JavaScript</title>
-        <link>http://pankajmalhotra.com/JSFoo-2015-Conference-and-Workshops-on-JavaScript</link>
+        <link>http://localhost:4000/JSFoo-2015-Conference-and-Workshops-on-JavaScript</link>
         <pubDate>Fri, 18 Sep 2015 06:14:52 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;h2&gt;Enjoying weather sitting outside airport&lt;/h2&gt;
@@ -128,7 +246,7 @@
     
       <item>
         <title>My Talk Proposal for JSFoo 2015 - Debugging Javascript on Mobile Browsers</title>
-        <link>http://pankajmalhotra.com/My-Talk-Proposal-for-JSFoo-2015-Debugging-Javascript-on-Mobile-Browsers</link>
+        <link>http://localhost:4000/My-Talk-Proposal-for-JSFoo-2015-Debugging-Javascript-on-Mobile-Browsers</link>
         <pubDate>Tue, 04 Aug 2015 06:14:52 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Here is a proposal of my talk titled &amp;quot;Debugging Javascript on Mobile-Browsers&amp;quot; for JSFoo 2015. It covers a major part of the research work I did while interning with Mobile team at BrowserStack.&lt;/p&gt;
@@ -156,7 +274,7 @@ This is a completely fresh set of slides, so do suggest any modifications so tha
     
       <item>
         <title>GoSprint and GoRhythms - Algorithms In GoLang</title>
-        <link>http://pankajmalhotra.com/GoSprint-And-GoRhythms-Algorithms-In-GoLang</link>
+        <link>http://localhost:4000/GoSprint-And-GoRhythms-Algorithms-In-GoLang</link>
         <pubDate>Sat, 01 Aug 2015 02:01:35 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Few weeks back I started a new section called &lt;code&gt;coding&lt;/code&gt; on my blog. If you follow my blog you would have seen that there wasn&amp;#39;t much activity and posts around that section as promised.
@@ -174,7 +292,7 @@ Its not that I have stoppped reading algorithms and just doing so called &lt;cod
     
       <item>
         <title>Skip SSL HostName Verification Java HttpsURLConnection</title>
-        <link>http://pankajmalhotra.com/Skip-SSL-HostName-Verification-Java-HttpsURLConnection</link>
+        <link>http://localhost:4000/Skip-SSL-HostName-Verification-Java-HttpsURLConnection</link>
         <pubDate>Tue, 28 Jul 2015 02:09:10 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;There might arise a situation when you have to make a secure request to a server with certificates that do not have host name to which you are making a request.&lt;/p&gt;
@@ -184,7 +302,7 @@ Its not that I have stoppped reading algorithms and just doing so called &lt;cod
 &lt;p&gt;PS: This situation is different from errors arrising from invalid or self signed certificates. This situation arrises when certificates are valid but the host name verification fails.&lt;/p&gt;
 
 &lt;p&gt;You might see an error like&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;java.io.IOException: Hostname &#39;0.0.0.0&#39; was not verified
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;java.io.IOException: Hostname '0.0.0.0' was not verified
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Where in place of &lt;code&gt;0.0.0.0&lt;/code&gt; its the server&amp;#39;s ip address.&lt;/p&gt;
 
@@ -266,7 +384,7 @@ public class SkipVerification implements Runnable {
     
       <item>
         <title>Retrieving Safari History From JailBroken IOS Device</title>
-        <link>http://pankajmalhotra.com/Retrieving-Safari-History-From-JailBroken-IOS-Device</link>
+        <link>http://localhost:4000/Retrieving-Safari-History-From-JailBroken-IOS-Device</link>
         <pubDate>Sun, 28 Jun 2015 12:40:58 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;h3&gt;This post is for Jail Broken devices and tested on IOS 8.1.2.&lt;/h3&gt;
@@ -286,16 +404,16 @@ History.db-shm
 History.db-wal
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;To find path to these files just do:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ find /private/var/mobile/Containers/Data/Application -iname &#39;History.db*&#39;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ find /private/var/mobile/Containers/Data/Application -iname 'History.db*'
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;3 SCP files to a local location&lt;/p&gt;
 
 &lt;p&gt;Basically to get the data from these files you need &lt;code&gt;sqlite3&lt;/code&gt;. You can either install &lt;code&gt;sqlite3&lt;/code&gt; app from cydia to the mobile or better just scp the datbase files to machine you are working on.&lt;/p&gt;
 
 &lt;p&gt;You can copy the files one by one or better use &lt;code&gt;sshpass&lt;/code&gt; and &lt;code&gt;xargs&lt;/code&gt; to copy all files at one go like:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ sshpass -p &#39;alpine&#39; ssh  root@mobile_ip &quot;find /private/var/mobile/Containers/Data/Application -name &#39;History.db*&#39;&quot; \
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ sshpass -p 'alpine' ssh  root@mobile_ip &quot;find /private/var/mobile/Containers/Data/Application -name 'History.db*'&quot; \
     | xargs -I{} \
-    sshpass -p &#39;alpine&#39; scp -P $SSH_PORT root@mobile_ip:&#39;{}&#39; /path/to/tmp/db/on/local/machine;
+    sshpass -p 'alpine' scp -P $SSH_PORT root@mobile_ip:'{}' /path/to/tmp/db/on/local/machine;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;4 Load the sqlite database&lt;/p&gt;
 
@@ -313,7 +431,7 @@ History.db-wal
     
       <item>
         <title>Start App Service At BootUp On JailBroken IOS Device</title>
-        <link>http://pankajmalhotra.com/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device</link>
+        <link>http://localhost:4000/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device</link>
         <pubDate>Sat, 27 Jun 2015 12:49:35 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;h3&gt;This post is for Jail Broken devices and tested on IOS 8.1.2.&lt;/h3&gt;
@@ -363,7 +481,7 @@ This can be anything as simpler as a bash script or anything that launches your 
     
       <item>
         <title>Websockets SSL/TLS Termination Using NGINX Proxy</title>
-        <link>http://pankajmalhotra.com/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy</link>
+        <link>http://localhost:4000/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy</link>
         <pubDate>Sun, 14 Jun 2015 14:47:00 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;There can be a situation where your application is configured to communicate via websockets protocol &lt;code&gt;ws&lt;/code&gt; and you want to expose it over the internet while still keeping the client side secure by SSL/TLS or say the client will always get an &lt;code&gt;HTTPS&lt;/code&gt; page.&lt;/p&gt;
@@ -382,7 +500,7 @@ We use secure websockets communication on client side using the &lt;code&gt;wss&
 &lt;p&gt;All that is needed to convert an instance of NGINX to a proxy server is a few changes in configuration file.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;map $http_upgrade $connection_upgrade {
     default upgrade;
-    &#39;&#39; close;
+    '' close;
 }
 
 upstream appserver {
@@ -410,174 +528,6 @@ server {
 &lt;p&gt;Replace the &lt;code&gt;appserver_ip&lt;/code&gt; and &lt;code&gt;ws_port&lt;/code&gt; with the ip and port of your application server, &lt;code&gt;client_wss_port&lt;/code&gt; with the port on which client makes a &lt;code&gt;wss&lt;/code&gt; connection and provide paths to certificate/key.&lt;/p&gt;
 
 &lt;p&gt;Just reload the NGINX configuration or restart the server to get everything up and running.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Injecting Javascript In HTML Content Using MITM Proxy</title>
-        <link>http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy</link>
-        <pubDate>Tue, 09 Jun 2015 03:13:10 +0530</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;Its been a few days that I have been learning about Man In The Middle MITM proxy, my use case was to inject a simple javascript to html pages that users open behind proxy server.&lt;/p&gt;
-
-&lt;p&gt;It actually involves a bit insight on how to do this, and a few small challenges. Here I describe the solutions I found to do this:&lt;/p&gt;
-
-&lt;h2&gt;What is MITM proxy ?&lt;/h2&gt;
-
-&lt;p&gt;An interactive console program that allows traffic flows to be intercepted, inspected, modified and replayed.
-So basically it gives the proxy administartor the power to modify any traffic that goes through the proxy. You can play with html content, inject elements, get header data, modify headers, dns spoofing, traffic filteration, redirection and a lot more things you can do with mitmproxy.
-&lt;br/&gt;
-&lt;a href=&quot;https://github.com/mitmproxy/mitmproxy/tree/master/examples&quot;&gt;Example scripts for doing experimentation&lt;/a&gt;
-&lt;br/&gt;
-For more information visit &lt;a href=&quot;https://mitmproxy.org/&quot;&gt;mitmproxy official website&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;For OS X its distributed as a homebrew package and is really simple to install, just do &lt;code&gt;$ brew install mitmproxy&lt;/code&gt;.
-For troubleshooting and setting environment variables have a look at the &lt;a href=&quot;https://mitmproxy.org/doc/install.html&quot;&gt;installation guide&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Make sure you have all the certificates used by mitm proxy in &lt;code&gt;~/.mitmproxy/&lt;/code&gt;. Install certificates on browser by browsing to &lt;code&gt;mitm.it&lt;/code&gt;. If the traffic is passing through the proxy server this page will show you options to install certificates, just select the platform you are browsing on.  For more information about generating and installing certificates see &lt;a href=&quot;https://mitmproxy.org/doc/certinstall.html&quot;&gt;about cerificates&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2&gt;Running&lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ mitmproxy -p port_number
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The default port on which proxy server runs is &lt;code&gt;8080&lt;/code&gt; but you can specify the &lt;code&gt;port_number&lt;/code&gt; by using &lt;code&gt;-p&lt;/code&gt; flag. It will open up a window showing traffic passing through proxy.&lt;/p&gt;
-
-&lt;p&gt;Configure browser to use proxy server by specifying host as &lt;code&gt;localhost&lt;/code&gt; and the port on which proxy server is listening.
-You will start seeing requests though the proxy and traffic passing through it.
-&lt;img src=&quot;/public/images/mitmproxy.png&quot; alt=&quot;MITM Console&quot; style=&quot;margin-right:15px; width: 100%; height: 100%&quot; /&gt;&lt;/p&gt;
-
-&lt;h2&gt;Modifying traffic passing through proxy&lt;/h2&gt;
-
-&lt;p&gt;You can pass scripts as arguments while running proxy server which will modify the traffic according to the logic you specify in script.
-The script will operate on each request passing through proxy, and will make the desired modification.&lt;/p&gt;
-
-&lt;h3&gt;Inline Scripts&lt;/h3&gt;
-
-&lt;p&gt;Basic Structure of an Inline script is:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;def on_event(context, flow):
-    some_logic
-    another_logic
-    do_something
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The first argument to each event method is an instance of ScriptContext that lets the script interact with the global mitmproxy state. 
-&lt;code&gt;on_event&lt;/code&gt; can be an event like request, response, start, clientconnect, serverconnect or any other event from this &lt;a href=&quot;https://mitmproxy.org/doc/scripting/inlinescripts.html&quot;&gt;list&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Script to inject javascript to html content:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;# Usage: mitmdump -s &quot;js_injector.py src&quot;
-# (this script works best with --anticache)
-from bs4 import BeautifulSoup
-from libmproxy.protocol.http import decoded
-
-# On start of proxy server ask for src as an argument
-def start(context, argv):
-    if len(argv) != 2:
-        raise ValueError(&#39;Usage: -s &quot;js_injector.py src&quot;&#39;)
-    context.src_url = argv[1]
-
-
-def response(context, flow):
-    if flow.request.host in context.src_url:
-        return # Make sure JS isn&#39;t injected to itself
-    with decoded(flow.response):  # Remove content encoding (gzip, ...)
-        html = BeautifulSoup(flow.response.content)
-        if html.body:
-            script = html.new_tag(
-                &quot;script&quot;,
-                src=context.src_url,
-                type=&#39;application/javascript&#39;)
-            html.body.insert(0, script)
-            flow.response.content = str(html)
-            context.log(&quot;Script injected.&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Run the mitm proxy using:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ mitmdump -p 8888 -s &quot;js_injector.py http://path/to/src.js&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Note: that we are using &lt;code&gt;mitmdump&lt;/code&gt; istead of &lt;code&gt;mitmproxy&lt;/code&gt; for getting more detailed output.&lt;/p&gt;
-
-&lt;p&gt;Note: If you want to inject javascript in an &lt;code&gt;https&lt;/code&gt; website, your javascript file must also be hosted on &lt;code&gt;https&lt;/code&gt; server.&lt;/p&gt;
-
-&lt;p&gt;So far so good:
-Now open the url in browser configured to use proxy server, you should see a broken website.&lt;/p&gt;
-
-&lt;h3&gt;Any guess why the website is broken ?&lt;/h3&gt;
-
-&lt;p&gt;The website is broken because in previous script our javascript is getting injected on every resource on page having &lt;code&gt;html.body&lt;/code&gt; which should not be the case.&lt;/p&gt;
-
-&lt;p&gt;Replace:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;-- if html.body:
-with
-++ if html.body and (&#39;text/html&#39; in flow.response.headers[&quot;content-type&quot;][0]):
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;to make sure only requests with &lt;code&gt;text/html&lt;/code&gt; in their header get js injection.&lt;/p&gt;
-
-&lt;p&gt;Try to open the page again, it should now open fine with &lt;em&gt;almost&lt;/em&gt; all resources loading properly.&lt;/p&gt;
-
-&lt;h3&gt;So why &lt;em&gt;almost&lt;/em&gt; all and not &lt;em&gt;ALL&lt;/em&gt; ? Try to figure it out and read further:&lt;/h3&gt;
-
-&lt;p&gt;The reason is that an html page has multiple resources that can be of type text/html for example an iframe loading content from an external resource. But we want to inject our js only to the page that is opened by user at current time i.e the main page.&lt;/p&gt;
-
-&lt;p&gt;Its not possible to do this without knowing what page is the main page and what are the elements within it. Therefore to overcome this situation we come up with a filter.&lt;/p&gt;
-
-&lt;p&gt;filter.js&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;if(parent.document.URL!=document.location.href)
-       throw new Error(&quot;Not the main page&quot;);
-
-(function(e){e.setAttribute(&quot;src&quot;,&quot;http://path/to/script.js&quot;);
-document.getElementsByTagName(&quot;body&quot;)[0].appendChild(e);})
-(document.createElement(&quot;script&quot;));void(0);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;So basically injecting this filter on proxy server side by replacing path/to/script.js with the path to actual js that we want to inject will do a client side verification to identify the main page and allow execution of js only on main page otherwise it will throw an error &amp;quot;Not the main page&amp;quot;.&lt;/p&gt;
-
-&lt;p&gt;This solves our problem of js getting executed multiple times on a single page. Now the js we inject will execute only once but still on the proxy server side our js filter will get inject to all valid html resources i.e which have &lt;code&gt;text/html&lt;/code&gt; as their &lt;code&gt;content-type&lt;/code&gt; in header response.&lt;/p&gt;
-
-&lt;h2&gt;Final Steps:&lt;/h2&gt;
-
-&lt;p&gt;Inject JS filter on html resources:&lt;/p&gt;
-
-&lt;p&gt;Final version of &lt;code&gt;js_injector.py&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;# Usage: mitmdump -s &quot;js_injector.py src&quot;
-# (this script works best with --anticache)
-from bs4 import BeautifulSoup
-from libmproxy.protocol.http import decoded
-
-# On start of proxy server ask for src as an argument
-def start(context, argv):
-    if len(argv) != 2:
-        raise ValueError(&#39;Usage: -s &quot;js_injector.py src&quot;&#39;)
-    context.src_url = argv[1]
-
-
-def response(context, flow):
-    with decoded(flow.response):  # Remove content encoding (gzip, ...)
-        html = BeautifulSoup(flow.response.content)
-        &quot;&quot;&quot;
-        # To Allow CORS
-        if &quot;Content-Security-Policy&quot; in flow.response.headers:
-            del flow.response.headers[&quot;Content-Security-Policy&quot;]
-        &quot;&quot;&quot;
-        if html.body and (&#39;text/html&#39; in flow.response.headers[&quot;content-type&quot;][0]):
-            script = html.new_tag(
-                &quot;script&quot;,
-                src=context.src_url)
-            html.body.insert(0, script)
-            flow.response.content = str(html)
-            context.log(&quot;******* Filter Injected *******&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ mitmdump -p 8888 -s &quot;js_injector.py http://path/to/filter.js&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Final version of &lt;code&gt;filter.js&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;if(parent.document.URL!=document.location.href)
-       throw new Error(&quot;Not the main page&quot;);
-
-(function(e){e.setAttribute(&quot;src&quot;,&quot;http://path/to/script.js&quot;);
-document.getElementsByTagName(&quot;body&quot;)[0].appendChild(e);})
-(document.createElement(&quot;script&quot;));void(0);
-
-console.log(&quot;******* Script Injected *******&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Replace &lt;code&gt;/path/to/script.js&lt;/code&gt; in &lt;code&gt;filter.js&lt;/code&gt; with path to the script you want to actually inject.&lt;/p&gt;
-
-&lt;p&gt;That&amp;#39;s it ! Now the JS you inject will be executed only one time per page i.e the actual page and not the resources in it.&lt;/p&gt;
 </description>
       </item>
     
