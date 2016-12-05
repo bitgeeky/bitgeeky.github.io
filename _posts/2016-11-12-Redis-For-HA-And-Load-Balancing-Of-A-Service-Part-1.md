@@ -31,27 +31,27 @@ In the above architecture we have:
 
 Event message examples:
 {% highlight bash %}
-event_type=rails-5xx,product=live value=testusername1 1478507534415525888
-event_type=stuck_in_queue,product=live value=testusername2 1478507534415525888
-event_type=browser_error,product=automate value=testusername3 1478507534415525888
-event_type=browser_error,product=automate value=testusername4 1478507534415525888
-event_type=rails-5xx,product=live value=testusername1 1478507534415525890
+event_type=http-5xx,product=productA value=testusername1 1478507534415525888
+event_type=os_error,product=productA value=testusername2 1478507534415525888
+event_type=browser_error,product=productB value=testusername3 1478507534415525888
+event_type=browser_error,product=productB value=testusername4 1478507534415525888
+event_type=http-5xx,product=productA value=testusername1 1478507534415525890
 {% endhighlight %}
 
 Note: The time stamp for the above events is in nanoseconds.
 
 Consider the following use case:
 
-1. For instrumentation purpose, we need to count the total number of particular event types(eg: rails-5xx, browser_error, etc) which happened for a particular product(eg: live, automate) per minute and also get the same count for unique users.
+1. For instrumentation purpose, we need to count the total number of particular event types(eg: http-5xx, browser_error, etc) which happened for a particular product(eg: productA, productB) per minute and also get the same count for unique users.
 
 According to the given use case the above 5 example messages will yield an output:
 {% highlight bash %}
-unique_user_event,event_type=rails-5xx,product=live value=1
-cumulative_user_event,event_type=rails-5xx,product=live value=2
-unique_user_event,event_type=stuck_in_queue,product=live value=1
-cumulative_user_event,event_type=stuck_in_queue,product=live value=1
-unique_user_event,event_type=browser_error,product=automate value=2
-cumulative_user_event,event_type=browser_error,product=automate value=2
+unique_user_event,event_type=http-5xx,product=productA value=1
+cumulative_user_event,event_type=http-5xx,product=productA value=2
+unique_user_event,event_type=os_error,product=productA value=1
+cumulative_user_event,event_type=os_error,product=productA value=1
+unique_user_event,event_type=browser_error,product=productB value=2
+cumulative_user_event,event_type=browser_error,product=productB value=2
 {% endhighlight %}
 
 Understanding the above output
@@ -60,12 +60,12 @@ Understanding the above output
 
 ```unique_user_event``` tag describes events which happened within one minute for a particular product, considering unique users only, i.e if an event happened for testuser1 two times within a minute it will be counted once only.
 
-1. The first output message says: Within a duration of 1 minute the product `live` gave `rails-5xx` to 1 user only.
-2. The second output message says: Within a duration of 1 minute the product `live` gave `rails-5xx` 2 times.
-3. The third output message says: Within a duration of 1 minute the product `live` gave `stuck_in_queue` to 1 user only.
-4. The fourth output message says: Within a duration of 1 minute the product `live` gave `stuck_in_queue` 1 time only.
-5. The fifth output message says: Within a duration of 1 minute the product `automate` gave `browser_error` to 2 users.
-6. The sixth output message says: Within a duration of 1 minute the product `automate` gave `browser_error` 2 times.
+1. The first output message says: Within a duration of 1 minute the product `productA` gave `http-5xx` to 1 user only.
+2. The second output message says: Within a duration of 1 minute the product `productA` gave `http-5xx` 2 times.
+3. The third output message says: Within a duration of 1 minute the product `productA` gave `os_error` to 1 user only.
+4. The fourth output message says: Within a duration of 1 minute the product `productA` gave `os_error` 1 time only.
+5. The fifth output message says: Within a duration of 1 minute the product `productB` gave `browser_error` to 2 users.
+6. The sixth output message says: Within a duration of 1 minute the product `productB` gave `browser_error` 2 times.
 
 Service Requirements
 ----

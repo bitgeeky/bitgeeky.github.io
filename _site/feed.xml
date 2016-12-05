@@ -6,9 +6,210 @@
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
-    <pubDate>Sun, 13 Nov 2016 04:45:55 +0530</pubDate>
-    <lastBuildDate>Sun, 13 Nov 2016 04:45:55 +0530</lastBuildDate>
+    <pubDate>Tue, 06 Dec 2016 02:04:57 +0530</pubDate>
+    <lastBuildDate>Tue, 06 Dec 2016 02:04:57 +0530</lastBuildDate>
 
+    
+      <item>
+        <title>Redis For HA And Load Balancing Of A Service - Part-2</title>
+        <link>http://localhost:4000/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-2</link>
+        <pubDate>Sun, 04 Dec 2016 15:38:18 +0530</pubDate>
+        <author>Pankaj Malhotra</author>
+        <description>&lt;p&gt;In &lt;a href=&quot;http://pankajmalhotra.com/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1&quot;&gt;last post&lt;/a&gt; I described the deployment of event data service on a single node.&lt;/p&gt;
+
+&lt;p&gt;Quick Recap:
+&lt;img src=&quot;/public/images/event_data_service_easy_solution.png&quot; alt=&quot;Event Data Service&quot;/&gt;&lt;/p&gt;
+
+&lt;h2&gt;Easy and unpromising solution&lt;/h2&gt;
+
+&lt;p&gt;We use a simple hash map with the following keys and values:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;cumulative_user_event,&amp;lt;product_type&amp;gt;,&amp;lt;event_type&amp;gt;&lt;/code&gt; : &lt;code&gt;(int)(count_of_events)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;unique_user_event,&amp;lt;product_type&amp;gt;,&amp;lt;event_type&amp;gt;&lt;/code&gt; : &lt;code&gt;(set)(usernames)&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Whenever a new message comes we increase the counter for cumulative&lt;em&gt;user&lt;/em&gt;event, and add a username to set corresposnding to unique&lt;em&gt;user&lt;/em&gt;event.
+Parallely, we run a loop every minute and send the aggregated ouput:
+&lt;code&gt;cumulative_user_event with the counter&lt;/code&gt; and &lt;code&gt;unique_user_event with the cardinality of set&lt;/code&gt;
+to database cluster and clear the hash maps.&lt;/p&gt;
+
+&lt;p&gt;We also discussed the problems with above solutions, main problem being when the machine goes down we start losing data and this can happen quite often in a cloud environment.
+But if you observe carefully, deploying on a single machine is not even an option here !&lt;/p&gt;
+
+&lt;h2&gt;Why single machine is not even an option ?&lt;/h2&gt;
+
+&lt;p&gt;Machine-1 and Machine-2 both sit behind a DNS which does a round robin load balancing i.e some requests go to Machine-1 and others go to Machine-2. If we want to deploy our service on one of the machines say Machine-1 we will start losing data which comes on Machine-2.&lt;/p&gt;
+
+&lt;p&gt;The worst idea is to boot up Machine-3 in-between Machine-1 and Machine-2 on which we can deploy our service. After processing data, Machine-3 sends data to databases on both the machines.&lt;/p&gt;
+
+&lt;p&gt;I call it the worst solution because it means, booting up of a machine for just one service, usage of an elastic-ip and a new DNS entry and still the whole system can fail on failure of just one machine.&lt;/p&gt;
+
+&lt;h2&gt;Extending the same solution to multiple machines&lt;/h2&gt;
+
+&lt;p&gt;Now, we plan to make this service highly available, so that even if one of the machine for this service goes down our system is not impacted and everything continues to work the same way.&lt;/p&gt;
+
+&lt;p&gt;We deploy our Event Data Service on both Machine-1 and Machine-2 behind a UDP relayer:
+&lt;img src=&quot;/public/images/event_data_service_ha_solution.png&quot; alt=&quot;Event Data Service&quot;/&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Whenever request comes to either of Machine-1 or Machine-2 it gets replicated to both the machines by udp replayer. If you observere the picture carefully, there are two arrows from UDP Replayer, one that sends data directly to InfluxDB and the other which sends it to our Event Data Service. This is because the data we want to process is not the only data that our UDP relayer receives, it receives other data also which isn&amp;#39;t of any interest &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Important point to note here is that the complexity of our UDP replayer has increased now, the dumb relayer which was made to only forward/ broadcast requests is now also processing data and distinguishig which request should directly be sent to database and which one to the Event Data Service.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Lets call Event Data Service on Macine-1 as EDS-1 and the one on Machine-2 as EDS-2.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Both EDS-1 and EDS-2 receive same data and start processing it.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2&gt;Problem with this deployment&lt;/h2&gt;
+
+&lt;p&gt;Important point to note here is that 1 minute for EDS-1 and EDS-2 can be different, i.e the processing time isn&amp;#39;t synchronized.
+Even though the system clocks on both machines are synchronized, i.e &lt;code&gt;date&lt;/code&gt; command on both machines shows same value but:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;One minute finished&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;When you run this script on both machines independently there is no guarantee that both will always print &amp;quot;One minute finished&amp;quot; at same time. Hence, as shown in picture below the processing time of one minute can overlap or just get out of sync anytime.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/images/eds_clocks.png&quot; alt=&quot;Event Data Service Easy Solution&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;In the overlapping intervals shown in above image same data gets processed twice by both EDS-1 and EDS-2 and we get duplicate/ incosistent data on database which doesn&amp;#39;t makes any sense.&lt;/p&gt;
+
+&lt;p&gt;It is clear that both services can&amp;#39;t operate simltaneously, i.e a minute&amp;#39;s data should be processed only once by one of them.&lt;/p&gt;
+
+&lt;h2&gt;Solution to above problem:&lt;/h2&gt;
+
+&lt;p&gt;This problem is actaully one of the most common problem of a Distributed System and hence has a number of solutions to it, I&amp;#39;ll describe one of them here:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Master-Slave architecture: We use only one of {EDS-1, EDS-2} at a given point of time. Both nodes send each other periodic heart beats and one of them takes over as a master node for processing the data.
+If EDS-1 goes down EDS-2 will take over and vice-versa.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This ensures HA of our service ! Yes, now our service is highly available, because same logic can be scaled horizontally to add more nodes, for 3 or more node cluster.&lt;/p&gt;
+
+&lt;h2&gt;Steps towards a scalable design and Load Balancing&lt;/h2&gt;
+
+&lt;p&gt;If you think carefully, in our solution only one of the service out of {EDS-1, EDS-2} is processing data, the other one is sitting idle and just sending heart beats.&lt;/p&gt;
+
+&lt;p&gt;We can modify our service and design it in such a way that the load of data processing can be distributed among the active nodes so that in future if the volume of data will increase our system can be scaled by simply adding more number of nodes and keeping architecture and implementation the same. Computing power of a single node in previous solution can become a bottle neck, the new solution should also remove any such bottle necks from our system.&lt;/p&gt;
+
+&lt;h2&gt;Taking advantage of Redis and NTP time:&lt;/h2&gt;
+
+&lt;p&gt;Now try to think of the problen yourself again, you&amp;#39;ll realize that from very begining all we needed was just a memory which is shared by both machines and is always same for both.
+That is the data once taken by EDS-1 shouldn&amp;#39;t be taken again by EDS-2, and since we need an aggregate over one minute we can take advantage of system time, the one shown by &lt;code&gt;date&lt;/code&gt; command since that will be same on both machines ! It gets synchronized via NTP client no matter what geographical area the nodes are in.&lt;/p&gt;
+
+&lt;h2&gt;Final Solution&lt;/h2&gt;
+
+&lt;p&gt;To keep track of clock time we define our 0 point as mid night and all the minutes after that have an abolute value, which can also be defined as &lt;code&gt;minutes_since_midnight&lt;/code&gt;.
+The value of &lt;code&gt;minutes_since_midnight&lt;/code&gt; will be same on both machines since both are synchronized by NTP.&lt;/p&gt;
+
+&lt;p&gt;We keep 1 sorted set and 3 unsorted sets in Redis:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Sorted set &amp;quot;minutes&amp;quot; - stores minutes&lt;em&gt;since&lt;/em&gt;midnight values.&lt;/li&gt;
+&lt;li&gt;Unsorted set &amp;quot;&lt;minutes_since_midnight&gt;&lt;em&gt;event&lt;/em&gt;types&amp;quot; - contains types of events that happened for a particular product in a particular minutes&lt;em&gt;since&lt;/em&gt;midnight.&lt;/li&gt;
+&lt;li&gt;Unsorted set &amp;quot;&lt;minutes_since_midnight&gt;&lt;em&gt;unique&lt;/em&gt;user&lt;em&gt;&amp;lt;event&lt;/em&gt;type&lt;em&gt;for&lt;/em&gt;a_product&amp;gt;&amp;quot; - contains usernames for which the event happened.&lt;/li&gt;
+&lt;li&gt;Unsorted set &amp;quot;&lt;minutes_since_midnight&gt;&lt;em&gt;cumulative&lt;/em&gt;user&lt;em&gt;&amp;lt;event&lt;/em&gt;type&lt;em&gt;for&lt;/em&gt;a_product&amp;gt;&amp;quot; - contains usernames + timestamp for which the event happened.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;When the events for a product type comes:
+Add minutes&lt;em&gt;since&lt;/em&gt;midnight to a set &amp;quot;minutes&amp;quot; with a weight equal to the value.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;ZADD&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'minutes'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minutes_since_midnight&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minutes_since_midnight&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Even if both machines push the same value multiples time, we are sure that there is only a single entry.&lt;/p&gt;
+
+&lt;p&gt;Keep track of all the events happened for a product in a particular minute:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;SADD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minutes_since_midnight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'event_types'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type_val&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Since, this is also a set, it ensures each type of event for a product gets pushed only once.&lt;/p&gt;
+
+&lt;p&gt;Preappend &lt;code&gt;minutes_since_midnight&lt;/code&gt; to each event type to create a set so that we 
+can later get to know the events which came in a particular minute for a particular product:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;SADD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minutes_since_midnight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'unique_user,'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;We store the usernames in this set, the cardinality of this set will later give us the
+number of users for which a particular event happened for a particular product.&lt;/p&gt;
+
+&lt;p&gt;Similar to above set we construct a set of cummulative events here, the difference is that
+we also add a timestamp appended to the username in this set, this is done to differentiate
+between two events which happened at two different times but within same minute.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;SADD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;minutes_since_midnight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'cumulative_events,'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;+&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timestamp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And since this is a set, even if EDS-1 and EDS-2 push the same event, it will get stored only once.&lt;/p&gt;
+
+&lt;p&gt;This will become more clear with the following example:
+Consider the same input as in previous example.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername1&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1480876707352348928&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername2&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1480876707352348928&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername3&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1480876707352348928&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername4&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1480876707352348928&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername1&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1480876707352348930&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The above events happen within same minute as indicated by timestamp in nanoseconds.
+If we calculate the minutes since midnight for the above events it will be 1118.&lt;/p&gt;
+
+&lt;p&gt;Now, value of minutes&lt;em&gt;since&lt;/em&gt;midnight = 1118
+other datastructures in Redis will have the values:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;minutes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,}&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_event_types&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;event_type=http-5xx,product=productA&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;event_type=os_error,product=productA&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;event_type=browser_error,product=productB&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_unique_user_event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_unique_user_event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_unique_user_event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productB&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; \
+                       &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_cumulative_user_event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; \
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername1_1480876707352348928&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testusername1_1480876707352348930&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_cumulative_user_event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+                     &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername2_1480876707352348928&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_cumulative_user_event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productB&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 
+                     &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testusername3_1480876707352348928&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2&gt;Service operation on Redis data&lt;/h2&gt;
+
+&lt;p&gt;Both EDS-1 and EDS-2 start poping out an element form the &amp;quot;minute&amp;quot; set, this make sure if EDS-1 gets minute value of 1118
+it gets deleted from the set and EDS-2 can never get that value.&lt;/p&gt;
+
+&lt;p&gt;Assuming that EDS-1 gets the minute 1118 to be processed it will iterate over the event types of &lt;code&gt;1118_event_types&lt;/code&gt;
+and get cardinality of each set corresponding to the event.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;min_since_midnight&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pop_from_redis_set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;minutes&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# value of minutes_since_midnight = 1118&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event_tpe&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_event_types&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;get_cadinallity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_unique_user_event_type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;get_cadinallity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_cumulative_user_event_type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;delete_from_redis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_unique_user_event_type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;delete_from_redis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_cumulative_user_event_type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;delete_from_redis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1118&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_event_tpes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This will give us the desired output:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;unique_user_event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;cumulative_user_event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;unique_user_event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;cumulative_user_event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;unique_user_event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;cumulative_user_event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;productB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Final Architecture:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/images/final_event_data_service.png&quot; alt=&quot;Event Data Service&quot;/&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;#39;s it ! Now we have a highly available load balanced service which can be deployed on a cluster of more than two nodes.&lt;/p&gt;
+
+&lt;p&gt;Feel, free to get in touch of you have a better design or want to discuss more on this.&lt;/p&gt;
+</description>
+      </item>
     
       <item>
         <title>Redis For HA And Load Balancing Of A Service - Part-1</title>
@@ -41,42 +242,42 @@ A lot has happened since then, about which I plan to write seperate blog posts. 
 
 &lt;p&gt;Event message examples:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername1 1478507534415525888
-&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;stuck_in_queue,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername2 1478507534415525888
-&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername3 1478507534415525888
-&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername4 1478507534415525888
-&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername1 1478507534415525890&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;http-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productA &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername1 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;os_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productA &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername2 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productB &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername3 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productB &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername4 1478507534415525888
+&lt;span class=&quot;nv&quot;&gt;event_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;http-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productA &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;testusername1 1478507534415525890&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Note: The time stamp for the above events is in nanoseconds.&lt;/p&gt;
 
 &lt;p&gt;Consider the following use case:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;For instrumentation purpose, we need to count the total number of particular event types(eg: rails-5xx, browser_error, etc) which happened for a particular product(eg: live, automate) per minute and also get the same count for unique users.&lt;/li&gt;
+&lt;li&gt;For instrumentation purpose, we need to count the total number of particular event types(eg: http-5xx, browser_error, etc) which happened for a particular product(eg: productA, productB) per minute and also get the same count for unique users.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;According to the given use case the above 5 example messages will yield an output:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;rails-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2
-unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;stuck_in_queue,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;stuck_in_queue,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;live &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
-unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2
-cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;automate &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;http-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productA &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;http-5xx,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productA &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2
+unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;os_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productA &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;os_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productA &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+unique_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productB &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2
+cumulative_user_event,event_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;browser_error,product&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;productB &lt;span class=&quot;nv&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2&gt;Understanding the above output&lt;/h2&gt;
 
 &lt;p&gt;&lt;code&gt;cumulative_user_event&lt;/code&gt; tag describes events which happened within one minute for a particular product, i.e if an event happened for testuser1 two times within a minute it will be counted two times. On the other hand&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;unique_user_event&lt;/code&gt; tag describes events which happened within one minute for a particular product, considering unique users only, i.e if an event happened for testuser1 two times withing a minute it will be counted once only.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;unique_user_event&lt;/code&gt; tag describes events which happened within one minute for a particular product, considering unique users only, i.e if an event happened for testuser1 two times within a minute it will be counted once only.&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;The first output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;rails-5xx&lt;/code&gt; to 1 user only.&lt;/li&gt;
-&lt;li&gt;The second output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;rails-5xx&lt;/code&gt; 2 times.&lt;/li&gt;
-&lt;li&gt;The third output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;stuck_in_queue&lt;/code&gt; to 1 user only.&lt;/li&gt;
-&lt;li&gt;The fourth output message says: Within a duration of 1 minute the product &lt;code&gt;live&lt;/code&gt; gave &lt;code&gt;stuck_in_queue&lt;/code&gt; 1 time only.&lt;/li&gt;
-&lt;li&gt;The fifth output message says: Within a duration of 1 minute the product &lt;code&gt;automate&lt;/code&gt; gave &lt;code&gt;browser_error&lt;/code&gt; to 2 users.&lt;/li&gt;
-&lt;li&gt;The sixth output message says: Within a duration of 1 minute the product &lt;code&gt;automate&lt;/code&gt; gave &lt;code&gt;browser_error&lt;/code&gt; 2 times.&lt;/li&gt;
+&lt;li&gt;The first output message says: Within a duration of 1 minute the product &lt;code&gt;productA&lt;/code&gt; gave &lt;code&gt;http-5xx&lt;/code&gt; to 1 user only.&lt;/li&gt;
+&lt;li&gt;The second output message says: Within a duration of 1 minute the product &lt;code&gt;productA&lt;/code&gt; gave &lt;code&gt;http-5xx&lt;/code&gt; 2 times.&lt;/li&gt;
+&lt;li&gt;The third output message says: Within a duration of 1 minute the product &lt;code&gt;productA&lt;/code&gt; gave &lt;code&gt;os_error&lt;/code&gt; to 1 user only.&lt;/li&gt;
+&lt;li&gt;The fourth output message says: Within a duration of 1 minute the product &lt;code&gt;productA&lt;/code&gt; gave &lt;code&gt;os_error&lt;/code&gt; 1 time only.&lt;/li&gt;
+&lt;li&gt;The fifth output message says: Within a duration of 1 minute the product &lt;code&gt;productB&lt;/code&gt; gave &lt;code&gt;browser_error&lt;/code&gt; to 2 users.&lt;/li&gt;
+&lt;li&gt;The sixth output message says: Within a duration of 1 minute the product &lt;code&gt;productB&lt;/code&gt; gave &lt;code&gt;browser_error&lt;/code&gt; 2 times.&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2&gt;Service Requirements&lt;/h2&gt;
@@ -102,7 +303,7 @@ to database cluster and clear the hash maps.&lt;/p&gt;
 
 &lt;h2&gt;Problems with above solution&lt;/h2&gt;
 
-&lt;p&gt;The above solution works perfectly when deployed on a single machine as a service, but deploying the service on a single node makes it a single point of failure for our complete system, i.e even though we have HA for our database but whenever the node containing Event Data Service and all our database servers stop receiving data.&lt;/p&gt;
+&lt;p&gt;The above solution works perfectly fine when deployed on a single machine as a service, but deploying the service on a single node makes it a single point of failure for our complete system, i.e even though we have HA for our database but whenever the node containing Event Data Service crashes, all our database servers stop receiving data.&lt;/p&gt;
 
 &lt;p&gt;If you observe carefully, in this solution we can simply deploy the service on Machine-1 or Machine-2 and just point our DNS to one of them with deployed service. It will disable our HA and when the server pointed by DNS crashes whole of our system will crash.&lt;/p&gt;
 
@@ -476,58 +677,6 @@ This can be anything as simpler as a bash script or anything that launches your 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ launchctl load /Library/LaunchDaemons/com.example.BackgroundService.plist
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;That&amp;#39;s it ! Now every time you boot up the device your service will start running automatically.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>Websockets SSL/TLS Termination Using NGINX Proxy</title>
-        <link>http://localhost:4000/Websockets-SSL-TLS-Termination-Using-NGINX-Proxy</link>
-        <pubDate>Sun, 14 Jun 2015 14:47:00 +0530</pubDate>
-        <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;There can be a situation where your application is configured to communicate via websockets protocol &lt;code&gt;ws&lt;/code&gt; and you want to expose it over the internet while still keeping the client side secure by SSL/TLS or say the client will always get an &lt;code&gt;HTTPS&lt;/code&gt; page.&lt;/p&gt;
-
-&lt;p&gt;In such a situation the &lt;code&gt;HTTPS&lt;/code&gt; page won&amp;#39;t allow insecure content to be present on the page so you need a &lt;code&gt;wss&lt;/code&gt; protocol, but in my case I had no control over the application server. So a solution to such a problem is to use a SSL/TLS terminator in between the application server and the client.&lt;/p&gt;
-
-&lt;p&gt;There are a few options which act as a websockets proxy, I decided to use NGINX because of the variety of options it provides such as listening mutiple ports, allowing multiple upstreams, support for unix sockets and a bunch of other features without comprimising the performace parameters.&lt;/p&gt;
-
-&lt;p&gt;The final architecture after using NGINX as a websockets proxy is:
-&lt;br/&gt;
-&lt;br/&gt;
-&lt;img src=&quot;/public/images/nginx.png&quot; alt=&quot;NGINX Proxy&quot; style=&quot;margin-right:15px; width: 100%; height: 100%&quot; /&gt;
-&lt;br/&gt;
-We use secure websockets communication on client side using the &lt;code&gt;wss&lt;/code&gt; protocol and inbetween client and application server is a NGINX proxy server which allows to terminate the SSL/TLS connection and establishes an insecure connection using &lt;code&gt;ws&lt;/code&gt; protocol.&lt;/p&gt;
-
-&lt;p&gt;All that is needed to convert an instance of NGINX to a proxy server is a few changes in configuration file.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;map $http_upgrade $connection_upgrade {
-    default upgrade;
-    '' close;
-}
-
-upstream appserver {
-    server 192.168.100.10:9222; # appserver_ip:ws_port
-}
-
-server {
-    listen 8888; // client_wss_port
-
-    ssl on;
-    ssl_certificate /path/to/crt;
-    ssl_certificate_key /path/to/key;
-
-
-    location / {
-        proxy_pass http://appserver;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The above configuration should be within &lt;code&gt;http{ }&lt;/code&gt; block.&lt;/p&gt;
-
-&lt;p&gt;Replace the &lt;code&gt;appserver_ip&lt;/code&gt; and &lt;code&gt;ws_port&lt;/code&gt; with the ip and port of your application server, &lt;code&gt;client_wss_port&lt;/code&gt; with the port on which client makes a &lt;code&gt;wss&lt;/code&gt; connection and provide paths to certificate/key.&lt;/p&gt;
-
-&lt;p&gt;Just reload the NGINX configuration or restart the server to get everything up and running.&lt;/p&gt;
 </description>
       </item>
     
