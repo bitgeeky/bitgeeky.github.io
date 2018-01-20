@@ -103,7 +103,7 @@ function replaceUrls(text) {
 	return text
 }
 }
-Typer.speed=3;
+Typer.speed=50;
 Typer.file="/public/docs/about.txt";
 Typer.init();
  
