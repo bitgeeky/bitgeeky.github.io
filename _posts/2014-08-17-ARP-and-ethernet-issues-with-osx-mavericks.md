@@ -54,8 +54,8 @@ I googled about the problem to find if its just my machine or other users are fa
 2. [Reddit Discussion][reddit-discussion]
 3. [MacStadum Blog providing updates on issue][macstadium-blog]
 [apple-support]: https://discussions.apple.com/thread/5483424?start=0&tstart=0
-[reddit-discussion]: http://www.reddit.com/r/sysadmin/comments/1yc6n1/packet_losses_with_new_os_x_mavericks_make_sure
-[macstadium-blog]: http://www.macstadium.com/blog/osx-10-9-mavericks-bugs/
+[reddit-discussion]: https://www.reddit.com/r/sysadmin/comments/1yc6n1/packet_losses_with_new_os_x_mavericks_make_sure
+[macstadium-blog]: https://www.macstadium.com/blog/osx-10-9-mavericks-bugs/
 
 Which clearly indicate this issue with ARP caching by OS X Mavericks and problem with only some of the machines and not all.
 So I was curious to check my arp output at this point of time and here is what it looked like:

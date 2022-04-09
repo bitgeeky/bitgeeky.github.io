@@ -7,7 +7,7 @@ comments: true
 categories: infrastructure automation terraform packer consul atlas wordpress travis ssh docker discourse homepage
 ---
 
-In the [last](http://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas/) post I talked about Infrastructure automation and gave a brief introduction about tools like Terraform, Packer, Consul and also talked about ATLAS and the workflow for deploying deploying infrastructure using it.
+In the [last](https://pankajmalhotra.com/Infrastructure-Automation-Using-Terraform-Packer-Consul-Atlas/) post I talked about Infrastructure automation and gave a brief introduction about tools like Terraform, Packer, Consul and also talked about ATLAS and the workflow for deploying deploying infrastructure using it.
 
 Today I am gonna get into details on how to actually deploy projects like a LAMP server, Wordpress, Discourse, Docker on AWS using Atlas workflow and how to generate and associate RSA keys and security group to SSH into any of your machines.
 

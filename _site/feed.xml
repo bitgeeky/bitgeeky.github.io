@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="https://www.w3.org/2005/Atom">
   <channel>
     <title>Pankaj Malhotra</title>
-    <link>http://localhost:4000</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://localhost:4000</link>
+    <atom:link href="https://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
     <description>Pankaj Malhotra aka bitgeeky's blog on Automation, Web QA, Web Development, Algorithms, Coding and his life.</description>
     <language>en-us</language>
     <pubDate>Thu, 09 Feb 2017 18:06:52 +0530</pubDate>
@@ -12,10 +12,10 @@
     
       <item>
         <title>Redis For HA And Load Balancing Of A Service - Part-2</title>
-        <link>http://localhost:4000/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-2</link>
+        <link>https://localhost:4000/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-2</link>
         <pubDate>Sun, 04 Dec 2016 15:38:18 +0530</pubDate>
         <author>Pankaj Malhotra</author>
-        <description>&lt;p&gt;In &lt;a href=&quot;http://pankajmalhotra.com/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1&quot;&gt;last post&lt;/a&gt; I described the deployment of event data service on a single node.&lt;/p&gt;
+        <description>&lt;p&gt;In &lt;a href=&quot;https://pankajmalhotra.com/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1&quot;&gt;last post&lt;/a&gt; I described the deployment of event data service on a single node.&lt;/p&gt;
 
 &lt;p&gt;Quick Recap:
 &lt;img src=&quot;/public/images/event_data_service_easy_solution.png&quot; alt=&quot;Event Data Service&quot;/&gt;&lt;/p&gt;
@@ -213,13 +213,13 @@ and get cardinality of each set corresponding to the event.&lt;/p&gt;
     
       <item>
         <title>Redis For HA And Load Balancing Of A Service - Part-1</title>
-        <link>http://localhost:4000/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1</link>
+        <link>https://localhost:4000/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1</link>
         <pubDate>Sat, 12 Nov 2016 14:07:59 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Its been long since I have written a blog post, mostly because of my busy schedule and new life after University.
 A lot has happened since then, about which I plan to write seperate blog posts. &lt;/p&gt;
 
-&lt;p&gt;I have been working with the DevOps team at &lt;a href=&quot;http://browserstack.com/&quot;&gt;BrowserStack&lt;/a&gt; for a few months now. In this post I&amp;#39;ll describe an interesting problem I have been working on recently.&lt;/p&gt;
+&lt;p&gt;I have been working with the DevOps team at &lt;a href=&quot;https://browserstack.com/&quot;&gt;BrowserStack&lt;/a&gt; for a few months now. In this post I&amp;#39;ll describe an interesting problem I have been working on recently.&lt;/p&gt;
 
 &lt;h2&gt;Problem&lt;/h2&gt;
 
@@ -331,7 +331,7 @@ to database cluster and clear the hash maps.&lt;/p&gt;
     
       <item>
         <title>Making My GSoC 2014 Project Proposal Public</title>
-        <link>http://localhost:4000/Making-My-GSoC-2014-Project-Proposal-Public</link>
+        <link>https://localhost:4000/Making-My-GSoC-2014-Project-Proposal-Public</link>
         <pubDate>Mon, 21 Mar 2016 04:56:12 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Many of my juniors are applying for Google Summer of Code this year, and I have been giving them few tips on how to write a good proposal. I decided to make my own proposal public so that anyone who wants to get some hints can go through it. I spent a lot of time writing this proposal and I am thankful to my project mentor and team manager for their helpful quality reviews.&lt;/p&gt;
@@ -344,7 +344,7 @@ to database cluster and clear the hash maps.&lt;/p&gt;
     
       <item>
         <title>Dynamic Resource Management in IaaS Cloud</title>
-        <link>http://localhost:4000/Dynamic-Resource-Management-in-IaaS-Cloud</link>
+        <link>https://localhost:4000/Dynamic-Resource-Management-in-IaaS-Cloud</link>
         <pubDate>Thu, 17 Dec 2015 20:30:00 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Few months back, I started working on a problem to dynamically manage resources in an Infrastructure as a Service platform, I wanted to build a model that would scale infrastrcuture based on application needs, and would help to reduce the cost and resource over utilization for the infrastructure provider and make the application robust by providing right amount of resources at the right time.&lt;/p&gt;
@@ -357,7 +357,7 @@ to database cluster and clear the hash maps.&lt;/p&gt;
     
       <item>
         <title>JSFoo 2015 Conference and Workshops on JavaScript</title>
-        <link>http://localhost:4000/JSFoo-2015-Conference-and-Workshops-on-JavaScript</link>
+        <link>https://localhost:4000/JSFoo-2015-Conference-and-Workshops-on-JavaScript</link>
         <pubDate>Fri, 18 Sep 2015 06:14:52 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;h2&gt;Enjoying weather sitting outside airport&lt;/h2&gt;
@@ -371,69 +371,69 @@ to database cluster and clear the hash maps.&lt;/p&gt;
 &lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
 
 &lt;p&gt;It has started raining now, planning to leave for airport.
-&lt;img src=&quot;http://i.imgur.com/dsg28Kj.jpg&quot; alt=&quot;It started raining&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/dsg28Kj.jpg&quot; alt=&quot;It started raining&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Tikki Tikki&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
 
 &lt;p&gt;We had to checkout at 12 pm. Left the hotel to explore city, having some snacks at a place called Tikki Tikki, it&amp;#39;s a snack made of pita bread pocket filled with cutlet, veggies and some tasty sauces.
-&lt;img src=&quot;http://i.imgur.com/Fub28DE.jpg&quot; alt=&quot;Tikki Tikki&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/Fub28DE.jpg&quot; alt=&quot;Tikki Tikki&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;We are in a Book Fair&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
 
 &lt;p&gt;Looks like my idea of exploring the city is working out well. I just saw a banner titled Book Fair, and didn&amp;#39;t take a moment to go inside.
-&lt;img src=&quot;http://i.imgur.com/54Du7uB.jpg&quot; alt=&quot;We are in a Book Fair&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/54Du7uB.jpg&quot; alt=&quot;We are in a Book Fair&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Getting ready for the day&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-20&lt;/h5&gt;
 
 &lt;p&gt;I am planning to explore the city, and skipping NodeBots &amp;amp; JS Hardware Workshop. I hope I don&amp;#39;t regret it later.
-&lt;img src=&quot;http://i.imgur.com/yT5rbzs.jpg&quot; alt=&quot;Getting ready for the day&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/yT5rbzs.jpg&quot; alt=&quot;Getting ready for the day&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Guillermo Rauch live on stage&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-19&lt;/h5&gt;
 
 &lt;p&gt;Creator of Socket.IO talks on future of Chat and Rich Realtime JavaScript application
-&lt;img src=&quot;http://i.imgur.com/fxBYyr6.jpg&quot; alt=&quot;Guillermo Rauch live on stage&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/fxBYyr6.jpg&quot; alt=&quot;Guillermo Rauch live on stage&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Droids, JavaScript and Web Connected Hardware&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-19&lt;/h5&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/IPR6dnQ.jpg&quot; alt=&quot;Droids, JavaScript and Web Connected Hardware&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/IPR6dnQ.jpg&quot; alt=&quot;Droids, JavaScript and Web Connected Hardware&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Nice use of Web Audio API&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-19&lt;/h5&gt;
 
 &lt;p&gt;These guys are playing live Djembe and filling the hall with music. They are using Web Audio API to capture sound signals and P5.js to visualze the music and beat being played. They are going to talk about the algorithm they are using to perfectly capture and process sound signals.
-&lt;img src=&quot;http://i.imgur.com/PYnqSP6.jpg&quot; alt=&quot;Nice use of Web Audio API&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/PYnqSP6.jpg&quot; alt=&quot;Nice use of Web Audio API&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Mathias Talk on RegExp and Unicode&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-18&lt;/h5&gt;
 
 &lt;p&gt;A very good talk on how unicode can be pain with RegExp and how &lt;code&gt;u&lt;/code&gt; flag in ES6 helps solve the problem.
-&lt;img src=&quot;http://i.imgur.com/gnseXuA.jpg&quot; alt=&quot;Mathias Talk on RegExp and Unicode&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/gnseXuA.jpg&quot; alt=&quot;Mathias Talk on RegExp and Unicode&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Welcome Board&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-18&lt;/h5&gt;
 
 &lt;p&gt;Its actually a very huge board, I&amp;#39;ll capture a small part of it.
-&lt;img src=&quot;http://i.imgur.com/m9AIzoG.jpg&quot; alt=&quot;Welcome Board&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/m9AIzoG.jpg&quot; alt=&quot;Welcome Board&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Sunshine&lt;/h2&gt;
 
 &lt;h5&gt;Friday 2015-09-18&lt;/h5&gt;
 
 &lt;p&gt;I got a window seat, on the emergency exit door with an extra leg space, so comfortable.
-&lt;img src=&quot;http://i.imgur.com/pF3mxWP.jpg&quot; alt=&quot;Sunshine&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://i.imgur.com/pF3mxWP.jpg&quot; alt=&quot;Sunshine&quot; /&gt;&lt;/p&gt;
 
 &lt;h2&gt;Ready to board&lt;/h2&gt;
 
@@ -441,13 +441,13 @@ to database cluster and clear the hash maps.&lt;/p&gt;
 
 &lt;p&gt;It&amp;#39;s very calm and silent today, the sun hasn&amp;#39;t risen yet. Waiting to board the plane. Will be taking off for bengaluru in a few more minutes.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/879UMbF.jpg&quot; alt=&quot;Plane&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/879UMbF.jpg&quot; alt=&quot;Plane&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
       <item>
         <title>My Talk Proposal for JSFoo 2015 - Debugging Javascript on Mobile Browsers</title>
-        <link>http://localhost:4000/My-Talk-Proposal-for-JSFoo-2015-Debugging-Javascript-on-Mobile-Browsers</link>
+        <link>https://localhost:4000/My-Talk-Proposal-for-JSFoo-2015-Debugging-Javascript-on-Mobile-Browsers</link>
         <pubDate>Tue, 04 Aug 2015 06:14:52 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Here is a proposal of my talk titled &amp;quot;Debugging Javascript on Mobile-Browsers&amp;quot; for JSFoo 2015. It covers a major part of the research work I did while interning with Mobile team at BrowserStack.&lt;/p&gt;
@@ -475,7 +475,7 @@ This is a completely fresh set of slides, so do suggest any modifications so tha
     
       <item>
         <title>GoSprint and GoRhythms - Algorithms In GoLang</title>
-        <link>http://localhost:4000/GoSprint-And-GoRhythms-Algorithms-In-GoLang</link>
+        <link>https://localhost:4000/GoSprint-And-GoRhythms-Algorithms-In-GoLang</link>
         <pubDate>Sat, 01 Aug 2015 02:01:35 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;Few weeks back I started a new section called &lt;code&gt;coding&lt;/code&gt; on my blog. If you follow my blog you would have seen that there wasn&amp;#39;t much activity and posts around that section as promised.
@@ -493,7 +493,7 @@ Its not that I have stoppped reading algorithms and just doing so called &lt;cod
     
       <item>
         <title>Skip SSL HostName Verification Java HttpsURLConnection</title>
-        <link>http://localhost:4000/Skip-SSL-HostName-Verification-Java-HttpsURLConnection</link>
+        <link>https://localhost:4000/Skip-SSL-HostName-Verification-Java-HttpsURLConnection</link>
         <pubDate>Tue, 28 Jul 2015 02:09:10 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;p&gt;There might arise a situation when you have to make a secure request to a server with certificates that do not have host name to which you are making a request.&lt;/p&gt;
@@ -585,7 +585,7 @@ public class SkipVerification implements Runnable {
     
       <item>
         <title>Retrieving Safari History From JailBroken IOS Device</title>
-        <link>http://localhost:4000/Retrieving-Safari-History-From-JailBroken-IOS-Device</link>
+        <link>https://localhost:4000/Retrieving-Safari-History-From-JailBroken-IOS-Device</link>
         <pubDate>Sun, 28 Jun 2015 12:40:58 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;h3&gt;This post is for Jail Broken devices and tested on IOS 8.1.2.&lt;/h3&gt;
@@ -632,7 +632,7 @@ History.db-wal
     
       <item>
         <title>Start App Service At BootUp On JailBroken IOS Device</title>
-        <link>http://localhost:4000/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device</link>
+        <link>https://localhost:4000/Start-App-Service-At-BootUp-On-JailBroken-IOS-Device</link>
         <pubDate>Sat, 27 Jun 2015 12:49:35 +0530</pubDate>
         <author>Pankaj Malhotra</author>
         <description>&lt;h3&gt;This post is for Jail Broken devices and tested on IOS 8.1.2.&lt;/h3&gt;
@@ -646,7 +646,7 @@ This can be anything as simpler as a bash script or anything that launches your 
 
 &lt;p&gt;3 Write a plist for application. An example plist for application is:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple Computer//DTD PLIST 1.0//EN&quot; &quot;https://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;plist&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;version=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1.0&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;dict&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;Label&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;

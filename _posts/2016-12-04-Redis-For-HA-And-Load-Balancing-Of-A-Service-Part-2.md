@@ -7,7 +7,7 @@ comments: true
 categories: redis browserstack ha load balancing homepage
 ---
 
-In [last post](http://pankajmalhotra.com/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1) I described the deployment of event data service on a single node.
+In [last post](https://pankajmalhotra.com/Redis-For-HA-And-Load-Balancing-Of-A-Service-Part-1) I described the deployment of event data service on a single node.
 
 Quick Recap:
 <img src="/public/images/event_data_service_easy_solution.png" alt="Event Data Service"/>

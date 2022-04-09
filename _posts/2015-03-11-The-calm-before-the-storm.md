@@ -33,12 +33,12 @@ This was one of the best thing I had done in all the years I spent in college ti
 Honestly speaking I wasn't much into Algorithms and competetive programming till I realised that things would be really tough if I would not practice enough Algorithms to crack interviews for Software Engineering Intern and yes from that point I started reading a lot of Algorithsm and would solve a few problems daily.
 I gradually developed interest and saw its intersection with Software Development. Obviously, you would never be able to write a good software unless you know your Algorithms and Data Structures. This thing wasn't actually too obvious to me initially.
 
-4. Software Developer Contractor for [HashiCorp ATLAS](http://atlas.hashicorp.com/)
+4. Software Developer Contractor for [HashiCorp ATLAS](https://atlas.hashicorp.com/)
 -----------------------------------------------------------
 I am writing code for [HashiCorp](https://hashicorp.com/), YES you heard it right ! This was something I have been wanting to do since when I started programming but I didn't know my interest because I never knew what DevOps is and what Distributed Systems is.<img src="/public/images/HashiCorp_Logo.png" alt="HashiCorp Logo" style="float:left; margin-right:15px; margin-top:15px; width: 20%; height: 20%" />I always wanted to make things which could communicate in real time and send data across machines,  I developed a few multiplayer games and used Socket IO alot to make chat applications. But now I know what I want to do and I read a lot about distributed algorithms, protocols and networking.
 I can't write much on this because of a contract but I would be blogging about my adventures with ATLAS.
 
-5. Summer Internship 2015 at [BrowserStack](http://www.browserstack.com/)
+5. Summer Internship 2015 at [BrowserStack](https://www.browserstack.com/)
 ---------------------------------------------------------------------------------------
 <img src="/public/images/BrowserStack_Logo.png" alt="BrowserStack Logo" style="float:left; margin-right:15px; width: 20%; height: 20%" />I will be working with BrowseStack as a summer Intern this year. I will blog about the reasons why I chose BrowserStack to work for.
 

@@ -73,7 +73,7 @@ What is ATLAS ?
 ----
 So now you have the machine images and your terraform deployment configurations. Lets say, you want to share your infrastructure with one of the team members or you need a place to host the machine images, develop your infrastructure further and then deploy it immediately. This is what ATLAS is designed for. It provides a platform to perform all these operations at a single place.
 
-I would describe [ATLAS](http://atlas.hashicorp.com/) as a utility to store and share your infrastrucutre. Like you can share and develop your application code on GitHub, ATLAS provides a platform to develop and share you infrastructure while providing instant deployment option.
+I would describe [ATLAS](https://atlas.hashicorp.com/) as a utility to store and share your infrastrucutre. Like you can share and develop your application code on GitHub, ATLAS provides a platform to develop and share you infrastructure while providing instant deployment option.
 
 The workflow of ATLAS is like:
 
